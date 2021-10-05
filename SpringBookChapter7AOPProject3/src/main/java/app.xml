@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+   <!-- AOP 적용 -->
+   <aop:aspectj-autoproxy/>
+   <!-- 사용자 정의 클래스 등록 -->
+   <context:component-scan base-package="com.sist.*"/>
+   <!-- Database연동  -->
+   <bean id="ds"
+      class="org.apache.commons.dbcp.BasicDataSource"
+      p:driverClassName="oracle.jdbc.driver.OracleDriver"
+      p:url="jdbc:oracle:thin:@211.238.142.181:1521:XE"
+      p:username="hr"
+      p:password="happy"
+   />
+   <bean id="ssf"
+     class="org.mybatis.spring.SqlSessionFactoryBean"
+     p:dataSource-ref="ds"
+   />
+   <!-- interface구현 -->
+   <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+     p:sqlSessionFactory-ref="ssf"
+     p:mapperInterface="com.sist.dao.EmpMapper"
+   />
+</beans>

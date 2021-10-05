@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+    <!-- AOP적용 -->
+    <aop:aspectj-autoproxy/><!-- Annotation 사용 -->
+    <context:component-scan base-package="com.sist.*"/>
+    <!-- 
+                사용자 정의 클래스에서만 사용 (라이브러리는 어노테이션이 존재하지 않는다:자바소스를 변경할 수 없다=> .class)
+        => 라이브러리를 강제로 어노테이션을 첨부 => 상속 (X)
+        @Component, 
+        @Repository, 
+        @Service, 
+        @Controller, 
+        @RestController
+        
+        => 어노테이션을 이용하게 되면 주입할 수 없다 (메모리 할당 , 자동으로 주입 (객체주소만 주입이 가능)
+           @Autowired
+           String , int , double 일반데이터형 (X)
+           ==> 클래스 객체 주소만 넘겨준다(스프링에서 메모리 할당한 객체 주소)  
+     -->
+     <!--  데이터 주입이 필요하거나 라이브러리 메모리 할당시에는 bean -->
+    <bean id="dbConn" class="com.sist.dao.DBConnection"
+      c:driverName="oracle.jdbc.driver.OracleDriver"
+      p:url="jdbc:oracle:thin:@211.238.142.181:1521:XE"
+      p:username="hr"
+      p:password="happy"
+    />
+</beans>

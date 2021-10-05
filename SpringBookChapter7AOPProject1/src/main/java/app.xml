@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+    <!-- 1. 클래스 메모리 할당 -->
+    <bean id="aspect" class="com.sist.aop.MyAspect"/>
+    <bean id="dao" class="com.sist.dao.MyDAO2"/>
+    <!-- 2. AOP적 용 -->
+    <aop:config>
+      <aop:aspect ref="aspect"> <!-- 공통으로 사용되는 부분 -->
+       <!-- 
+             MyDAO2에 있는 모든 메소드가 호출되기 전에 getConnection()을 먼저 호출 (before)
+        -->
+       <aop:before method="getConnection"
+         pointcut="execution(* com.sist.dao.MyDAO2.*())"
+       />
+       <!-- 
+            * com.sist.dao.MyDAO2.*()
+           ===                    ==
+            return (관계없이)        모든 메소드 (*) 모든 것
+           
+           MyDAO2.*(String) => 매개변수 (String)
+           MyDAO2.*(..)  => 매개변수(X), 매개변수(O)=>1개,여러개 있을 수 있다 (데이터형도 상관없이 사용이 가능)
+        -->
+        <!-- 
+             MyDAO2에 있는 모든 메소드의 수행이 끝나고 나면 disConnection()을 먼저 호출 (after:finally) 
+        -->
+       <aop:after method="disConnection"
+         pointcut="execution(* com.sist.dao.MyDAO2.*())"
+       />
+      </aop:aspect>
+    </aop:config>
+    <!-- 
+          Transaction 적용, 보안 적용(스프링에서 제공) , 로그 적용(프로그래머가 사용)
+          
+          @Transational
+          public void insert()
+          {
+             try
+             {
+                  getConnection(); ==> Before
+                  
+                  // SQL => 비절차적 언어 ==> 에러가 나면 건너뛰고 다른 SQL문장을 실행한다 
+                  ==> conn.setAutoCommit(false); => 자동 Commit()
+                  String sql="INSERT"; ==> 입고
+                  ps=conn.preparedStatement(sql);
+                  ps.executeUpdate();
+                  
+                  sql="INSERT"; // 재고 
+                  ps=conn.preparedStatement(sql);
+                  ps.executeUpdate();  ===> catch
+                  
+                  sql="INSERT"; // 출고
+                  ps=conn.preparedStatement(sql);
+                  ps.executeUpdate();
+                  
+                  conn.commit();// 정상 저장을 하지 않는다   ==> Around
+                  
+             }catch(Exception ex)
+             {
+                  conn.rollback() // SQL문장을 취소한다  ===> 일괄처리 
+                  After-Throwing
+             }
+             finally
+             {
+                 setAutoCommit(true);
+                 disConnection(); =====> After
+             }
+          }
+     -->
+</beans>
+
+
+
+
+
+
+

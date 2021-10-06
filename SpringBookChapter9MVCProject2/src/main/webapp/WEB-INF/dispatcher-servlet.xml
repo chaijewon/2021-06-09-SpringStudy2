@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+    <!-- AOP등록 -->
+    <aop:aspectj-autoproxy/>
+    <!-- 사용자 등록 클래스 : 패키지 단위 (메모리 할당은 @Controller,@Repository) -->
+    <context:component-scan base-package="com.sist.*"/>
+    <!-- 
+        등록한 파일을 읽기 (DispatcherServlet => WebApplicationContext => HandlerMapping)
+        xml파일 위치 지정 <init-param> : 없는 경우는 디폴트 처리 
+                                    =================
+                                    WEB-INF => <servlet-name>-servlet.xml
+     => 매번 반복 : ds,ssf.... => 별도로 xml파일을 만들어서 재사용이 가능 
+     -->
+     <bean id="ds"
+        class="org.apache.commons.dbcp.BasicDataSource"
+        p:driverClassName="oracle.jdbc.driver.OracleDriver"
+        p:url="jdbc:oracle:thin:@211.238.142.181:1521:xe"
+        p:username="hr"
+        p:password="happy"
+     />
+     <!-- 
+         maxAction=8
+         maxIdle=8
+      -->
+     <!-- getConnection/disConnection : SqlSessionFactoryBean -->
+     <bean id="ssf"
+         class="org.mybatis.spring.SqlSessionFactoryBean"
+         p:dataSource-ref="ds"
+     />
+     <!-- interface 구현 : MapperFactoryBean -->
+     <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+         p:sqlSessionFactory-ref="ssf"
+         p:mapperInterface="com.sist.dao.MusicMapper"
+     />
+     <!-- JSP를 찾기 시작 : ViewResolver (JSP경로명 , 확장자) -->
+     <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:prefix="/"
+          p:suffix=".jsp"
+     />
+     <!-- 
+           p:prefix+music/list+p:suffix  => /music/list.jsp => request를 전송하는 역할 
+           
+           Spring MVC
+           => 요청/응답  ===> DispatcherServlet : URL받기
+           => Model 찾기 ==> HandlerMapping : URL받아서 @RequestMapping() => return
+           => JSP 찾기   ==> ViewResolver : return값을 받아서 JSP찾기
+      -->
+</beans>
+
+
+
+
+
+
+
+
+
+

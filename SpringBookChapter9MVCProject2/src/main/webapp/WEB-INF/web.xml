@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <!-- 톰켓이 읽어가는 파일 
+         1. Controller등록
+         2. 한글변환 
+         3. 에러처리 (JSP) 
+     -->
+     <!-- Controller (Spring:이미 제작)
+          => 동작 (메뉴얼) : app.xml,어노테이션 
+          
+          MVC 
+          M(Model)
+          View(JSP)
+          C(Controller) : DispatcherServlet (요청을 받아서 응답을 하는 역할)
+          
+                   요청  받기 ==> Model을 찾아서 요청처리 ====> 요청 처리 결과 View (화면 출력)
+         ========    ============             ===============
+            |                |                      |
+     DispatcherServlet  HandlerMapping          ViewResolver
+        *.do(요청)       @RequestMapping()       JSP를 찾아서 ==> request전송 (1.경로명,2.확장자)
+                                                    메소드 호출 
+       list.do          @RequestMapping("list.do")
+                                                처리
+                           return "movie/list";      => prefix="/" suffix=".jsp"
+                                                         prefix+movie/list+suffix
+                                                         ========================
+                                                           /movie/list.jsp
+                                                         => 자바전용 (확장자 없이도 인식) : 스프링은 자바 전용이 아니니다
+                                                         .aspx , .php , 장고
+                                                     => 우대 사항 
+                                                        1) AI => 장고(파이썬 기반)
+                                                        2) 정보처리 기사 
+                                                        3) VueJS / ReactJS(Redux) => JavaScript
+                                                     => 기본 : 스프링 , 오라클 
+                                                             ===== 자바 , JSP
+       스프링 => Model 
+            public String main_main(HttpServletRequest request,HttpServletResponse response)
+            {                      ========================================================= (X)
+                
+            }
+            public String main_main(int page) => VO단위로 값을 받을 수 있다 
+            public String member_join(MemberVO vo) => DispatcherServlet이 직접 VO에 값을 채워서 사용이 가능 
+            {
+                  MemberDAO dao=MemberDAO.newInstance();
+				  dao.memberJoinInsert(vo);
+            }
+            public String member_join(HttpServletRequest request)
+            {
+               System.out.println("회원 데이터 전송완료");
+				  // 사용자가 보내준 데이터를 받는다 
+				  try
+				  {
+					  request.setCharacterEncoding("UTF-8");
+				  }catch(Exception ex) {}
+				  String id=request.getParameter("id");//스프링 => 매개변수 (MemberVO vo)
+				  String pwd=request.getParameter("pwd");
+				  String name=request.getParameter("name");
+				  String sex=request.getParameter("sex");
+				  String birthday=request.getParameter("birthday");
+				  String email=request.getParameter("email");// UNIQUE  => 아이디 찾기
+				  String post1=request.getParameter("post1");
+				  String post2=request.getParameter("post2");
+				  String addr1=request.getParameter("addr1");
+				  String addr2=request.getParameter("addr2");
+				  String tel1=request.getParameter("tel1");// UNIQUE => 아이디 찾기 (후보키)
+				  String tel2=request.getParameter("tel2");//
+				  
+				  MemberVO vo=new MemberVO();
+				  vo.setId(id);
+				  vo.setPwd(pwd);
+				  vo.setName(name);
+				  vo.setSex(sex);
+				  vo.setBirthday(birthday);
+				  vo.setPost(post1+"-"+post2);
+				  vo.setEmail(email);
+				  vo.setAddr1(addr1);
+				  vo.setAddr2(addr2);
+				  vo.setTel(tel1+"-"+tel2);
+				  // DAO로 전송 
+				  MemberDAO dao=MemberDAO.newInstance();
+				  dao.memberJoinInsert(vo);
+			    }
+			            
+			            
+       -->
+       <!-- 스프링에서 제공하는 Controller등록  -->
+       <servlet>
+         <servlet-name>dispatcher</servlet-name>
+         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+         <!-- 스프링과 관련 : 클래스 메모리 할당 , DI , AOP : 클래스 관리 -->
+         <!-- <init-param>
+           <param-name>contextConfigLocation</param-name>
+           <param-value>/WEB-INF/config/app.xml</param-value>
+         </init-param> -->
+         <!-- 자바 환경 설정  -->
+         <!-- 
+              WebApplicationContext : XML(자동 등록)
+              ApplicationConfigApplicationContext : 수동으로 등록 
+          -->
+          <!-- 239page web.xml -->
+         <init-param>
+           <param-name>contextClass</param-name>
+           <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+         </init-param>
+         <init-param>
+           <param-name>contextConfigLocation</param-name>
+           <param-value>com.sist.config.MusicConfig</param-value>
+         </init-param>
+       </servlet>
+       <!-- 
+               C/S
+               클라이언트(유저)  =======  서버 연결 
+                                             브라우저 (주소창)  ==> URL
+                       클라이언트는 요청 
+                       서버는 요청처리후 응답 
+        -->
+       <servlet-mapping><!-- URL주소를 이용해서 Controller를 찾는다 -->
+         <servlet-name>dispatcher</servlet-name><!-- Map (키,값) -->
+         <url-pattern>*.do</url-pattern>
+         <!-- 사용자가 URL에 .do를 보내면 Dispatcher이 호출  
+              * : 모든 것  ==> 어떤 단어가 들어와도 상관없다 
+              list.do
+              main.do
+              detail.do ==> 요청에 구분 
+         -->
+       </servlet-mapping>
+       <!-- 한글 변환  -->
+       <filter>
+	    <filter-name>encodingFilter</filter-name>
+	    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+	    <init-param>
+	        <param-name>encoding</param-name>
+	        <param-value>UTF-8</param-value>
+	    </init-param>
+	    <init-param>
+	        <param-name>forceEncoding</param-name>
+	        <param-value>true</param-value>
+	    </init-param>
+		</filter>
+		
+		<!-- /의 형식으로 시작하는 url에 대하여 UTF-8로 인코딩 -->
+		<filter-mapping>
+		    <filter-name>encodingFilter</filter-name>
+		    <url-pattern>/*</url-pattern>
+		</filter-mapping>
+       
+</web-app>
+
+
+
+
+
+

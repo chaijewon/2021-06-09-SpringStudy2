@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+   <!-- properites파일 읽기  -->
+   <util:properties id="db" location="/WEB-INF/config/db.properties"/>
+   <!-- DataSource 등록 : 오라클(데이터베이스)에 대한 정보를 가지고 있다 -->
+   <!-- 
+        p:maxActive="8"
+        p:maxIdle="8"
+        p:maxWait="10000"  ==> default ===> dbcp 사용하고 있다
+    -->
+   <bean id="ds" class="org.apache.commons.dbcp.BasicDataSource"
+     p:driverClassName="#{db['driver']}"
+     p:url="#{db['url']}"
+     p:username="#{db['username']}"
+     p:password="#{db['password']}"
+     p:maxActive="#{db['maxActive']}"
+     p:maxIdle="#{db['maxIdle']}"
+     p:maxWait="#{db['maxWait']}"
+   />
+   <!-- MyBatis연결 : SqlSessionFactoryBean:getConnection/disConnection -->
+   <bean id="ssf"
+      class="org.mybatis.spring.SqlSessionFactoryBean"
+      p:dataSource-ref="ds"
+   />
+   <!-- 등록한 인터페이스 메소드를 구현 요청 : MapperFactoryBean -->
+   <bean id="mapper"
+     class="org.mybatis.spring.mapper.MapperFactoryBean"
+     p:sqlSessionFactory-ref="ssf"
+     p:mapperInterface="com.sist.dao.FoodMapper"
+   />
+</beans>
+
+
+
+
+
+
+

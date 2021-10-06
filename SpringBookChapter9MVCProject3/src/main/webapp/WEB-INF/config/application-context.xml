@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+    <!-- XML은 최대한 소스가 작아야 된다 : 여러개로 분산(종류별 처리)
+         application-context.xml
+         application-datasource.xml => Oracle용 / 마리아디비용 / MySql용 => 1.driver명 , url,username,password
+         application-security.xml
+         application-etc.xml => Mongo,BigData , AI .... 
+     -->
+     <!-- AOP적용 -->
+     <aop:aspectj-autoproxy/> <!-- AOP 어노테이션이 존재한다 -->
+     <!-- 사용자 정의 클래스 등록 -->
+     <context:component-scan base-package="com.sist.*"/>
+     <!-- ViewResolver 등록 : tiles로 변경  -->
+     <bean id="viewResolver"
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+        p:prefix="/"
+        p:suffix=".jsp"
+     />
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+

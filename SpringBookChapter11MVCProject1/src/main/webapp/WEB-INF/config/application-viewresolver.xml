@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd">
+    <!-- 
+        web => JSP와 관련 
+        mvc : JSON(한글이 깨진다) => 한글 변환 (코틀린,Vue...)
+        web.xml => 사용자 보내준 데이터 처리 
+        task => 스케쥴러 (실시간:날씨) => 반복 (1초)
+     -->
+     <!-- 생략이 되면 브라우저에서 JSP (404) -->
+     <bean id="viewResolver"
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+        p:prefix="/"
+        p:suffix=".jsp"
+     />
+     <!-- 
+       multipartReslover : 
+       TilesView : include없이 처리 (라이브러리)
+      -->
+</beans>

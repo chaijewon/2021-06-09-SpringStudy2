@@ -5,9 +5,25 @@
    <servlet>
 		<servlet-name>dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
+		<!-- <init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/config/application-*.xml</param-value>
+		</init-param> -->
+		<!-- 
+		     WebApplicationContext : XML(default)
+		     AnnotationConfigWebApplicationContext : 어노테이션으로 제작 
+		 -->
+		<init-param>
+			<param-name>contextClass</param-name>
+			<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+		</init-param>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>
+			  com.sist.config.BoardContextConfig,
+			  com.sist.config.BoardDataSourceConfig,
+			  com.sist.config.BoardViewResolverConfig
+			</param-value>
 		</init-param>
 	</servlet>
 		

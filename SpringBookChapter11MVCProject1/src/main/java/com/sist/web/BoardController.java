@@ -43,6 +43,24 @@ import com.sist.dao.*;
  *                                                         (ViwResolver) => 경로명 / 확장자 
  *                                                            | request
  *                                                           JSP 출력 =========> 브라우저 전송
+ *       에러 
+ *        404 , 500 , 405 , 400 (292~295page)
+ *        =====================
+ *        404 : 파일을 찾지 못하는 경우 
+ *              1) xml : viewResoler => prefix => "/" , suffix(확장자) .jsp
+ *              2) Model => @Controller , @RestController
+ *              3) return값 
+ *        500 : DAO (SQL문장) => 실행이 안되는 경우  => 정수 => "" 
+ *              <a href="list.do? page = 1 ">제목</a>  ==> "1" , " 1"
+ *        405 : <a href="list.do"> => Get  ===> Get/Post구분 
+ *              ==================
+ *              @PostMapping("list.do") => 405  ==> @RequestMapping()(GET/POST를 동시에 처리)
+ *        400 : <a href="list.do?name=admin&check=1"> Bad Request
+ *              @GetMapping("list.do")
+ *              public String list(String name,boolean check)
+ *              {
+ *              }
+ *        415 : 한글 코드 => UTF-8 => UFT-8
  */
 @Controller
 public class BoardController {
@@ -187,7 +205,7 @@ public class BoardController {
 		else
 		{
 			js="<script>"
-			  +"alert(\"Password Fail...\");"
+			  +"alert(\"비밀번호가 틀립니다...\");"
 			  +"history.back();"
 			  +"</script>";
 		}

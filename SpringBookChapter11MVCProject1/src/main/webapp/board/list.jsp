@@ -47,7 +47,26 @@
         </tr>
         </c:forEach>
       </table>
+      <table class="table">
+        <tr>
+          <td class="text-left">
+            Search:<select name=fs class="input-sm">
+              <option value="name">이름</option>
+              <option value="subject">제목</option>
+              <option value="content">내용</option>
+            </select>
+            <input type=text name=ss size=15 class="input-sm">
+            <input type=submit value="검색" class="btn btn-sm btn-danger">
+          </td>
+          <td class="text-right">
+            <a href="list.do?page=${curpage>1?curpage-1:curpage }" class="btn btn-sm btn-success">이전</a>
+              ${curpage } page / ${totalpage } pages
+            <a href="list.do?page=${curpage<totalpage?curpage+1:curpage }" class="btn btn-sm btn-info">다음</a>
+          </td>
+        </tr>
+      </table>
      </div>
+     
    </div>
 </body>
 </html>

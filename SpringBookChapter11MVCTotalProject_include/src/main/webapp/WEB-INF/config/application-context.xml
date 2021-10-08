@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+    <context:component-scan base-package="com.sist.*"/>
+    <!-- 
+         WebApplicationContext 
+         =====================
+           HandlerMapping : => .do => @RequestMapping => 메소드 수행
+           ViewResolver : JSP를 찾아서 request 전송  => JSP => jsp경로명 / 확장자 (자바전용이 아니기 때문에)
+           Controllers : @Controller가 있는 클래스(프로그래머가 제작) => 스프링에서 만들어 준다
+           => AI(활성화X) 
+     -->
+    <bean id="viewResolver"
+       class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+       p:prefix="/"
+       p:suffix=".jsp"
+     />
+</beans>
+
+
+
+
+
+
+

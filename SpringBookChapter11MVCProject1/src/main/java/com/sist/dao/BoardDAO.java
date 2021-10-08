@@ -65,6 +65,16 @@ public class BoardDAO {
 	   }
 	   return bCheck;
    }
+   
+   public List<BoardVO> boardFindData(Map map)
+   {
+	   return mapper.boardFindData(map);
+   }
+   
+   public int boardFindCount(Map map)
+   {
+	   return mapper.boardFindCount(map);
+   }
 }
 
 

@@ -219,6 +219,31 @@ public class BoardController {
 	// GetMapping(입력창 출력,list목록)<a>,location.href , PostMapping 구분 (<form>)
 	// 파일명, redirect => , <script>,JSON,HTML,일반 데이터 전송 => @ResponseBody
 	// 찾기  => #{} , ${}
+	@PostMapping("board/find.do")
+	public String board_find(String fs,String ss,Model model)
+	{
+		Map map=new HashMap();
+	    map.put("fs", fs); // fieldString : column명 
+	    map.put("ss", ss); // searchString : 검색어
+	    // 검색 갯수 
+	    int count=dao.boardFindCount(map);
+	    // 검색 데이터목록
+	    List<BoardVO> list=dao.boardFindData(map);
+	    
+	    model.addAttribute("count", count);
+	    model.addAttribute("list", list);
+	    // 입문 과정 => 실무 요구사항 (게시판,댓글)
+		return "board/find";
+	}
+	//                              Model,request
+	// 요청(.do) ==> 자바(Controller) =============> JSP
+	/*
+	 *                  |
+	 *              1) forward => request를 전송  ==> return "경로/jsp명"
+	 *              2) sendRedirect => 화면만 변경 ===> return "redirect:~"  => _ok
+	 *                 => _ok 처리 => 여러개 일 경우 (비밀번호 검색: O이동 , X이동)
+	 *              3) script 처리 => @ResponseBody
+	 */
 }
 
 

@@ -13,6 +13,10 @@ public interface BoardMapper {
 		 +"FROM (SELECT no,subject,name,regdate,hit "
 		 +"FROM spring_board0 ORDER BY no DESC)) "
 		 +"WHERE num BETWEEN #{start} AND #{end}")
+  //                         map.get("start") map.get("end")
+  // 조건이 없는 경우 => List , 조건 : VO
+  // 매개변수 : 1개일 경우 (일반 변수선택)
+  //         2개 이상 (Map,VO)
   public List<BoardVO> boardListData(Map map);
   // 1-1 총페이지 구하기 
   @Select("SELECT CEIL(COUNT(*)/10.0) FROM spring_board0")
@@ -33,6 +37,12 @@ public interface BoardMapper {
 		  statement="SELECT NVL(MAX(no)+1,1) as no FROM spring_board0") //자동 증가 번호 (sequence) => 서브쿼리 이용 
   @Insert("INSERT INTO spring_board0(no,name,subject,content,pwd) "
 		  +"VALUES(#{no},#{name},#{subject},#{content},#{pwd})")
+  /*
+   *     BoardVO vo=new BoardVO();
+   *     vo.setContent()
+   *     vo.set...
+   *     => ps.setString(1,...) index => mybatis => column명 ,변수명 
+   */
   //     #{name} ==> vo.getName()
   public void boardInsert(BoardVO vo);
   // 4. 게시물 수정
@@ -52,7 +62,30 @@ public interface BoardMapper {
   public boolean boardDelete(int no);
   // 6. 찾기 ==> #{} (${})
   // => 다음 => 동적쿼리 => <script>
+  // 동적 <if test="fs=='name'"> => job korea
+  @Select("SELECT no,subject,name,regdate,hit "
+		 +"FROM spring_board0 "
+		 +"WHERE ${fs} LIKE '%'||#{ss}||'%'")
+  public List<BoardVO> boardFindData(Map map);
+  
+  @Select("SELECT COUNT(*) "
+			 +"FROM spring_board0 "
+			 +"WHERE ${fs} LIKE '%'||#{ss}||'%'")
+  public int boardFindCount(Map map);
+  // WHERE 'name' LIKE ~ (X) => WHERE name LIKE
+  // '홍'
+  // => #{ss} => ss=홍  fs=name   ==>  #{ss} => '홍'  ${fs} => name
+  // 일반 데이터 => #{} , table명,column명 => ${}
 }
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+    <!-- DataBase 관련 -->
+    <!-- 데이터베이스 관련  
+         util : properties파일 읽기 
+         tx : 트랜잭션 
+    -->
+    <!-- properties 파일 읽기 -->
+    <util:properties id="db" location="/WEB-INF/config/db.properties"/>
+    <!-- 데이터베이스 정보 수집 : DataSource(드라이버 , URL, username, password => maxIdle,maxActive => 사용(X) 8/8) -->
+    <bean id="ds"
+       class="org.apache.commons.dbcp.BasicDataSource"
+       p:driverClassName="#{db['driver']}"
+       p:url="#{db['url']}"
+       p:username="#{db['username']}"
+       p:password="#{db['password']}"
+       p:maxActive="#{db['maxActive']}"
+       p:maxIdle="#{db['maxIdle']}"
+       p:maxWait="#{db['maxWait']}"
+    />
+    <!-- 트랜잭션 적용 : TransactionManager (미정) -->
+    <!-- 데이터베이스 정보 : MyBatis로 전송 (SqlSessionFactoryBean) : getConnection/disConnection -->
+    <bean id="ssf"
+        class="org.mybatis.spring.SqlSessionFactoryBean"
+        p:dataSource-ref="ds"
+    />
+    <!-- SqlSessionFactoryBean을 이용해서 인터페이스 구현 : MapperFactoryBean -->
+    <bean id="mapper"
+        class="org.mybatis.spring.mapper.MapperFactoryBean"
+        p:sqlSessionFactory-ref="ssf"
+        p:mapperInterface="com.sist.dao.BoardMapper"
+    />
+</beans>

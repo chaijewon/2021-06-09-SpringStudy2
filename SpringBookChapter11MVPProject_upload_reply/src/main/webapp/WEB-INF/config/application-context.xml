@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+    <!-- Spring 등작에 대한 메뉴얼 -->
+    <!-- aop등록 -->
+    <aop:aspectj-autoproxy/>
+    <!-- 사용자 클래스 등록 -->
+    <!-- 
+       WebApplicationContext ==> 찾기 (HandlerMapping)
+     -->
+    <context:component-scan base-package="com.sist.*"/>
+    <!-- @Component, @Repository, @Service, @Controller, @RestController (DL)-->
+    <!-- @Required, @Autowired, @PostConstruct, @PreDestroy, @Resource : 주입 (DI)-->
+    <!-- JSP를 찾을 수 있게 ViewResolver등록 -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+      p:prefix="/"
+      p:suffix=".jsp"
+    />
+    <!-- 파일 업로드 , 다운로드  -->
+    <bean id="multipartResolver"
+       class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+    <!--  id가 반드시  multipartResolver(이미 스프링에서 설정한 아이디)-->
+</beans>
+
+
+
+
+
+
+
+
+
+
+

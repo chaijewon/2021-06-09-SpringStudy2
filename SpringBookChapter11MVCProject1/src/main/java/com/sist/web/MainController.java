@@ -1,5 +1,7 @@
 package com.sist.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -134,6 +136,12 @@ public class MainController {
     {
     	System.out.println("전송 받은 값:"+id);
     	return "main/print";
+    }
+    @RequestMapping("main/print3.do")
+    public String main_print3(NamesVO vo,Model model)
+    {
+    	model.addAttribute("list", vo.getList());
+    	return "main/print2";
     }
 }
 

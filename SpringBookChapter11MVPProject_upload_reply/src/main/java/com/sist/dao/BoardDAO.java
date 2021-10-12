@@ -81,9 +81,20 @@ public class BoardDAO {
 	{
 		return mapper.databoardListData(map);
 	}
+	
+	public int databoardTotalPage()
+	{
+		return mapper.databoardTotalPage();
+	}
+	
 	public void databoardInsert(DataBoardVO vo)
 	{
 		mapper.databoardInsert(vo);
+	}
+	public DataBoardVO databoardDetailData(int no)
+	{
+		mapper.databoardHitIncreement(no);// 조회수 증가
+		return mapper.databoardDetailData(no);
 	}
 }
 

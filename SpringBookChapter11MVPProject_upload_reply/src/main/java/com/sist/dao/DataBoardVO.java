@@ -14,10 +14,33 @@ FILECOUNT          NUMBER
    셋팅 => VO(DAO) => Controller => JSP
  */
 import java.util.*;
+
+import org.springframework.web.multipart.MultipartFile;
+/*
+ *    <input type=text name=name size=10>  => String name;
+ *    
+ *    <input type=text name=hobby>   => String[] hobby
+ *    <input type=text name=hobby>
+ *    <input type=text name=hobby>
+ *    
+ *    <input type=text name=hobby[0]> => List<String> hobby
+ *    <input type=text name=hobby[1]>
+ *    <input type=text name=hobby[2]>
+ */
 public class DataBoardVO {
     private int no,filecount,hit;
     private String name,subject,content,pwd,filename,filesize;
     private Date regdate;
+    // 파일 목록을 받는다 
+    private List<MultipartFile> files;
+    
+    
+	public List<MultipartFile> getFiles() {
+		return files;
+	}
+	public void setFiles(List<MultipartFile> files) {
+		this.files = files;
+	}
 	public int getNo() {
 		return no;
 	}

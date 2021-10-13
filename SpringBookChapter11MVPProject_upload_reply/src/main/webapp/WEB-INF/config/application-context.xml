@@ -5,9 +5,11 @@
 	xmlns:c="http://www.springframework.org/schema/c"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
     <!-- Spring 등작에 대한 메뉴얼 -->
     <!-- aop등록 -->
     <aop:aspectj-autoproxy/>
@@ -23,10 +25,17 @@
       p:prefix="/"
       p:suffix=".jsp"
     />
+    <mvc:annotation-driven/>
     <!-- 파일 업로드 , 다운로드  -->
     <bean id="multipartResolver"
        class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
     <!--  id가 반드시  multipartResolver(이미 스프링에서 설정한 아이디)-->
+    <!--  id가 반드시  messageSource(이미 스프링에서 설정된 아이디) 324page-->
+    <bean id="messageSource"
+       class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+       p:basename="/WEB-INF/message"
+       p:defaultEncoding="UTF-8"
+    />
 </beans>
 
 

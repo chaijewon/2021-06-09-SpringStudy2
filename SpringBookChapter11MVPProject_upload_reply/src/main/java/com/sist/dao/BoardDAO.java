@@ -1,6 +1,7 @@
 package com.sist.dao;
 import java.util.*;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
@@ -96,7 +97,54 @@ public class BoardDAO {
 		mapper.databoardHitIncreement(no);// 조회수 증가
 		return mapper.databoardDetailData(no);
 	}
-}
+	// 삭제
+	/*
+	 *    @Select("SELECT pwd FROM spring_databoard0 "
+		   +"WHERE no=#{no}")
+		  public String databoardGetPassword(int no); // 수정하기에서도 재사용 
+		  // 2. 삭제 , 파일명전송 
+		  @Select("SELECT filename,filesize,filecount FROM spring_databoard0 "
+				 +"WHERE no=#{no}")
+		  public DataBoardVO databoardFileInfoData(int no);
+		  @Delete("DELETE FROM spring_databoard0 WHERE no=#{no}")
+		  public void databoardDelete(int no);
+	 */
+	public DataBoardVO databoardFileInfoData(int no)
+	{
+		return mapper.databoardFileInfoData(no);
+	}
+	// DAO에서는 필요한 데이터를 매개변수 여러개로 받을 수 있다 
+	public boolean databoardDelete(int no,String pwd)
+	{
+		boolean bCheck=false;
+		// 비밀번호 
+		String db_pwd=mapper.databoardGetPassword(no);
+		if(db_pwd.equals(pwd))
+		{
+			bCheck=true;
+			mapper.databoardDelete(no);
+		}
+		return bCheck;
+	}
+	// 수정할 데이터를 읽어 온다 
+	public DataBoardVO databoardUpdateData(int no)
+	{
+		return mapper.databoardDetailData(no);
+	}
+	// 실제 수정
+	public boolean databoardUpdate(DataBoardVO vo)
+	{
+		boolean bCheck=false;
+		// 비밀번호 검색 
+		String db_pwd=mapper.databoardGetPassword(vo.getNo());
+		if(db_pwd.equals(vo.getPwd()))
+		{
+			bCheck=true;
+			mapper.databoardUpdate(vo);
+		}
+		return bCheck;
+	}
+} 
 
 
 

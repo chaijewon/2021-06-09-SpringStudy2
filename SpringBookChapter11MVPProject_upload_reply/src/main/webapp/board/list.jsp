@@ -2,6 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%><!-- 날짜변환 (오라클/자바) -->
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%--
+    <spring:~> <form: ~ 에러 처리> 검증 (유효성 검사)
+ --%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -30,7 +34,11 @@ h1{
 </head>
 <body>
    <div class="container">
-    <h1>자료실</h1>
+    <%-- <spring:message code="list.title"> 주로 사용처 (메뉴) , 한글/영문
+          title=자료실
+          title_en=Title
+    --%>
+    <h1><spring:message code="list.title"/></h1>
     <div class="row">
       <table class="table">
        <tr>

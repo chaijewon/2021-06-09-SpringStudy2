@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -266,6 +267,78 @@ public class BoardController {
     		bos.close();
     	}catch(Exception ex){}
     }
+    // 삭제 하기
+    // 1. 삭제 폼 전송  delete.do?no=${vo.no }&page=${page}
+    @GetMapping("board/delete.do")
+    public String board_delete(int no,int page,Model model)
+    {
+    	model.addAttribute("no", no);
+    	model.addAttribute("page", page);
+    	return "board/delete";
+    }
+    // 2. 실제 삭제 => 추가 (만약에 댓글이 있다면 => 댓글을 먼저 지운다 => 나중에 게시물 지우기)
+    // 유효성 검사 (인터셉트), 트랜잭션 
+    // 댓글 => PL/SQL => 모든 프로그램에 댓글이 가능(재사용) 
+    @PostMapping("board/delete_ok.do")
+    public String board_delete_ok(int no,int page,String pwd,Model model)
+    {
+    	//1. 처리 => 데이터베이스 처리 
+    	DataBoardVO vo=dao.databoardFileInfoData(no); // 파일 지우기 
+    	boolean bCheck=dao.databoardDelete(no, pwd);
+    	if(bCheck==true)
+    	{
+    		// 삭제 
+    		// 저장된 파일 지운다 
+    		try
+    		{
+    			if(vo.getFilecount()>0) //업로드된 파일이 존재
+    			{
+    				StringTokenizer st=new StringTokenizer(vo.getFilename(),",");
+    				while(st.hasMoreTokens())
+    				{
+    					File file=new File("c:\\download\\"+st.nextToken());
+    					file.delete();
+    				}
+    			}
+    		}catch(Exception ex){}
+    		// list.do => page
+    		model.addAttribute("page", page);
+    	}
+    	model.addAttribute("bCheck", bCheck);
+    	//2. 처리 => 업로드된 데이터 지우기 
+    	//3. 결과값 전송 => boolean (true(list.do)/false(history.back())
+    	return "board/delete_ok"; // 결과값을 전송한다 
+    }
+    // 수정 => 폼 
+    /*
+     *   update.do ==> DispatcherServlet ==> HandlerMapping (클래스중에 @Controller=>@RequestMapping
+     *   GetMapping @PostMapping이 있는 메소드 찾아서 호출 ==> invoke()
+     *   model에 담긴 데이터와 return 값을 ViewResolver => /board/update.jsp
+     *                                             ===           ===== model을 request로 변환후에 전송
+     *                                             출력시 사용 => EL / JSTL 
+     */
+    @GetMapping("board/update.do") // HanlderMapping
+    public String board_update(int no,int page,Model model)
+    {
+    	// 이전에 입력된 데이터를 읽어 온다 
+    	DataBoardVO vo=dao.databoardUpdateData(no);
+    	model.addAttribute("vo", vo);
+    	model.addAttribute("page", page);
+    	return "board/update";//board폴더에 update.jsp를 찾아서 브라우저 화면 출력하라(ViewResolver)
+    }
+    // 실제 수정 
+    @PostMapping("board/update_ok.do")
+    public String board_update_ok(int page,DataBoardVO vo,Model model)
+    {
+    	// VO에 값을 채워달라 (DispatcherServlet에 요청) => VO에 없는 변수면 개별적이 따로 받는다 
+    	// Model이 있는 경우 => jsp에 값을 전송할 내용이 있다  => bCheck(true/false)
+    	boolean bCheck=dao.databoardUpdate(vo);
+    	model.addAttribute("page", page);
+    	model.addAttribute("bCheck", bCheck);
+    	model.addAttribute("no", vo.getNo());
+    	return "board/update_ok";
+    }
+    
 }
 
 

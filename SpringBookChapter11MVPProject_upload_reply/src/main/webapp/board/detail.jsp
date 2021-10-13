@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%><%--제어문 for --%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%><%-- 날짜 변환 --%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -30,7 +31,7 @@ h1{
 </head>
 <body>
   <div class="container">
-   <h1>내용보기</h1>
+   <h1><spring:message code="detail.title"/></h1>
    <div class="row"><%-- 내용출력 --%>
      <table class="table">
       <tr>
@@ -78,8 +79,8 @@ h1{
       </tr>
       <tr>
         <td colspan="4" class="text-right">
-         <a href="#" class="btn btn-xs btn-danger">수정</a>
-         <a href="#" class="btn btn-xs btn-primary">삭제</a>
+         <a href="update.do?no=${vo.no }&page=${page}" class="btn btn-xs btn-danger">수정</a>
+         <a href="delete.do?no=${vo.no }&page=${page}" class="btn btn-xs btn-primary">삭제</a>
          <a href="list.do?page=${page }" class="btn btn-xs btn-info">목록</a>
         </td>
       </tr>

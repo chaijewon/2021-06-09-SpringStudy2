@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.dao.board-mapper">
+  <!-- 목록 출력 -->
+  <!-- 
+       // 목록처리 
+		  @Select("SELECT no,subject,name,regdate,hit,num "
+				 +"FROM (SELECT no,subject,name,regdate,hit,rownum as num "
+				 +"FROM (SELECT no,subject,name,regdate,hit "
+				 +"FROM spring_databoard0 ORDER BY no DESC)) "
+		         +"WHERE num BETWEEN #{start} AND #{end}")
+		  public List<DataBoardVO> databoardListData(Map map);
+		  
+		  // 총페이지 설정 
+		  @Select("SELECT CEIL(COUNT(*)/10.0) FROM spring_databoard0")
+		  public int databoardTotalPage();
+   -->
+   <select id="daraboardListData" resultType="BoardVO" parameterType="hashmap">
+     <!-- id=메소드명 , resultType=리턴형 , parameterType=매개변수 -->
+     <!-- 
+           resultType="DataBoardVO"
+           1) List<DataBoardVO> == selectList
+           2) DataBoardVO  == selectOne
+           parameterType="hashmap"
+           1) java.util.Map
+           2) hashmap
+           
+           parameterType=""
+           1) String , java.lang.String
+           2) string
+           
+           parameterType=""
+           1) java.lang.Integer
+           2) int
+      -->
+      SELECT no,subject,name,regdate,hit,num 
+	  FROM (SELECT no,subject,name,regdate,hit,rownum as num 
+	  FROM (SELECT no,subject,name,regdate,hit 
+	  FROM spring_databoard0 ORDER BY no DESC)) 
+	  WHERE num BETWEEN #{start} AND #{end}
+   </select>
+   <!-- 총페이지  -->
+   <select id="databoardTotalPage" resultType="int">
+     <!--  public int databoardTotalPage() -->
+     SELECT CEIL(COUNT(*)/10.0) FROM spring_databoard0
+   </select>
+  <!-- 찾기(동적 쿼리) => 핵심 (ERP) 
+       if 
+       choose (when , otherwise) => 다중 조건문 
+       trim (where , set) => 제거 
+       foreach => in(데이터가 여러개)
+       
+       SELECT~
+       WHERE 
+       <trim prefixOverrides='OR'>
+       <if test="column==name">
+         name LIKE '%'||#{keyword}||'%'
+       </if>
+       <if test="column==subject">
+         OR subject LIKE '%'||#{keyword}||'%'
+       </if>
+       <if test="column==content">
+         OR content LIKE '%'||#{keyword}||'%'
+       </if>
+       </trim>
+       
+       @Select("<script>"
+              +"SELECT~"
+		      +" WHERE " 
+		      +"<trim prefixOverrides='OR'>"
+		       <if test="column==name">
+		         name LIKE '%'||#{keyword}||'%'
+		       </if>
+		       <if test="column==subject">
+		         OR subject LIKE '%'||#{keyword}||'%'
+		       </if>
+		       <if test="column==content">
+		         OR content LIKE '%'||#{keyword}||'%'
+		       </if>
+		       </trim>
+		     "</script>")
+  -->
+  <select id="boardFindData" resultType="BoardVO" parameterType="hashmap">
+    SELECT no,subject,name,regdate,hit 
+    FROM spring_databoard0
+    WHERE
+    <!-- 
+         <trim prefix="(" suffix=")" prefixOverrides="OR" suffixOverrides="AND">
+               =========  =========  ==================== =====================
+                                앞에 추가       뒤에 추가            앞에 있는 OR제거                 뒤에 있는 AND제거
+                
+                name , subject content
+                        
+                WHERE name LIKE '%'||#{ss}||'%'
+                    OR  subject LIKE '%'||#{ss}||'%'
+                    OR  content LIKE '%'||#{ss}||'%'
+                    
+                subject , content
+                WHERE 
+                    (subject LIKE '%'||#{ss}||'%')
+                    OR  (content LIKE '%'||#{ss}||'%')
+     -->
+    <trim prefix="(" suffix=")" prefixOverrides="OR">
+      <foreach collection="fsArr" item="fd">
+        <trim prefix="OR">
+          <choose>
+            <when test="fd=='N'.toString()">
+            name LIKE '%'||#{ss}||'%'
+            </when>
+            <when test="fd=='S'.toString()">
+            subject LIKE '%'||#{ss}||'%'
+            </when>
+            <when test="fd=='C'.toString()">
+            content LIKE '%'||#{ss}||'%'
+            </when>
+          </choose>
+        </trim>
+      </foreach>
+    </trim>
+  </select>
+</mapper>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+   <!-- Spring : 동작을 할 수 있게 만들어져 있다 (xml파일, 어노테이션을 이용해서 동작이 가능하게 메뉴얼을 만들어 준다)
+        1. Spring과 관련된 라이브러리 설정  => pom.xml
+        2. 웹프로그램 동작 => DispatcherServlet => web.xml
+           application-context,application-datasource ====> 순수자바만 가지고 설정이 가능 
+        3. 스프링의 원래 기능 설정(클래스 관리 => 다른 클래스에 영향이 없게 만드는 가능)
+           => 메모리 할당시에 필요한 데이터를 요구 (데이터설정위해서 => DI)
+           => 클래스에서 목표 (간결한 코딩) 
+           => 공통으로 사용되는 클래스(자동 호출이 가능) : AOP  , 핵심적으로 사용되는 클래스
+           => 클래스간의 호출이 없게 (상속없고 , 인터페이스 구현 => POJO) => 가능한 new를 사용하지 않는다 
+           => 미리 메모리 할당하고 필요시마다 찾아서 사용  (DL) => getBean()
+                                                      ========== HandlerMapping
+                                                      => 구분 (@RequestMapping,@GetMapping
+                                                              @PostMapping)
+                                                      => 구분시에 사용 (어노테이션)
+                                                      => 메소드 호출 => @RequestMapping("")
+                                                                                 ========
+                                                                                                                                                               중복되면 안된다 
+    -->
+   <!-- AOP적용 -->
+   <aop:aspectj-autoproxy/>
+   <!-- Redirect 데이터 전송 -->
+   <mvc:annotation-driven/>
+   <!-- 메모리 할당 요청 -->
+   <context:component-scan base-package="com.sist.*"/>
+   <!-- 
+       @Component, 
+       @Repository, 
+       @Service, 
+       @Controller, 
+       @RestController, (16장)
+       @ControllerAdvice, (에러)
+       @Configuration (XML대신 자바로 코딩)
+       =============================== 메모리 할당 
+       @Required, 
+       @Autowired, (O)
+       @PostConstruct,(O) => init-method 
+       @PreDestroy,(O) => destory-method
+       @Resource (O)
+       ============================== DI(주입)
+    -->
+   <!-- JSP를 찾을 수 있게 설정  -->
+   <bean id="viewResolver"
+       class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+       p:prefix="/"
+       p:suffix=".jsp"
+   />
+   <!-- 객체 검증 -->
+</beans>
+
+
+
+
+
+
+
+
+
+

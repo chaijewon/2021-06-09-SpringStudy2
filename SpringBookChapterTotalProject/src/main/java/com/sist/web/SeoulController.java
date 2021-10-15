@@ -38,6 +38,20 @@ public class SeoulController {
 		map.put("start", start);
 		map.put("end", end);
 		List<SeoulLocationVO> list=dao.locationListData(map);
+		// 총페이지 
+		    map.put("table_name", "seoul_location");
+			int totalpage=dao.seoulTotalPage(map);
+		final int BLOCK=10;
+		int startPage=((curpage-1)/BLOCK*BLOCK)+1;
+		int endPage=((curpage-1)/BLOCK*BLOCK)+BLOCK;
+		if(endPage>totalpage)
+			endPage=totalpage;
+		
+		model.addAttribute("curpage", curpage);
+		model.addAttribute("totalpage",totalpage);
+		model.addAttribute("BLOCK", BLOCK);
+		model.addAttribute("startPage",startPage);
+		model.addAttribute("endPage", endPage);
 		model.addAttribute("list", list);
 		model.addAttribute("main_jsp", "../seoul/location_list.jsp");//실제 출력 
 		return "main/main";
@@ -55,6 +69,21 @@ public class SeoulController {
 		map.put("start", start);
 		map.put("end", end);
 		List<SeoulNatureVO> list=dao.natureListData(map);
+		
+		// 총페이지 
+		    map.put("table_name", "seoul_nature");
+			int totalpage=dao.seoulTotalPage(map);
+				final int BLOCK=10;
+				int startPage=((curpage-1)/BLOCK*BLOCK)+1;
+				int endPage=((curpage-1)/BLOCK*BLOCK)+BLOCK;
+				if(endPage>totalpage)
+					endPage=totalpage;
+				
+				model.addAttribute("curpage", curpage);
+				model.addAttribute("totalpage",totalpage);
+				model.addAttribute("BLOCK", BLOCK);
+				model.addAttribute("startPage",startPage);
+				model.addAttribute("endPage", endPage);
 		model.addAttribute("list", list);
 		model.addAttribute("main_jsp", "../seoul/nature_list.jsp");// 실제 출력
 		return "main/main";
@@ -72,6 +101,20 @@ public class SeoulController {
 		map.put("start", start);
 		map.put("end", end);
 		List<SeoulHotelVO> list=dao.hotelListData(map);
+		// 총페이지 
+		        map.put("table_name", "seoul_hotel");
+				int totalpage=dao.seoulTotalPage(map);
+				final int BLOCK=10;
+				int startPage=((curpage-1)/BLOCK*BLOCK)+1;
+				int endPage=((curpage-1)/BLOCK*BLOCK)+BLOCK;
+				if(endPage>totalpage)
+					endPage=totalpage;
+				
+				model.addAttribute("curpage", curpage);
+				model.addAttribute("totalpage",totalpage);
+				model.addAttribute("BLOCK", BLOCK);
+				model.addAttribute("startPage",startPage);
+				model.addAttribute("endPage", endPage);
 		model.addAttribute("list", list);
 		model.addAttribute("main_jsp", "../seoul/hotel_list.jsp");// 실제 내용을 출력 
 		// request를 공유 : include , forward

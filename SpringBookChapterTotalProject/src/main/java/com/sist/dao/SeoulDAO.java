@@ -26,4 +26,9 @@ public class SeoulDAO {
   {
 	  return mapper.hotelListData(map);
   }
+  
+  public int seoulTotalPage(Map map)
+  {
+	  return mapper.seoulTotalPage(map);
+  }
 }

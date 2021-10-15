@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+    <!--  개발자가 직접 제작하는 클래스 등록  -->
+    <!-- AOP -->
+    <aop:aspectj-autoproxy/><!-- AOP와 관련된 어노테이션 활성화 : 스프링에 이런 어노테이션을 사용한다 -->
+    <!-- MVC활성 : RedirectAttributes , JMS사용  -->
+    <mvc:annotation-driven/>
+    <!-- 클래스 등록 -->
+    <context:component-scan base-package="com.sist.*"/>
+    <!-- ViewResolver / TilesView / MultipartResolver / MessageSource -->
+    <!-- JSP를 찾기 위한 설정 -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:prefix="/"
+          p:suffix=".jsp"
+    />
+    <!-- tiles설정 : order=0 -->
+    <!-- 
+        return "board/list";   => /board/list.jsp
+        
+        public class ViewResolver
+        {
+           private String prefix;
+           private String suffix;
+           
+           public void setPrefix(String prefix)
+           {
+               this.prefix=prefix;
+           }
+           public void setSuffix(String suffix)
+           {
+              this.suffix=suffix;
+           }
+           
+           public String createJsp(String jspName => Model에서 넘겨는 return)
+           {
+               return prefix+jspName+suffix;
+           }
+           
+        }
+        
+        public class Model
+        {
+           HttpServletRequest request; => DispatcherServlet에서 설정 
+           public Model(HttpServletRequest request)
+           {
+              this.request=request;
+           }
+           public void addAttribute(String key,Object obj)
+           {
+              request.setAttribute(key,obj);
+           }
+        }
+        XML 파싱 ==> List<String> clsList=new ArrayList<String>();
+                   clsList.add("com.sist.dao")
+                   clsList.add("com.sist.web")
+                   clsList.add("com.sist.manager")
+        class HandlerMapping 
+        {
+            List<String> clsList=new ArrayList<String>();
+            public String methodFind(String uri) uri="board/list.do"
+            {
+               for(String clsName:clsList)
+               {
+                  Controller controller=clsName.getDeclareAnnotation();
+                  if(controller!=null)
+                  {
+                      Class c=Class.forName(clsName);
+                      Object obj=c.newInstance();
+                      Method[] methods=c.getDeclareMethod();
+                      for(Method m:methods)
+                      {
+                         RequestMapping m=m.getAnnotation();
+                         if(m.value().equals(uri))
+                         {
+                             m.invoke(request,response,session...)
+                         }
+                      }
+                      
+                  }
+               }
+            }
+        }
+     -->
+</beans>
+
+
+
+
+
+
+
+
+
+
+

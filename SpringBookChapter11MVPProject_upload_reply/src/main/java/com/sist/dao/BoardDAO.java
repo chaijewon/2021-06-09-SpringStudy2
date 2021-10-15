@@ -144,6 +144,10 @@ public class BoardDAO {
 		}
 		return bCheck;
 	}
+	public List<DataBoardVO> databoardFindData(Map map)
+	{
+		return mapper.databoardFindData(map);
+	}
 } 
 
 

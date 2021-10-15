@@ -22,7 +22,26 @@
       p:username="hr"
       p:password="happy"
    />
-   <!-- 트랜잭션 적용 -->
+   <!-- 트랜잭션 적용 213page-->
+   <!-- 
+       212 page
+               메소드 ()
+       {
+            conn.setAutoCommit(false); ==> 해제 
+            SQL(INSERT) => 성공시 commit
+            SQL(UPDATE) => 성공시 commit
+            SQL(DELETE) => 성공시 commit
+            conn.commit()
+            
+            => catch => conn.rollback()
+            => finally => conn.setAutoCommit(true) => 원상복귀
+       }
+       
+       @Transactional => transactionManager등록 
+       <tx:annotation-driven/> : 활성화 
+       
+       223page => propagation=Propagation.REQUIRED,rollbackFor=Exception.class
+    -->
    <tx:annotation-driven/> <!-- @Transactional 사용이 가능  -->
    <bean id="transactionManager"
        class="org.springframework.jdbc.datasource.DataSourceTransactionManager"

@@ -338,6 +338,16 @@ public class BoardController {
     	model.addAttribute("no", vo.getNo());
     	return "board/update_ok";
     }
+    @PostMapping("board/find.do")
+    public String board_find(String[] fsArr,String ss,Model model)
+    {
+    	Map map=new HashMap();
+    	map.put("fsArr", fsArr);
+    	map.put("ss", ss);
+    	List<DataBoardVO> list=dao.databoardFindData(map);
+    	model.addAttribute("list", list);
+    	return "board/find";
+    }
     
 }
 

@@ -46,6 +46,31 @@ public interface BoardMapper {
 		 +"WHERE no=#{no}")
   public DataBoardVO databoardDetailData(int no);
   // 찾기 => 동적 쿼리 (마이바티스)
+  @Select({
+	  "<script>"
+	  +"SELECT no,subject,name,regdate,hit "
+	  +"FROM spring_databoard0 "
+	  +"WHERE "
+	  +"<trim prefix=\"(\" suffix=\")\" prefixOverrides=\"OR\">"
+      +"<foreach collection=\"fsArr\" item=\"fd\">"
+        +"<trim prefix=\"OR\">"
+          +"<choose>"
+          +"<when test=\"fd=='N'.toString()\">"
+        		  +"name LIKE '%'||#{ss}||'%'"
+            +"</when>"
+            +"<when test=\"fd=='S'.toString()\">"
+            		+"subject LIKE '%'||#{ss}||'%'"
+            +"</when>"
+            +"<when test=\"fd=='C'.toString()\">"
+            		+"content LIKE '%'||#{ss}||'%'"
+            +"</when>"
+          +"</choose>"
+        +"</trim>"
+      +"</foreach>"
+    +"</trim>"
+	  +"</script>"
+  })
+  public List<DataBoardVO> databoardFindData(Map map);
   //////////////////////////// 댓글 (트랜젝션)
   // 삭제하기 
   // 1. 비밀번호 검색  (마이바티스의 단점 : 무조건 매개변수는 1개만 사용한다) => 여러개일 경우 (~VO,Map)

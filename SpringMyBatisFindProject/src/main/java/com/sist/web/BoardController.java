@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sist.dao.BoardDAO;
 import com.sist.dao.BoardVO;
 import com.sist.dao.EmpDAO;
+import com.sist.dao.EmpVO;
 
 import java.util.*;
 @Controller
-//@RequestMapping("board/")
+@RequestMapping("board/")
 public class BoardController {
    @Autowired
    @Qualifier("boardDAO") // 자동 (메모리 할당된 객체주소 대입) => @Resource(name="boardDAO") 
@@ -89,7 +90,16 @@ public class BoardController {
 	   model.addAttribute("list", list);
 	   return "emp/list";
    }
-   
+ 
+   @RequestMapping("emp/find.do")
+   public String emp_find(String[] names,Model model)
+   {
+	   Map map=new HashMap();
+	   map.put("names", names);
+	   List<EmpVO> list=eDao.empFindData(map);
+	   model.addAttribute("list", list);
+	   return "emp/find";
+   }
 }
 
 

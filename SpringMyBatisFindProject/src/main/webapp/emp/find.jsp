@@ -8,13 +8,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-  <div style="height: 30px"></div>
-  <h1>사원 이름</h1>
-  <form method=post action="find.do">
-  <c:forEach var="name" items="${list }">
-   <input type="checkbox" name="names" value="${name }">${name }
-  </c:forEach>
-  <button>찾기</button>
-  </form>
+  <ul>
+    <c:forEach var="vo" items="${list }">
+     <li>${vo.ename }-${vo.job }-${vo.sal }-${vo.hiredate }</li>
+    </c:forEach>
+  </ul>
 </body>
 </html>

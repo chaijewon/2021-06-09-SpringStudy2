@@ -27,6 +27,10 @@
 	     4. 톰캣 => 8.5
 	 -->
 	<dependencies>
+	    <!-- 
+	          6. ==> javax.validation 2
+	          5. ==> javax.validation 1
+	     -->
 	    <dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-validator</artifactId>

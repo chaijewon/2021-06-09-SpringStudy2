@@ -2,6 +2,18 @@
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <!-- 스프링을 이용해서 프로그램 제어 : 스프링 동작은 XML 설정 (XML,Annotation)
+                  스프링 동작 :XML 
+                  사용자 정의 : 어노테이션 
+     -->
+    <!-- Error코드 인식 -->
+    <context-param>
+      <param-name>contextConfigLocation</param-name>
+	  <param-value>/WEB-INF/config/application-*.xml</param-value>
+    </context-param>
+    <listener>
+      <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
    <!-- Controller 등록 : 서블릿은 사용자가 호출(X) , 톰캣에서 자동 호출-->
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>

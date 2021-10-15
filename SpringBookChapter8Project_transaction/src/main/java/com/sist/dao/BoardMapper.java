@@ -14,7 +14,7 @@ public interface BoardMapper {
 	@Select("SELECT no,subject,name,regdate,hit,group_tab,num "
 			 +"FROM (SELECT no,subject,name,regdate,hit,group_tab,rownum as num "
 			 +"FROM (SELECT no,subject,name,regdate,hit,group_tab, "
-			 +"FROM spring_replyboard0 ORDER BY no DESC)) "
+			 +"FROM spring_replyboard0 ORDER BY group_id DESC,group_step ASC)) "
 	         +"WHERE num BETWEEN #{start} AND #{end}")
 	public List<BoardVO> boardListData(Map map);
    // 총페이지 SELECT
@@ -54,11 +54,13 @@ public interface BoardMapper {
    /*                          group_step ASC
     *              group_id   group_step group_tab
     *    AAAAA       1           0         0
-    *      =>KKKKK   1           1         1
-    *      =>DDDDD   1           2         1  
-    *      =>BBBBB   1           3         1
-    *       =>CCCCC  1           4         2
-    *     
+    *      =>OOOOO   1           1         1 
+    *      =>KKKKK   1           2         1
+    *      =>DDDDD   1           3         1  
+    *      =>BBBBB   1           4         1
+    *      
+    *       =>CCCCC  1           5         2
+    *       
     *      
     *     
     * 

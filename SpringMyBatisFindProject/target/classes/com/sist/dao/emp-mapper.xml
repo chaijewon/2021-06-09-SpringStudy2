@@ -5,4 +5,21 @@
   <select id="empNameListData" resultType="string">
    SELECT ename FROM emp
   </select>
+  <select id="empFindData" resultType="EmpVO" parameterType="hashmap">
+   <!-- 처음 등장 : 실무 소스 -->
+   <!-- 
+      SELECT * FROM emp
+      WHERE ename IN('A','B','C','D')
+    -->
+   SELECT * FROM emp
+   <trim prefix="WHERE ename IN(" suffix=")" suffixOverrides=")">
+     <!-- 
+          String[] names={"A","B","C","D","E"};
+          for(String name:names)
+      -->
+     <foreach collection="names" item="name" close=")" separator=",">
+      #{name}
+     </foreach>
+   </trim>
+  </select>
 </mapper>

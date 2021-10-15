@@ -6,9 +6,11 @@
   <typeAliases>
     <typeAlias type="com.sist.dao.BoardVO" alias="BoardVO"/>
     <typeAlias type="com.sist.dao.EmpVO" alias="EmpVO"/>
+    <typeAlias type="com.sist.dao.MusicVO" alias="MusicVO"/>
   </typeAliases>
   <mappers>
     <mapper resource="com/sist/dao/board-mapper.xml"/>
     <mapper resource="com/sist/dao/emp-mapper.xml"/>
+    <mapper resource="com/sist/dao/music-mapper.xml"/>
   </mappers>
 </configuration>

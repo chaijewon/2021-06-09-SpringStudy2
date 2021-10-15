@@ -1,1 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.dao.music-mapper">
+  <select id="musicListData" resultType="MusicVO">
+   SELECT no,poster,title,singer,album,key FROM melon_cjw
+  </select>
+  <select id="musicFindData" resultType="MusicVO" parameterType="hashmap">
+   SELECT no,poster,title,singer,album,key 
+   FROM melon_cjw
+   WHERE 
+   <trim prefix="(" suffix=")" prefixOverrides="OR">
+      <foreach collection="fsArr" item="fs">
+       <trim prefix="OR">
+        <!-- 
+             <if test="fs=='T'.toString()">
+             </if>
+             <if test="fs=='S'.toString()">
+             </if>
+             <if test="fs=='A'.toString()">
+             </if>
+         -->
+        <choose>
+         <when test="fs=='T'.toString()">
+          title LIKE '%'||#{ss}||'%'
+         </when><!-- 'T' => int변경 -->
+         <when test="fs=='S'.toString()">
+          singer LIKE '%'||#{ss}||'%'
+         </when>
+         <when test="fs=='A'.toString()">
+          album LIKE '%'||#{ss}||'%'
+         </when>
+        </choose>
+       </trim>
+      </foreach>
+   </trim>
+  </select>
+  <!-- 
+    TSA  TS TA
+    SA
+    WHERE 
+     (singer LIKE '%'||#{ss}||'%') 
+    OR (album LIKE '%'||#{ss}||'%')
+   -->
+</mapper>

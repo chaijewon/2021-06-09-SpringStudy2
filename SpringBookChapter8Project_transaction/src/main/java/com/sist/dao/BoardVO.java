@@ -5,11 +5,12 @@ import java.util.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 public class BoardVO {
 	// validation => 원하는 데이터만 입력을 받기 위해서 사용을 한다 
     private int no;
-    @NotNull
+    @NotBlank
     private String name;
     @NotEmpty
     private String subject;

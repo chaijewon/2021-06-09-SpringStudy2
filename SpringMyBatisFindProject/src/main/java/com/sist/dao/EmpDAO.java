@@ -18,5 +18,10 @@ public class EmpDAO extends SqlSessionDaoSupport{
 	{
 		return getSqlSession().selectList("empNameListData");
 	}
+	
+	public List<EmpVO> empFindData(Map map)
+	{
+		return getSqlSession().selectList("empFindData",map);
+	}
    
 }

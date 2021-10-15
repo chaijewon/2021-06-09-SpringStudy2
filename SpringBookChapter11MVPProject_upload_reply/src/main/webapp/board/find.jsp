@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%><!-- 날짜변환 (오라클/자바) -->
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%--
     <spring:~> <form: ~ 에러 처리> 검증 (유효성 검사)
  --%>
@@ -38,23 +37,12 @@ h1{
           title=자료실
           title_en=Title
     --%>
-    <h1><spring:message code="list.title"/></h1>
+    <h1>검색결과</h1>
     <div class="row">
       <table class="table">
        <tr>
          <td>
-          <a href="insert.do" class="btn btn-sm btn-danger">새글</a>
-          <%--Default가 GET <a>에는 메소드를 지정하는 속성이 없다 
-              POST : <form method="post"> => @PostMapping
-              Ajax : $.ajax({
-                        type:'post' => @PostMapping
-                        type:'get'  => @GetMapping
-                     })
-              VueJs/ReactJS(자체 = Ajax)
-                    axios.get() => @GetMapping
-                    axios.post() => @PostMapping
-                    ============================= ajax를 대체 
-          --%>
+          <a href="list.do" class="btn btn-sm btn-danger">목록</a>
          </td>
        </tr>
       </table>
@@ -82,47 +70,7 @@ h1{
          </tr>
         </c:forEach>
       </table>
-      <table class="table">
-       <tr>
-         <td class="text-left">
-          <form method=post action="find.do">
-	          <input type="checkbox" name="fsArr" value="N">이름
-	          <input type="checkbox" name="fsArr" value="S">제목
-	          <input type="checkbox" name="fsArr" value="C">내용
-	          <%-- 동적 쿼리 --%>
-	          <input type=text name=ss size=15 class="input-sm">
-	          <button class="btn btn-sm btn-primary">검색</button>
-          </form>
-         </td>
-         <td class="text-right">
-           <ul class="pagination">
-             <c:if test="${startPage>1 }">
-              <li><a href="list.do?page=${startPage-1 }">&lt;</a></li>
-             </c:if>
-               <c:forEach var="i" begin="${startPage }" end="${endPage }" step="1">
-                <c:if test="${curpage==i }">
-                  <c:set var="style" value="class=active"/>
-                </c:if>
-                <c:if test="${curpage!=i }">
-                  <c:set var="style" value=""/>
-                </c:if>
-                <li ${style }><a href="list.do?page=${i }">${i }</a></li>
-               </c:forEach>
-             <c:if test="${endPage<totalpage }">
-			  <li><a href="list.do?page=${endPage+1 }">&gt;</a></li>
-			 </c:if>
-			</ul>
-         </td>
-       </tr>
-      </table>
     </div>
    </div>
 </body>
 </html>
-
-
-
-
-
-
-

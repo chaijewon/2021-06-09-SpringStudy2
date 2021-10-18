@@ -46,7 +46,7 @@
         <li><a class="drop" href="#">커뮤니티</a>
           <ul>
             <li><a href="#">자유게시판</a></li>
-            <li><a href="#">묻고답하기</a></li>
+            <li><a href="../replyboard/list.do">묻고답하기</a></li>
             <li><a href="#">실시간 상담(webSocket)</a></li>
           </ul>
         </li>

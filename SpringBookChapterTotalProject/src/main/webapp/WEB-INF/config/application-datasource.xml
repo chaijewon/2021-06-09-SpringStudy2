@@ -39,9 +39,13 @@
           Datasoure / XML => SqlSessionFactoryBean / SqlSessionTemplate
      -->
     <!-- Mapper -->
-    <bean id="mapper" class="org.mybatis.spring.mapper.MapperFactoryBean"
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
        p:sqlSessionFactory-ref="ssf"
        p:mapperInterface="com.sist.mapper.SeoulMapper"
+    />
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.mapper.ReplyBoardMapper"
     />
     <!-- <mybatis-spring:scan base-package="com.sist.mapper"/> -->
 </beans>

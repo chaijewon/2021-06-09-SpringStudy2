@@ -29,6 +29,7 @@
         </td>
        </tr>
      </table>
+     <div style="height: 450px">
      <table class="table">
        <tr>
         <th class="text-center" width=10%>번호</th>
@@ -47,6 +48,12 @@
          <tr>
 	        <td class="text-center" width=10%>${vo.no }</td>
 	        <td width=45%>
+	          <c:if test="${vo.group_tab>0 }">
+	            <c:forEach var="i" begin="1" end="${vo.group_tab }">
+	              &nbsp;&nbsp;
+	            </c:forEach>
+	            <img src="re_icon.png">
+	          </c:if>
 	          <a href="../replyboard/detail.do?no=${vo.no }&page=${curpage}">${vo.subject }</a>
 	          <c:if test="${today==vo.dbday }">
 	            &nbsp;<sup style="color:red">new</sup>
@@ -58,6 +65,7 @@
 	       </tr>
        </c:forEach>
      </table>
+     </div>
      <table class="table">
        <tr>
         <td class="text-left inline">

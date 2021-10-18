@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+    <mvc:interceptors>
+      <mvc:interceptor>
+        <mvc:mapping path="/**/*"/><!--  controller전체 -->
+        <bean id="commonLogInterceptor" class="com.sist.interceptor.CommonLogInterceptor"></bean>
+      </mvc:interceptor>
+    </mvc:interceptors>
+    <!-- 메세지 훅 : 채팅 (ws)/ 일반 사이트(http)  -->
+    <!-- 
+           서버를 따로 돌린다 
+           채팅 : NodeJS ==> 모듈화 (React) 
+           일반 사이트 : Spring
+     -->
+</beans>

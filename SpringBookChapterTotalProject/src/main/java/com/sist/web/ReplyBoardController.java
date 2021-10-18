@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -104,10 +106,80 @@ public class ReplyBoardController {
    public String replyboard_detail(int no,int page,Model model)
    {
 	   // 결과값 읽기 => DAO연결 
+	   // 내용보기 데이터 가지고 오기 
+	   ReplyBoardVO vo=dao.replyBoardDetailData(no);
+	   // 데이터를 JSP로 전송 
+	   model.addAttribute("vo", vo);
+	   model.addAttribute("curpage", page);
 	   model.addAttribute("main_jsp", "../replyboard/detail.jsp");
 	   return "main/main";
    }
    
+   // ../replyboard/reply.do?no=${vo.no }&page=${curpage}
+   @GetMapping("reply.do")
+   public String replyboard_reply(int no,int page,Model model)
+   {
+	   model.addAttribute("no", no);
+	   model.addAttribute("page", page);
+	   model.addAttribute("main_jsp", "../replyboard/reply.jsp");//답변 폼 
+	   return "main/main";
+   }
+   // ../replyboard/reply_ok.do
+   @PostMapping("reply_ok.do")
+   public String replyboard_reply_ok(int pno,int page, ReplyBoardVO vo,RedirectAttributes attr)
+   {
+	   dao.replyBoardReplyInsert(pno, vo);
+	   attr.addAttribute("page", page); // 데이터 전송 => xml에 셋팅 
+	   // RedirectAttributes(sendRedirect()) , Model (forward일 경우에 사용) => 데이터 전송이 가능 
+	   return "redirect:../replyboard/list.do";// page => list.do?page=+page
+	   // http://localhost:8080/web/replyboard/list.do?page=2
+   }
+   // ../replyboard/update.do?no=${vo.no }&page=${curpage} => 요청 = 수정 폼을 보여달라 
+   /*
+    *    detail.do ======> update.jsp(X)
+    *                      @Controller
+    *                      @GetMapping("update.do") ======> update.jsp
+    *              no,page                          no,page
+    */
+   @GetMapping("update.do")
+   public String replyboard_update(int no,int page,Model model)
+   {
+	   // no,page를 전송 
+	   model.addAttribute("no", no);
+	   model.addAttribute("page", page);
+	   // => 이전에 입력된 게시물을 전송 
+	   ReplyBoardVO vo=dao.replyBoardDetailData(no);
+	   model.addAttribute("vo", vo);
+	   // JSP(Model1) , MVC(Model2) 
+	   // => 보안(X), 확장성 낮고 , 혼자서 제작 
+	   // M(Back-End)V(Front-End) , 보안(.class) , 확장성, 재사용이 높다 , 여러명이 동시 작업이 가능  
+	   model.addAttribute("main_jsp", "../replyboard/update.jsp");
+	   return "main/main";
+   }
+   // ../replyboard/update_ok.do
+   /*
+    *   {"no":no,"page":page,"name":name,"subject":subject,"content":content,"pwd":pwd};
+    *   type:'post'
+    */
+   @GetMapping("update_ok.do") // 파일명(JSP명) 
+   @ResponseBody // 데이터만 전송한다 
+   public String replyboard_update_ok(int page,ReplyBoardVO vo)
+   {
+	   int no=0;
+	   // DAO연결 => 데이터 읽기 
+	   no=dao.replyboardUpdate(vo);
+	   
+	   return String.valueOf(no);
+   }
+   // ../replyboard/delete.do?no=${vo.no }&page=${curpage}
+   @GetMapping("delete.do")
+   public String replyboard_delete(int no,int page,Model model)
+   {
+	   model.addAttribute("no", no);
+	   model.addAttribute("page", page);
+	   model.addAttribute("main_jsp", "../replyboard/delete.jsp");
+	   return "main/main";
+   }
 }
 
 

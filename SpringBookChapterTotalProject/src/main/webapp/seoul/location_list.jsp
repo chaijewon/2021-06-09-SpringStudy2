@@ -62,6 +62,16 @@
     </div>
     <!-- ################################################################################################ -->
     <!-- / main body -->
+    <div class="wrapper row3">
+     <h1>최신 방문 명소</h1>
+     <a href="../seoul/location_cookie_delete.do" class="btn btn-sm">쿠키 삭제</a>
+     <hr>
+     <c:forEach var="vo" items="${sList }" varStatus="s">
+      <c:if test="${s.index<10 }">
+       <a href="../seoul/location_detail.do?no=${vo.no }"><img src="${vo.poster }" style="width:100px;height:100px" title="${vo.title }"></a>
+      </c:if>
+     </c:forEach>
+    </div>
     <div class="clear"></div>
   </main>
 </div>

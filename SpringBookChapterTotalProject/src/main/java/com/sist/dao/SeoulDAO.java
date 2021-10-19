@@ -37,4 +37,9 @@ public class SeoulDAO {
   {
 	  return mapper.locationDetailData(no);
   }
+  
+  public SeoulHotelVO hotelDetailData(int no)
+  {
+	  return mapper.hotelDetailData(no);
+  }
 }

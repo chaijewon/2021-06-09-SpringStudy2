@@ -38,4 +38,24 @@ public interface SeoulMapper {
 		 +"FROM seoul_location "
 		 +"WHERE no=#{no}")
   public SeoulLocationVO locationDetailData(int no);// 구현종료 
+  
+  // 호텔 상세보기 
+  @Select("SELECT no,poster,name,score,address,images "
+		 +"FROM seoul_hotel "
+		 +"WHERE no=#{no}")
+  public SeoulHotelVO hotelDetailData(int no);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

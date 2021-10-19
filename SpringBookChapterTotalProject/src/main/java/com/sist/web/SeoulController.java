@@ -5,11 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sist.dao.*;
@@ -19,10 +21,10 @@ import com.sist.vo.SeoulLocationVO;
 import com.sist.vo.SeoulNatureVO;
 // 클래스가 달라도 => RequestMapping("uri") => 같으면 안된다 
 // 폴더명 ==> seoul/list.do   food/list.do 
-@Controller
+@Controller // TYPE (클래스 구분)
 @RequestMapping("seoul/")
 public class SeoulController {
-	@Autowired
+	@Autowired // {CONSTRUCTOR(생성자 구분), FIELD(멤버변수), METHOD(setter), PARAMETER)=>
     private SeoulDAO dao;
 	@Autowired
 	private TwitterManager tm;
@@ -31,7 +33,8 @@ public class SeoulController {
 
 	
 	@RequestMapping("location_list.do")
-	public String seoul_location_list(String page,Model model)
+	// 매개변수는 DispatcherServlet 
+	public String seoul_location_list(String page,Model model,HttpServletRequest request)
 	{
 		if(page==null)
 			page="1";
@@ -59,6 +62,28 @@ public class SeoulController {
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("list", list);
 		model.addAttribute("main_jsp", "../seoul/location_list.jsp");//실제 출력 
+		
+		// Cookie에 저장된 데이터 전송 
+		// 1. Cookie전체 데이터 읽기 
+		Cookie[] cookies=request.getCookies();
+		List<SeoulLocationVO> sList=new ArrayList<SeoulLocationVO>();
+		if(cookies!=null && cookies.length>0)
+		{
+			// Cookie생성 => 쿠키에 값이 있는 경우 
+			for(int i=cookies.length-1;i>=0;i--) // 최신 방문 
+			{
+				// getName() : 키 , getValue():값 
+				//       loc1 loc2...
+				if(cookies[i].getName().startsWith("loc"))
+				{
+					String no=cookies[i].getValue(); // 명소의 고유번호 
+					SeoulLocationVO vo=dao.locationDetailData(Integer.parseInt(no));
+					sList.add(vo);
+				}
+					
+			}
+		}
+		model.addAttribute("sList", sList);
 		return "main/main";
 	}
 	@RequestMapping("nature_list.do")
@@ -94,8 +119,9 @@ public class SeoulController {
 		return "main/main";
 	}
 	@RequestMapping("hotel_list.do")
-	public String seoul_hotel_list(String page,Model model)
+	public String seoul_hotel_list(String page,Model model,HttpServletRequest request)
 	{
+		
 		if(page==null)
 			page="1";
 		int curpage=Integer.parseInt(page);
@@ -123,6 +149,22 @@ public class SeoulController {
 		model.addAttribute("list", list);
 		model.addAttribute("main_jsp", "../seoul/hotel_list.jsp");// 실제 내용을 출력 
 		// request를 공유 : include , forward
+		// Cookie 보내기 => request로 값을 읽어 온다 
+		Cookie[] cookies=request.getCookies();
+		List<SeoulHotelVO> hList=new ArrayList<SeoulHotelVO>();
+		if(cookies!=null && cookies.length>0)
+		{
+			for(int i=cookies.length-1;i>=0;i--)
+			{
+				if(cookies[i].getName().startsWith("hotel"))
+				{
+					String no=cookies[i].getValue();
+					SeoulHotelVO vo=dao.hotelDetailData(Integer.parseInt(no));
+					hList.add(vo);
+				}
+			}
+		}
+		model.addAttribute("hList", hList);
 		return "main/main";// main에서는 조립
 	}
 	// 상세 보기 => 전 (쿠키에 저장) => 최근 방문 명소 
@@ -132,6 +174,8 @@ public class SeoulController {
 	 */
 	// 구분 => HandlerMapping이 메소드 찾아서 호출이 가능 
 	@GetMapping("location_detail_before.do")
+	// Method위에서 메소드만 구분 
+	// @RequestMapping => 메소드 구분 , 클래스 구분 (target = METHOD , TYPE)
 	public String location_detail_before(int no,RedirectAttributes attr,HttpServletResponse response)
 	{
 		// response => 응답 (클라이언트 브라우저로 전송 : HTML코드 , 쿠키 전송=> 한번에 전송이 불가능)
@@ -154,6 +198,8 @@ public class SeoulController {
 		return "redirect:../seoul/location_detail.do";
 	}
 	// 상세보기 
+	//@RequestMapping(value="",method=RequestMethod.GET) => GetMapping
+	//@RequestMapping(value="",method=RequestMethod.POST)=> PostMapping
 	@GetMapping("location_detail.do")
 	public String location_detail(int no,Model model)
 	{
@@ -184,6 +230,92 @@ public class SeoulController {
 		// request공유 => include / forward ==> 공유가 된다 (request는 main.jsp)
 		return "main/main";// 메뉴/footer유지 => 중간에 출력 
 	}
+	// ../seoul/hotel_detail_before.do?no=${vo.no} => 요청 처리 (개발자) , Spring : 찾아서 메소드호출 
+	// 요청 받기 (.do) => 처리 메소드 호출 => JSP로 request전송 
+	//                 ======== 개발자가 수행 
+	@GetMapping("hotel_detail_before.do")
+	public String hotel_detail_before(int no,RedirectAttributes attr,HttpServletResponse response)
+	{
+		// forward : Model (request) , redirect : RedirectAttributes(request가 포함되어 있지 않는다)
+		// ?no=1  ==> attr.addAttribute("no",1)
+		// 쿠키 생성
+		// Cookie(String name, String value)
+
+		Cookie cookie=new Cookie("hotel"+no, String.valueOf(no));
+		// 기간 / 패스 (저장위치)
+		cookie.setMaxAge(60*60*24); // 초단위 계산 (1일 저장)
+		cookie.setPath("/");
+		// 쿠키를 클라이언트 브라우저로 전송 
+		response.addCookie(cookie);
+		attr.addAttribute("no", no); // redirect일 경우에만 사용한다 
+		return "redirect:../seoul/hotel_detail.do";
+	}
+	
+	//../seoul/hotel_detail.do => <form> , Ajax:type 
+	// <a> , location.href , sendRedirect => GET 
+	// sendRedirect => redirect:
+	/*
+	 *    HandlerMapping 
+	 *    1. URI를 얻어 온다 (브라우저 주소창)
+	 *    2. class안에서 => RequestMapping,GetMapping,PostMapping
+	 *    
+	 *    String uri=request.getRequestURI();
+	 *    // http://localhost:8080 (URL)
+	 *    uri="/web/seoul/hotel_list.do"
+	 *         ====request.getContextPath()
+	 *         
+	 *    uri=uri.substring(request.getContextPath().length()+1)
+	 *    uri="seoul/hotel_list.do"
+	 *    
+	 *    => method.invoke() => 메소드 호출 (메소드명이 없어도 호출이 가능) => 
+	 */
+	// ../seoul/hotel_detail.do
+	// DAO ==> 호출되는 위치 => Controller ==> JSP전송 
+	@GetMapping("hotel_detail.do")
+	public String hotel_detail(int no,Model model) // model => request가 첨부 (전송만 가능:전송객체)
+	{
+		// forward => main
+		/*
+		 *   ===============
+		 *   
+		 *   ===============
+		 *   
+		 *   Detail 
+		 *   
+		 *   ===============
+		 *   
+		 *   ===============
+		 */
+		// Hotel 한개에 대한 데이터 전송 (DAO)
+		SeoulHotelVO vo=dao.hotelDetailData(no);
+		model.addAttribute("vo", vo);
+		// include할 JSP를 보내준다 
+		model.addAttribute("main_jsp", "../seoul/hotel_detail.jsp");
+		return "main/main";
+	}
+	
+	//../seoul/location_cookie_delete.do
+	@GetMapping("location_cookie_delete.do")
+	public String location_cookie_delete(HttpServletRequest request,HttpServletResponse response)
+	{
+		// 쿠키 삭제 
+		Cookie[] cookies=request.getCookies();
+		if(cookies!=null && cookies.length>0)
+		{
+			for(int i=0;i<cookies.length;i++)
+			{
+				if(cookies[i].getName().startsWith("loc"))
+				{
+					cookies[i].setPath("/");
+					cookies[i].setMaxAge(0);
+					response.addCookie(cookies[i]);
+				}
+			}
+		}
+		return "redirect:../seoul/location_list.do";
+	}
+	
+	
 	
 }
 

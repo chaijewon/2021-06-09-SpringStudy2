@@ -27,11 +27,11 @@
           <ul class="nospace clear">
            <c:forEach var="vo" items="${list }" varStatus="s">
              <c:if test="${s.index%4==0 }">
-              <li class="one_quarter first"><a href="#"><img src="${vo.poster }" title="${vo.name }"
+              <li class="one_quarter first"><a href="../seoul/hotel_detail_before.do?no=${vo.no}"><img src="${vo.poster }" title="${vo.name }"
               style="width:250px;height:250px"></a></li>
              </c:if>
              <c:if test="${s.index%4!=0 }">
-              <li class="one_quarter"><a href="#"><img src="${vo.poster }" title="${vo.name }"
+              <li class="one_quarter"><a href="../seoul/hotel_detail_before.do?no=${vo.no}"><img src="${vo.poster }" title="${vo.name }"
               style="width:250px;height:250px"></a></li>
              </c:if>
            </c:forEach>
@@ -62,6 +62,15 @@
     </div>
     <!-- ################################################################################################ -->
     <!-- / main body -->
+    <div class="wrapper row3">
+     <h1>최신 방문 호텔</h1>
+     <hr>
+     <c:forEach var="vo" items="${hList }" varStatus="s">
+      <c:if test="${s.index<10 }">
+       <a href="../seoul/hotel_detail.do?no=${vo.no }"><img src="${vo.poster }" style="width:100px;height:100px" title="${vo.name }"></a>
+      </c:if>
+     </c:forEach>
+    </div>
     <div class="clear"></div>
   </main>
 </div>

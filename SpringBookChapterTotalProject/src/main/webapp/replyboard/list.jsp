@@ -69,11 +69,13 @@
      <table class="table">
        <tr>
         <td class="text-left inline">
-         <input type="checkbox" value="N" class="input-sm" name="fs">이름
-         <input type="checkbox" value="S" class="input-sm" name="fs">제목
-         <input type="checkbox" value="C" class="input-sm" name="fs">내용
-         <input type=text name=ss size=15 class="input-sm">
-         <input type=submit class="btn btn-sm btn-success" value="검색">
+	        <form method="post" action="../replyboard/find.do">
+	         <input type="checkbox" value="N" class="input-sm" name="fs">이름
+	         <input type="checkbox" value="S" class="input-sm" name="fs">제목
+	         <input type="checkbox" value="C" class="input-sm" name="fs">내용
+	         <input type=text name=ss size=15 class="input-sm">
+	         <input type=submit class="btn btn-sm btn-success" value="검색">
+	        </form>
         </td>
         <td class="text-right">
          <a href="../replyboard/list.do?page=${curpage>1?curpage-1:curpage }" class="btn btn-sm btn-primary">이전</a>

@@ -1,5 +1,6 @@
 package com.sist.dao;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -186,6 +187,77 @@ public class ReplyBoardDAO {
 		   result=0;
 	   }
 	   return result;
+   }
+   /*
+    *   // 삭제하기 => SQL (트랜잭션 적용)
+	   // 1. 비밀번호 검색 => 재사용 (public String replyboardGetPassword(int no))
+	   // 2. 비밀번호가 맞는 경우 
+	   // 2-1. root,depth 읽기 
+	   @Select("SELECT root,depth FROM spring_replyboard0 WHERE no=#{no}")
+	   public ReplyBoardVO replyboardGetDepth(int no);
+	   // 2-2. depth==0  ==> DELETE (삭제) => 비밀번호 (O) , depth=0
+	   @Delete("DELETE FROM spring_replyboard0 WHERE no=#{no}")
+	   public void replyDelete(int no);
+	   // 2-3. depth!=0  ==> UPDATE (제목 : 관리자가 삭제한 게시물입니다)
+	   @Update("UPDATE spring_replyboard0 SET "
+			  +"subject=#{subject},content=#{content} "
+			  +"WHERE no=#{no}")
+	   public void replyboardDelUpdate(ReplyBoardVO vo);
+	   // 2-4. depth 감소 => UPDATE
+	   @Update("UPDATE spring_replyboard0 SET "
+			  +"depth=depth-1 "
+			  +"WHERE no=#{no}")
+	   public void depthDecrement(int no);
+	   
+	   요청 : .do 
+	            1) Controller => @RequestMapping (구분) <=====> DAO연결 
+	                                     | request
+	                                    JSP로 전송 
+    */
+   @Transactional(propagation=Propagation.REQUIRED,rollbackFor=Exception.class)
+   public int replyDelete(int no,String pwd)
+   {
+	   // conn.setAutoCommit(false);
+	   int result=0;
+	   // 비밀번호 읽기 
+	   String db_pwd=mapper.replyboardGetPassword(no);
+	   if(db_pwd.equals(pwd))
+	   {
+		   result=1;
+		   // root,depth를 읽어 온다 
+		   ReplyBoardVO vo=mapper.replyboardGetDepth(no);
+		   if(vo.getDepth()==0)// 댓글이 없는 상태 
+		   {
+			   // 삭제하면 된다 
+			   mapper.replyDelete(no); // DELETE
+		   }
+		   else // 댓글이 있는 상태
+		   {
+			   ReplyBoardVO pvo=new ReplyBoardVO();
+			   pvo.setSubject("관리자가 삭제한 게시물입니다.");
+			   pvo.setContent("관리자가 삭제한 게시물입니다.");
+			   pvo.setNo(no);
+			   mapper.replyboardDelUpdate(pvo);//UPDATE
+		   }
+		   /*int depth=mapper.replyboardRootGetDepth(vo.getRoot());
+		   if(depth>0)
+		   {*/
+		       mapper.depthDecrement(vo.getRoot());// 상위게시물 //UPDATE
+		  /* }*/
+	   }
+	   else
+	   {
+		   result=0;
+	   }
+	   // conn.commit()
+	   // conn.rollback() => SQL문장을 저장하지 않고 취소 
+	   // conn.setAutoCommit(true);
+	   // => AOP ==> @Transactional() 
+	   return result;
+   }
+   public List<ReplyBoardVO> replyboardFindData(Map map)
+   {
+	   return mapper.replyboardFindData(map);
    }
 }
 

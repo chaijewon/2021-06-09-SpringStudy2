@@ -27,6 +27,7 @@ public interface ReplyBoardMapper {
 	   @Update("UPDATE spring_replyboard0 SET "
 			  +"hit=hit+1 "
 			  +"WHERE no=#{no}")
+	   // 함수를 이용하면 => as 반드시 사용한다 
 	   public void hitIncrement(int no);
 	   @Select("SELECT no,name,subject,content,TO_CHAR(regdate,'YYYY-MM-DD HH24:MI:SS') as dbday,hit "
 			  +"FROM spring_replyboard0 "
@@ -89,13 +90,84 @@ public interface ReplyBoardMapper {
 	   // 1. 비밀번호 검색 => 재사용 (public String replyboardGetPassword(int no))
 	   // 2. 비밀번호가 맞는 경우 
 	   // 2-1. root,depth 읽기 
-	   // 2-2. depth==0  ==> DELETE (석제)
+	   @Select("SELECT root,depth FROM spring_replyboard0 WHERE no=#{no}")
+	   public ReplyBoardVO replyboardGetDepth(int no);
+	   // 2-2. depth==0  ==> DELETE (삭제) => 비밀번호 (O) , depth=0
+	   @Delete("DELETE FROM spring_replyboard0 WHERE no=#{no}")
+	   public void replyDelete(int no);
 	   // 2-3. depth!=0  ==> UPDATE (제목 : 관리자가 삭제한 게시물입니다)
+	   @Update("UPDATE spring_replyboard0 SET "
+			  +"subject=#{subject},content=#{content} "
+			  +"WHERE no=#{no}")
+	   public void replyboardDelUpdate(ReplyBoardVO vo);
 	   // 2-4. depth 감소 => UPDATE
+	   @Update("UPDATE spring_replyboard0 SET "
+			  +"depth=depth-1 "
+			  +"WHERE no=#{no}")
+	   public void depthDecrement(int no);
+	   
+	   @Select("SELECT depth FROM spring_replyboard0 WHERE no=#{no}")
+	   public int replyboardRootGetDepth(int no);
 	   // 검색 => 동적 쿼리 
 	   // 마이바티스 => 동적 쿼리 , 어노테이션 (JOIN) , PL/SQL ==> CURD (INSERT/UPDATE/DELETE/SELECT)
 	   // @SELECT({"SELECT * FROM spring_replyboard0 WHERE "
 	   //           +"<script><trim prefix="("
+	   // 동적 쿼리 사용 => <script> => 태그이용한다
+	   /*
+	    *     N
+	    *     WHERE name LIKE '%'||#{ss}||'%'
+	    *     
+	    *     S
+	    *     WHERE subject LIKE '%'||#{ss}||'%'
+	    *     
+	    *     C
+	    *     WHERE content LIKE '%'||#{ss}||'%'
+	    *     
+	    *     N / S
+	    *     WHERE OR name LIKE '%'||#{ss}||'%' OR subject LIKE '%'||#{ss}||'%'
+	    *     N / C
+	    *     WHERE OR name LIKE '%'||#{ss}||'%' OR content LIKE '%'||#{ss}||'%'
+	    *     N / S / C
+	    *     WHERE name LIKE '%'||#{ss}||'%' OR subject LIKE '%'||#{ss}||'%' OR content LIKE '%'||#{ss}||'%'
+	    *     S /C
+	    *     WHERE subject LIKE '%'||#{ss}||'%' OR content LIKE '%'||#{ss}||'%'
+	    *     
+	    *     trim => prefix="OR" suffix="AND"
+	    *     
+	    *     OR name LIKE '%'||#{ss}||'%'
+	    *     name LIKE '%'||#{ss}||'%' AND
+	    *     
+	    *     prefixOverrides=\"OR\" 
+	    *     (OR) name LIKE '%'||#{ss}||'%'
+	    *     
+	    *     ==> 조건 검색시 => 동적 쿼리 
+	    */
+	   @Select({
+		         "<script>"
+		        +"SELECT no,subject,name,TO_CHAR(regdate,'YYYY-MM-DD') as dbday,hit "
+		        +"FROM spring_replyboard0 "
+		        +"WHERE "
+		        +"<trim prefix=\"(\" suffix=\")\" prefixOverrides=\"OR\">"
+		        // for(String fs:fsArr) collection=> 배열 , List
+		        +"<foreach collection=\"fsArr\" item=\"fd\">"
+		        +"<trim prefix=\"OR\">"
+		        +"<choose>"
+		        +"<when test=\"fd=='N'.toString()\">"
+		        +"name LIKE '%'||#{ss}||'%'"
+		        +"</when>"
+		        +"<when test=\"fd=='S'.toString()\">"
+		        +"subject LIKE '%'||#{ss}||'%'"
+		        +"</when>"
+		        +"<when test=\"fd=='C'.toString()\">"
+		        +"content LIKE '%'||#{ss}||'%'"
+		        +"</when>"
+		        +"</choose>"
+		        +"</trim>"
+		        +"</foreach>"
+		        +"</trim>"
+		        +"</script>"
+	   })
+	   public List<ReplyBoardVO> replyboardFindData(Map map);
 }
 
 

@@ -180,6 +180,37 @@ public class ReplyBoardController {
 	   model.addAttribute("main_jsp", "../replyboard/delete.jsp");
 	   return "main/main";
    }
+   // ../replyboard/delete_ok.do
+   @GetMapping("delete_ok.do")
+   @ResponseBody  // 파일명, .do를 보내는 것이 아니라 => 0,1 (일반 데이터값을 전송) => 16장 @RestController
+   // 스크립트 , XML , JSON , 일반 데이터값 전송 => 웹/앱 => 많이 데이터를 전송 => 메소드처리 => 클래스 처리
+   public String replyboard_delete_ok(int no,String pwd)
+   {
+	   int result=0;
+	   // 데이터베이스 연동
+	   result=dao.replyDelete(no, pwd);
+	   return String.valueOf(result);
+   }
+   // ../replyboard/find.do
+   /*
+    *        <input type="checkbox" value="N" class="input-sm" name="fs">이름
+	         <input type="checkbox" value="S" class="input-sm" name="fs">제목
+	         <input type="checkbox" value="C" class="input-sm" name="fs">내용
+	         <input type=text name=ss size=15 class="input-sm">
+    */
+   @PostMapping("find.do")
+   public String replyboard_find(String[] fs,String ss,Model model)
+   {
+	   // DAO => SQL문장 
+	   Map map=new HashMap();
+	   map.put("fsArr", fs);
+	   map.put("ss", ss);
+	   List<ReplyBoardVO> list=dao.replyboardFindData(map);
+	   model.addAttribute("list", list);
+	   model.addAttribute("main_jsp", "../replyboard/find.jsp");
+	   return "main/main";
+   }
+   
 }
 
 

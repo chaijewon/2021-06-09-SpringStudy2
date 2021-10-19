@@ -27,11 +27,11 @@
           <ul class="nospace clear">
            <c:forEach var="vo" items="${list }" varStatus="s">
              <c:if test="${s.index%4==0 }">
-              <li class="one_quarter first"><a href="#"><img src="${vo.poster }" title="${vo.title }"
+              <li class="one_quarter first"><a href="../seoul/location_detail_before.do?no=${vo.no }"><img src="${vo.poster }" title="${vo.title }"
               style="width:250px;height:250px"></a></li>
              </c:if>
              <c:if test="${s.index%4!=0 }">
-              <li class="one_quarter"><a href="#"><img src="${vo.poster }" title="${vo.title }"
+              <li class="one_quarter"><a href="../seoul/location_detail_before.do?no=${vo.no }"><img src="${vo.poster }" title="${vo.title }"
               style="width:250px;height:250px"></a></li>
              </c:if>
            </c:forEach>

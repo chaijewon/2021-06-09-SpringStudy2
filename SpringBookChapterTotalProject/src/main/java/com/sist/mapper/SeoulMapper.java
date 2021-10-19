@@ -32,4 +32,10 @@ public interface SeoulMapper {
 			+"FROM seoul_hotel ORDER BY no ASC)) "
 			+"WHERE num BETWEEN #{start} AND #{end}")
   public List<SeoulHotelVO> hotelListData(Map map);
+  
+  // 명소 상세보기 
+  @Select("SELECT no,poster,title,msg,address "
+		 +"FROM seoul_location "
+		 +"WHERE no=#{no}")
+  public SeoulLocationVO locationDetailData(int no);// 구현종료 
 }

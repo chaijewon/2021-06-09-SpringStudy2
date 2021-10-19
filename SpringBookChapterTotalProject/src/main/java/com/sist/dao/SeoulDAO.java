@@ -31,4 +31,10 @@ public class SeoulDAO {
   {
 	  return mapper.seoulTotalPage(map);
   }
+  
+  // 상세보기 
+  public SeoulLocationVO locationDetailData(int no)
+  {
+	  return mapper.locationDetailData(no);
+  }
 }

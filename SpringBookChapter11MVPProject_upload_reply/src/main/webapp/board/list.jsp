@@ -74,7 +74,9 @@ h1{
            <%-- 모든 데이터에 값이 존재하면 (int no) --%>
           </td><%-- 댓글 갯수 --%>
           <td class="text-center" width=15%>${vo.name }</td>
-          <td class="text-center" width=20%><fmt:formatDate value="${vo.regdate }" pattern="yyyy-MM-dd"/></td>
+          <td class="text-center" width=20%><%-- <fmt:formatDate value="${vo.regdate }" pattern="yyyy-MM-dd"/> --%>
+            ${vo.regdate }
+          </td>
           <%--
                   fmt:formatDate => SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd")
            --%>

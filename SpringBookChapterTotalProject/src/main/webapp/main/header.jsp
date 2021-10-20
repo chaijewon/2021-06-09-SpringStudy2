@@ -18,7 +18,14 @@
       <!-- ################################################################################################ -->
       <ul class="clear">
         <li class="active"><a href="../main/main.do">Home</a></li>
-        <li><a href="#">회원가입</a></li>
+        <li><a href="#">로그인</a></li>
+        <li><a class="drop" href="#">회원</a>
+          <ul>
+            <li><a href="../member/join.do">회원가입</a></li>
+            <li><a href="../member/idfind.do">아이디찾기</a></li>
+            <li><a href="../member/pwdfind.do">비밀번호찾기</a></li>
+          </ul>
+        </li>
         <li><a class="drop" href="#">맛집</a>
           <ul>
             <li><a href="../food/category.do">카테고리</a></li>

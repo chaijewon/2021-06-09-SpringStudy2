@@ -1,4 +1,5 @@
 package com.sist.dao;
+import java.time.LocalDateTime;
 /*
  *  NO        NOT NULL NUMBER         
 NAME      NOT NULL VARCHAR2(34)   
@@ -15,6 +16,7 @@ FILECOUNT          NUMBER
  */
 import java.util.*;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 /*
  *    <input type=text name=name size=10>  => String name;
@@ -30,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class DataBoardVO {
     private int no,filecount,hit;
     private String name,subject,content,pwd,filename,filesize;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date regdate;
     // 파일 목록을 받는다 
     private List<MultipartFile> files;
@@ -101,6 +104,7 @@ public class DataBoardVO {
 	public void setRegdate(Date regdate) {
 		this.regdate = regdate;
 	}
+	
    
 }
 

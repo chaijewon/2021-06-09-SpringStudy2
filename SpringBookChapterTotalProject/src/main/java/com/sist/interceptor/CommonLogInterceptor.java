@@ -6,7 +6,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 /*
- *       
+ *       Spring 
+ *       ======
+ *       1. setting (String동작을 위한 셋팅) => web.xml , application-*.xml
+ *       2. 사용자 요청 처리 
+ *          @Controller => 메소드 @RequestMapping,@GetMapping,@PostMapping
+ *       3. JSP (자바 코딩을 하지 않는다 => JSTL/EL)
+ *       ================================================================
+ *       MyBatis는 데이터베이스 연결 (일반 JDBC,DBCP,ORM) => 설정 따로 된다 
+ *       ==========> mybatis-spring(호환)
  */
 // 로그 파일 만들때 
 public class CommonLogInterceptor extends HandlerInterceptorAdapter{

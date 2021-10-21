@@ -63,8 +63,8 @@
 			  }
 			  else if(result=='NOPWD')
 			  {
-				  alert("비리번호가 틀립니다\n다시입력하세요!!");
-				  $('#pwd').val();
+				  alert("비밀번호가 틀립니다\n다시입력하세요!!");
+				  $('#pwd').val("");
 				  $('#pwd').focus();
 			  }
 			  else
@@ -75,6 +75,9 @@
 		  }
 	  })
 	  
+   });
+   $('#logout').click(function(){
+	  location.href="../member/logout.do"; // MemberController (처리)
    });
   });
 </script>

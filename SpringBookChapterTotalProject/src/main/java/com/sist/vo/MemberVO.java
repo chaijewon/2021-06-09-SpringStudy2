@@ -15,8 +15,24 @@ package com.sist.vo;
 	회원 가입 / 회원 수정 / 로그인 (세션) => procedure (댓글)
  */
 public class MemberVO {
-    private String id,pwd,name,sex,birthday,email,post,addr1,addr2,tel,admin,content,msg;
+    private String id,pwd,name,sex,birthday,email,post,addr1,addr2,tel,admin,content,msg,tel1,tel2;
     
+	public String getTel1() {
+		return tel1;
+	}
+
+	public void setTel1(String tel1) {
+		this.tel1 = tel1;
+	}
+
+	public String getTel2() {
+		return tel2;
+	}
+
+	public void setTel2(String tel2) {
+		this.tel2 = tel2;
+	}
+
 	public String getMsg() {
 		return msg;
 	}
@@ -98,7 +114,7 @@ public class MemberVO {
 	}
 	
 	public String getTel() {
-		return tel;
+		return tel1+"-"+tel2;
 	}
 	
 	public void setTel(String tel) {

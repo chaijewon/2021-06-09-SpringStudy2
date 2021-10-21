@@ -46,6 +46,22 @@ public class MemberDAO {
     	}
     	return vo;
     }
+    
+    // 아이디 중복체크 
+    public int memberIdCheck(String id)
+    {
+    	return mapper.memberIdCount(id);
+    }
+    // 회원가입
+    public void memberInsert(MemberVO vo)
+    {
+    	mapper.memberInsert(vo);
+    }
+    // 회원탈퇴
+    public void memberDelete(String id)
+    {
+    	mapper.memberDelete(id);
+    }
 }
 
 

@@ -48,13 +48,41 @@ public class MemberController {
 	   msg=vo.getMsg();
 	   return msg; //NOID,NOPWD,OK
    }
+   @GetMapping("logout.do")
+   public String member_logout(HttpSession session)
+   {
+	   session.invalidate(); // 등록된 모든 데이터 삭제 ==> id=null , name=null
+	   return "redirect:../main/main.do";
+   }
    @PostMapping("join_ok.do")
    public String member_join_ok(MemberVO vo)
    {
 	   //DAO 
+	   dao.memberInsert(vo);
 	   return "redirect:../main/main.do"; //main화면 => 로그인  
    }
    
+   @GetMapping("idcheck.do")
+   // JSP로 결과값만 전송 
+   @ResponseBody
+   public String member_idcheck(String id)
+   {
+	   String msg="";
+	   // DAO 연결
+	   int count=dao.memberIdCheck(id);
+	   msg=String.valueOf(count);
+	   return msg;
+   }
+   // @RestController => 
+   @GetMapping("join_delete.do")
+   public String member_join_delete(HttpSession session)
+   {
+	   String id=(String)session.getAttribute("id");
+	   // DAO
+	   dao.memberDelete(id);
+	   session.invalidate(); // DB에서 삭제 => session은 그대로 있다 
+	   return "member/delete";
+   }
 }
 
 

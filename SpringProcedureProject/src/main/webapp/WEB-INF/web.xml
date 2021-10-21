@@ -24,7 +24,7 @@
 		
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
-		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.do</url-pattern> <!--  / *.nhn *.daum  -->
 	</servlet-mapping>
     <!-- 한글변환 -->
     <filter>

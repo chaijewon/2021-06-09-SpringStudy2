@@ -14,6 +14,7 @@
   <%-- Footer --%>
   <jsp:include page="footer.jsp"></jsp:include>
     <script src="../layout/scripts/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 	<script src="../layout/scripts/jquery.backtotop.js"></script>
 	<script src="../layout/scripts/jquery.mobilemenu.js"></script>
 	<!-- Homepage specific -->

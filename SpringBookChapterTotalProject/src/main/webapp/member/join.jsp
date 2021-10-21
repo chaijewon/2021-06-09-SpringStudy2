@@ -52,6 +52,12 @@
       </td>
     </tr>
     <tr>
+      <th align="right" width=20%>이메일</th>
+      <td width=80% class="inline">
+       <input type=text name=email size=50 class="input-sm">
+      </td>
+    </tr>
+    <tr>
       <th align="right" width=20%>우편번호</th>
       <td width=80% class="inline">
        <input type="text" name=post size=10 readonly>

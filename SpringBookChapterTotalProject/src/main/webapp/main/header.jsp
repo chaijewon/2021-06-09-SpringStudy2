@@ -6,6 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
 <script>
@@ -14,8 +15,8 @@
    $('#login').click(function(){
 	   $("#dialog").dialog({
 	         autoOpen:false,
-	         width:270,
-	         height:180,
+	         width:280,
+	         height:230,
 	         modal : true
 	    }).dialog("open");
    });

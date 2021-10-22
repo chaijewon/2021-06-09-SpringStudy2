@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script><!-- Jquery lib -->
 <script type="text/javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
@@ -23,8 +24,8 @@ $(function(){
 	    $('#idBtn').click(function(){
 		   $("#dialog_idcheck").dialog({
 		         autoOpen:false,
-		         width:420,
-		         height:150,
+		         width:450,
+		         height:170,
 		         modal : true
 		    }).dialog("open");
 	   });
@@ -92,7 +93,7 @@ $(function(){
       <th align="right" width=20%>아이디</th>
       <td width=80% class="inline">
        <input type=text name=id size=15 class="input-sm" readonly id=id_1>
-       <input type=button class="btn btn-xs" id="idBtn" value="중복체크">
+       <input type=button class="btn btn-sm" id="idBtn" value="중복체크">
       </td>
     </tr>
     <tr>
@@ -130,7 +131,7 @@ $(function(){
     <tr>
       <th align="right" width=20%>우편번호</th>
       <td width=80% class="inline">
-       <input type="text" name=post size=10 readonly id=post>
+       <input type="text" name=post size=10 readonly id=post class="input-sm">
        <input type=button class="btn" value="우편번호검색" onclick="postfind()">
       </td>
     </tr>

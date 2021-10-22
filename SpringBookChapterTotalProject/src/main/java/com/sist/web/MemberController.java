@@ -58,6 +58,8 @@ public class MemberController {
    public String member_join_ok(MemberVO vo)
    {
 	   //DAO 
+	   // tel1 , tel2 => tel
+	   vo.setTel(vo.getTel1()+"-"+vo.getTel2());
 	   dao.memberInsert(vo);
 	   return "redirect:../main/main.do"; //main화면 => 로그인  
    }
@@ -83,6 +85,89 @@ public class MemberController {
 	   session.invalidate(); // DB에서 삭제 => session은 그대로 있다 
 	   return "member/delete";
    }
+   
+   @GetMapping("join_update.do") // 회원 수정 요청 => 스프링 (기본 틀 => 요청이 들어오면 해당 메소드 호출 => 데이터 전송)
+   // 요청 처리 , 어떤 데이터 (모델 => 요청에 대한 처리 => 결정 (어떤 화면을 클라이언트에 전송) : 데이터를 보낸다 
+   // ======= Database  , return , Model => addAttribute()
+   public String member_join_update(HttpSession session,Model model)
+   {
+	   // DAO => 호출 
+	   // 처리 
+	   // 데이터 보내는 과정 ==> Model (조립기) => main
+	   // Id읽기 
+	   String id=(String)session.getAttribute("id"); // 브라우저마다 session은 한개만 생성 
+	   // 채팅 (목록) => sessionid => 
+	   
+	   MemberVO vo=dao.memberUpdateData(id);
+	   String tel=vo.getTel();
+	   tel=tel.substring(4);
+	   vo.setTel(tel.trim());
+	   model.addAttribute("vo", vo); // 데이터를 보내는 경우는 여러개를 보낼 수 있다 (request:Object)
+	   
+	   // 기존 이력을 기록을 가지고 온다 
+	   model.addAttribute("main_jsp", "../member/join_update.jsp");
+	   return "main/main";
+   }
+   
+   @PostMapping("join_update_ok.do")
+   public String member_join_update_ok(MemberVO vo,HttpSession session,Model model)
+   {
+	   // 오라클 / session은 별도(반드시 => 오라클 처리 / 세션 처리)
+	   // DAO연결 
+	   vo.setTel(vo.getTel1()+"-"+vo.getTel2());
+	   boolean bCheck=dao.memberJoinUpdate(vo);
+	   if(bCheck==true)
+	   {
+		   session.setAttribute("name", vo.getName());
+	   }
+	   model.addAttribute("bCheck", bCheck); 
+	   // bCheck=true(main.do),bCheck=false(history.back()) => @ResponseBody
+	   return "member/join_update_ok"; // 화면에 출력을 하지 않는다 
+	   // 화면에 출력 => return "main/main";
+   }
+   // 후보키 두개 (기본키=> Primary KEY => 잃어 버린 경우 => 대체할 수 있는 키 : 전화번호 / 이메일) 
+   // 전화번호 , 이메일 => Unique
+   // id를 찾기 위해서는 => 전화번호 , 이메일
+   @GetMapping("idfind.do")
+   public String member_idfind(Model model)
+   {
+	   model.addAttribute("main_jsp", "../member/idfind.jsp");
+	   return "main/main";
+   }
+   
+   @PostMapping("idfind_tel_ok.do")
+   @ResponseBody
+   public String member_idfind_tel_ok(String tel)
+   {
+	   String msg="";
+	   msg=dao.memberIdFindTelData(tel);
+	   return msg;
+   }
+   @PostMapping("idfind_email_ok.do")
+   @ResponseBody
+   public String member_idfind_email_ok(String email)
+   {
+	   String msg="";
+	   //DAO연결
+	   msg=dao.memberIdFindEmailData(email);
+	   return msg;
+   }
+   @GetMapping("pwdfind.do")
+   public String pwdfind(Model model)
+   {
+	   model.addAttribute("main_jsp", "../member/pwdfind.jsp");
+	   return "main/main";
+   }
+   @PostMapping("pwdfind_find_ok.do")
+   @ResponseBody
+   public String member_pwdfind_ok(String id)
+   {
+	   String msg="";
+	   //DAO연결
+	   msg=dao.memberPwdFindData(id);
+	   return msg;
+   }
+   
 }
 
 

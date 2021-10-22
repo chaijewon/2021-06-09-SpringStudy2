@@ -15,7 +15,18 @@
     <!-- AOP -->
     <aop:aspectj-autoproxy/><!-- AOP와 관련된 어노테이션 활성화 : 스프링에 이런 어노테이션을 사용한다 -->
     <!-- MVC활성 : RedirectAttributes , JMS사용  -->
-    <mvc:annotation-driven/>
+    <!-- @ResponseBody , @RestController : 한글깨짐 방지 (Kotlin) -->
+    <mvc:annotation-driven>
+	    <mvc:message-converters>
+	        <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+	            <property name="supportedMediaTypes">
+	                <list>
+	                    <value>text/html;charset=UTF-8</value>
+	                </list>
+	            </property>
+	        </bean>
+	    </mvc:message-converters>
+   </mvc:annotation-driven>
     <!-- 클래스 등록 -->
     <context:component-scan base-package="com.sist.*"/>
     <!-- ViewResolver / TilesView / MultipartResolver / MessageSource -->

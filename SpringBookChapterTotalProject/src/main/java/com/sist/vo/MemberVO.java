@@ -114,7 +114,7 @@ public class MemberVO {
 	}
 	
 	public String getTel() {
-		return tel1+"-"+tel2;
+		return tel;
 	}
 	
 	public void setTel(String tel) {

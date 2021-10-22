@@ -62,6 +62,73 @@ public class MemberDAO {
     {
     	mapper.memberDelete(id);
     }
+    // 회원 수정 데이터 읽기
+    public MemberVO memberUpdateData(String id)
+    {
+    	return mapper.memberUpdateData(id);
+    }
+    // 실제 수정 
+    public boolean memberJoinUpdate(MemberVO vo)
+    {
+    	boolean bCheck=false;
+    	MemberVO dbVO=mapper.memberGetPassword(vo.getId());
+    	if(dbVO.getPwd().equals(vo.getPwd()))
+    	{
+    		bCheck=true;// 비밀번호가 맞는 경우
+    		mapper.memberJoinUpdate(vo);
+    	}
+    	else
+    	{
+    		bCheck=false;//비밀번호가 틀린 경우
+    	}
+    	return bCheck;
+    }
+    
+    public String memberIdFindTelData(String tel)
+    {
+    	String msg="";
+    	int count=mapper.memberIdFindTel(tel);
+    	// 전화번호 존재여부 확인
+    	if(count==0)
+    	{
+    		msg="전화번호가 존재하지 않습니다!!";
+    	}
+    	else
+    	{
+    		msg=mapper.memberIdFindTelData(tel); // h***
+    	}
+    	return msg;
+    }
+    // tel / email => UNIQUE 
+    public String memberIdFindEmailData(String email)
+    {
+    	String msg="";
+    	int count=mapper.memberIdFindEmail(email);
+    	// 전화번호 존재여부 확인
+    	if(count==0)
+    	{
+    		msg="이메일이 존재하지 않습니다!!";
+    	}
+    	else
+    	{
+    		msg=mapper.memberIdFindEmailData(email); // h***
+    	}
+    	return msg;
+    }
+    public String memberPwdFindData(String id)
+    {
+    	String msg="";
+    	int count=mapper.memberIdCount(id);
+    	if(count==0)
+    	{
+    		msg="아이디가 존재하지 않습니다!!";
+    	}
+    	else
+    	{
+    		msg=mapper.memberPwdFindData(id);
+    	}
+    	return msg;
+    }
 }
 
 

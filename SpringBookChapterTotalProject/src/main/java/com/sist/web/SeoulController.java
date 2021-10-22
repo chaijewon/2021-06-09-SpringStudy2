@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sist.dao.*;
 import com.sist.manager.*;
+import com.sist.vo.CommonReplyVO;
 import com.sist.vo.SeoulHotelVO;
 import com.sist.vo.SeoulLocationVO;
 import com.sist.vo.SeoulNatureVO;
@@ -26,6 +27,9 @@ import com.sist.vo.SeoulNatureVO;
 public class SeoulController {
 	@Autowired // {CONSTRUCTOR(생성자 구분), FIELD(멤버변수), METHOD(setter), PARAMETER)=>
     private SeoulDAO dao;
+	@Autowired
+    private CommonReplyDAO cDao;
+	
 	@Autowired
 	private TwitterManager tm;
 	@Autowired
@@ -224,6 +228,9 @@ public class SeoulController {
 		String addr=vo.getAddress();
 		addr=addr.substring(addr.indexOf(" "));
 		vo.setAddress(addr);
+		
+		List<CommonReplyVO> rList=cDao.replyListData(no, 1);
+		model.addAttribute("rList", rList);
 		// 우편번호 주소
 		model.addAttribute("vo", vo);
 		model.addAttribute("main_jsp", "../seoul/location_detail.jsp"); // 상세보기 내용을 출력

@@ -5,7 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+/*
+ *   한개의 모델 , JSP를 가지고 여러개 사용 (재사용) => 공통모듈 
+ *   => 중복이 많은 경우 (공통 모듈을 만들고 사용) 
+ */
 //  전송 담당 (JSP)
 import java.util.*;
 
@@ -17,7 +20,9 @@ import com.sist.dao.*;
 public class ReplyController {
     @Autowired
     private CommonReplyDAO dao;
-    private String[] jsp={"","../seoul/location_detail.do","../seoul/hotel_detail.do"};
+    private String[] jsp={"","../seoul/location_detail.do","../seoul/hotel_detail.do",
+    		"../seoul/nature_detail.do","../freeboard/detail.do","../food/detail.do",
+    		"../recipe/detail.do"};
     // 댓글 목록 
    /* @RequestMapping("reply/list.do")
     public String reply_list(int cno,int tno,Model model)
@@ -42,6 +47,9 @@ public class ReplyController {
     @RequestMapping("reply/update.do")
     public String reply_update(CommonReplyVO vo,RedirectAttributes attr)
     {
+    	System.out.println("tno="+vo.getTno());
+    	System.out.println("cno="+vo.getCno());
+    	System.out.println("msg="+vo.getMsg());
     	dao.replyUpdate(vo.getNo(),vo.getMsg());
     	attr.addAttribute("no", vo.getCno()); // cno => 명소 번호 , 호텔번호 
     	return "redirect:"+jsp[vo.getTno()];
@@ -50,7 +58,7 @@ public class ReplyController {
     public String reply_delete(int no,int cno,int tno,RedirectAttributes attr)
     {
     	dao.replyDelete(no);
-    	attr.addFlashAttribute("no", cno);
+    	attr.addAttribute("no", cno);
     	return "redirect:"+jsp[tno];
     }
 }

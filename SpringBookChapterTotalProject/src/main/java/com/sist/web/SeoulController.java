@@ -231,6 +231,7 @@ public class SeoulController {
 		
 		List<CommonReplyVO> rList=cDao.replyListData(no, 1);
 		model.addAttribute("rList", rList);
+		model.addAttribute("tno", 1);
 		// 우편번호 주소
 		model.addAttribute("vo", vo);
 		model.addAttribute("main_jsp", "../seoul/location_detail.jsp"); // 상세보기 내용을 출력
@@ -297,6 +298,9 @@ public class SeoulController {
 		SeoulHotelVO vo=dao.hotelDetailData(no);
 		model.addAttribute("vo", vo);
 		// include할 JSP를 보내준다 
+		List<CommonReplyVO> rList=cDao.replyListData(no, 2);
+		model.addAttribute("rList", rList);
+		model.addAttribute("tno", 2);
 		model.addAttribute("main_jsp", "../seoul/hotel_detail.jsp");
 		return "main/main";
 	}

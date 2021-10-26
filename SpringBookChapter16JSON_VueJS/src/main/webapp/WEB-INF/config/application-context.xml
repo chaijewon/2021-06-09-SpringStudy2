@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+   <!-- AOP등록 , 인터셉트 : log파일 , 보안 설정(스프링에서 처리) , 트랜잭션(스프링에서 처리) -->
+   <aop:aspectj-autoproxy/><!-- 어노테이션 사용시에 처리 -->
+   <!-- MVC : 한글 변환(다른 프로그램과 연동:자바스트립트,파이썬,C#) -->
+   <mvc:annotation-driven>
+     <!-- 한글 변환  -->
+     <mvc:message-converters>
+	        <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+	            <property name="supportedMediaTypes">
+	                <list>
+	                    <value>text/html;charset=UTF-8</value>
+	                </list>
+	            </property>
+	        </bean>
+	 </mvc:message-converters>
+   </mvc:annotation-driven>
+   <!-- 사용자 정의 클래스 등록  -->
+   <context:component-scan base-package="com.sist.*"/>
+   <!-- JSP를 찾기 : ViewResolver 등록 -->
+   <bean id="viewResolver"
+      class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+      p:prefix="/"
+      p:suffix=".jsp"
+   />
+   <!-- 
+          DI(의존성 주입) : 스프링을 통해서 멤버변수에 값을 채워준다 (setXxx()가 존재해야 값을 주입
+          => InternalResourceViewResolver i=new InternalResourceViewResolver();
+             i.setPrefix("/")
+             i.setSuffix(".jsp);
+          => 생성자 매개변수 사용 
+          => 필요한 메소드 호출이 가능 (init-method,destory-method) 
+          => 스프링 
+             =====
+               DL ==> 등록된 클래스 찾기 (id를 이용해서 클래스 객체 찾기) => getBean() : WEB에서 HandlerMapping
+               DI ==> 객체 생성시에 필요한 데이터를 받아서 생성 (ViewResolver,MyBatis)
+               AOP => 공통모듈 (자동 호출이 가능하게 만들어 준다)
+               MVC => 웹이 발전하면서 등장한 라이브러리 
+    -->
+</beans>
+
+
+
+
+
+
+
+
+
+
+

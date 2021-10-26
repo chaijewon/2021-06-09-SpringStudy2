@@ -16,6 +16,9 @@ public class RestMovieController {
    // XML,JSON , 자바스크립트 => @Controller : forward(JSP파일) , sendRedirect(.do)
 	@Autowired
 	private MovieDAO dao;
+	
+	@Autowired
+	private FoodDAO fdao;
 	// text/html = html , text/xml=xml , text/plain = JSON 
 	@RequestMapping(value="main/movie_list.do",produces="text/plain;charset=UTF-8")
 	// 외부 클라이언트와 연결 
@@ -59,6 +62,34 @@ public class RestMovieController {
 			// 대기업 (현대자동차:React) , 삼성(모바일 =>5G) => 속도에 맞는 프론트 개발 => 유지(쌍용정보통신)
 		}catch(Exception ex){}
 		return json;
+	}
+	// 카테고리 출력
+	// @RequestMapping("list.do") => value(default)
+	@RequestMapping(value="main/category.do",produces="text/plain;charset=UTF-8")
+	public String main_category(int cno)
+	{
+		System.out.println("cno="+cno);
+		String json="";
+		try
+		{
+			Map map=new HashMap();
+			map.put("no", cno);
+			List<CategoryVO> list=fdao.food_categoryData(map);
+			JSONArray arr=new JSONArray(); //[{},{},{},{}...]
+			for(CategoryVO vo:list)
+			{
+				JSONObject obj=new JSONObject(); //자바스크립트에 인식 할 수 있게 (List를 변경=>JSON(배열))
+				// []=> JSONArray  {} => JSONObject => [{},{},{},{},{}.. 12]  
+				obj.put("cno",vo.getCno());
+				obj.put("title", vo.getTitle());
+				obj.put("subject", vo.getSubject());
+				obj.put("poster", vo.getPoster());
+				arr.add(obj);
+			}
+			System.out.println(arr.toJSONString());
+			json=arr.toJSONString();
+		}catch(Exception ex){}
+		return json; // 실제 JSON을 만들어서 전송 
 	}
 	
 }

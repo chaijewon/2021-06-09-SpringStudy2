@@ -49,4 +49,8 @@
        p:sqlSessionFactory-ref="ssf"
        p:mapperInterface="com.sist.dao.MovieMapper"
     />
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.dao.FoodMapper"
+    />
 </beans>

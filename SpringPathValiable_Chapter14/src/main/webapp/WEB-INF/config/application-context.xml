@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+    <context:component-scan base-package="com.sist.*"/>
+    <mvc:annotation-driven/><!-- @PathValiable -->
+    <!-- 
+         Spring.io (opensource)
+                  라이브러리 => 형식 
+         ======================
+         MVC
+         M(Model : 요청처리 = VO,DAO ...) : 사용자 정의(개발자) 
+         V : EL/JSTL 
+         C : (Controller:스프링에서 이미 만들어서 제공) => 반드시 web.xml에 등록 (DispatcherServlet)
+              => 다른 클래스를 인식 (WebApplicationContext(클래스 관리))
+                                         |
+                                      HandlerMapping : 클래스를 찾아서 메소드를 호출 
+                                                       @RequestMapping
+                                      ViewResolver : JSP를 찾는다 (경로명/확장자) => request를 보내준다 
+     -->
+    <bean id="viewResolver"
+      class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+      p:prefix="/"
+      p:suffix=".jsp"
+    />
+</beans>

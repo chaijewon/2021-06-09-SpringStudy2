@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-// 화면 변경 
+// 화면 변경 => insert,update,delete 
 public class FoodController {
    @RequestMapping("food/category.do")
    public String food_category()

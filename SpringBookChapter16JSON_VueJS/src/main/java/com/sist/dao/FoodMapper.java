@@ -50,7 +50,22 @@ public interface FoodMapper {
 		 +"FROM project_food_house "
 		 +"WHERE cno=#{cno}")
   public List<FoodVO> categoryFoodListData(int cno);
+  // 2-1 카테고리 정보 읽기 (JSON => SELECT)  
+  @Select("SELECT title,subject FROM project_food_category "
+		 +"WHERE cno=#{cno}")
+  public CategoryVO categoryInfoData(int cno);
   // 3. 맛집 상세보기 
+  /*
+   *   JSP => EL로 출력 (일반 사이트) => model.addAttribute() => request로 전송 
+   *          ${id} => request.getAttribute("id") 
+   *   JSP => VueJS,ReactJS,Ajax => request에 있는 데이터를 출력할 수 없다 => 인식하는 언어 (JSON) 
+   */
+  @Select("SELECT no,name,poster,address,score,tel,type,parking,price,menu,time "
+		+"FROM project_food_house "
+		+"WHERE no=#{no}")
+  public FoodVO foodDetailData(int no);
+  // 입력값 넘기는 방법 (화면 분할 => 템플릿)
+  // 라우터 (라이브러리)
 }
 
 

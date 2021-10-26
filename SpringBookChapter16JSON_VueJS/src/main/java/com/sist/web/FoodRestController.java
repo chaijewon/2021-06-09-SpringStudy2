@@ -3,6 +3,7 @@ package com.sist.web;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 // 화면이동 => 데이터 변경 (필요한 데이터만 전송) => 같은 파일로 데이터만 전송 => JSON
@@ -138,6 +139,63 @@ public class FoodRestController {
 	   }catch(Exception ex){}
 	   return json;
 	   
+   }
+   
+   @RequestMapping(value="food/rest_category_info.do",produces="text/plain;charset=UTF-8")
+   public String food_rest_category_info(int cno)
+   {
+	   String json="";
+	   try
+	   {
+		   // 값을 DAO로 부터 받아 온다 (VueJS는 오라클 연결을 할 수 없다 => Spring서버를 통해서 데이터를 받는다)
+		   // JS => JS가 인식할 수 있는 데이터로 전송 (일반 데이터는 인식 , JSON , XML) => 자동파싱(JSON)
+		   // 1. 정보를 받는다 
+		   CategoryVO vo=dao.categoryInfoData(cno);
+		   // vo는 인식을 못한다 
+		   // java => c / c++ / c# (불가능)  => socket(네트워크를 이용해서 전송)
+		   // 카톡 ==> 서버(C) / 클라이언트 (자바)
+		   // List ==> JSONArray 
+		   JSONObject obj=new JSONObject(); // VO를 자바스크립트에서 인식 
+		   obj.put("title", vo.getTitle());
+		   obj.put("subject", vo.getSubject());
+		   /*
+		    *    let info={"title":"","subject":""}
+		    *    info.title
+		    *    info.subject
+		    */
+		   json=obj.toJSONString();
+	   }catch(Exception ex){}
+	   return json;
+   }
+   
+   @RequestMapping(value="food/rest_detail_data.do",produces="text/plain;charset=UTF-8")
+   public String food_rest_detail_data(int no)
+   {
+	   String json="";
+	   try
+	   {
+		   // DAO에서 상세보기 데이터 읽기 
+		   FoodVO vo=dao.foodDetailData(no); 
+		   // vo=>JSP인식 , vo=JavaScript(X) => vo와 동일하게 인식 => XML , JSON (자동 파일)
+		   // FoodVO => JSON변경 
+		   JSONObject obj=new JSONObject();
+		   // no,name,poster,address,score,tel,type,parking,price,menu,time
+		   obj.put("no", vo.getNo());
+		   obj.put("name", vo.getName());
+		   obj.put("poster", vo.getPoster());
+		   obj.put("address", vo.getAddress());
+		   obj.put("score", vo.getScore());
+		   obj.put("tel", vo.getTel());
+		   obj.put("type", vo.getType());
+		   obj.put("parking", vo.getParking());
+		   obj.put("price", vo.getPrice());
+		   obj.put("menu", vo.getMenu());
+		   obj.put("time", vo.getTime());
+		   // 데이터 전송 
+		   json=obj.toJSONString();
+		   System.out.println(json);
+	   }catch(Exception ex){}
+	   return json;
    }
 }
 

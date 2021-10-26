@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vue"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <style type="text/css">
@@ -86,14 +86,16 @@ h1{
     	          5 => var
     	          6 => let , const
     	          6 => for => foreach , map 
+    	          change(no)
     	    */
     		change:function(no){
+    			let _this=this;
     			axios.get("http://localhost:8080/web/food/rest_category.do",{
     				params:{
     					no:no
     				}
     			}).then(response=>{
-    				this.cate_data=response.data;
+    				_this.cate_data=response.data;
     			})
     		}
     	}

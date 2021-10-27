@@ -22,6 +22,7 @@ public class MovieManager {
 		  url="https://www.kobis.or.kr/kobis/business/main/searchMainDailyBoxOffice.do";//일일 박스오피스 
 	  }
 	  else if(no==2)
+		  
 	  {
 		  url="https://www.kobis.or.kr/kobis/business/main/searchMainRealTicket.do";//실시간 예매율
 	  }

@@ -46,6 +46,17 @@ public class FoodDAO {
    {
 	   return mapper.foodDetailData(no);
    }
+   // <select id="foodFindData" resultType="FoodVO" parameterType="hashmap">
+   public List<FoodVO> foodFindData(Map map)
+   {
+	   return mapper.foodFindData(map);
+   }
+   // <select id="foodFindTotalPage" resultType="int" parameterType="string">
+   // id=메소드명 , resultType=리턴형  parameterType=매개변수 
+   public int foodFindTotalPage(String address)
+   {
+	   return mapper.foodFindTotalPage(address);
+   }
 }
 
 

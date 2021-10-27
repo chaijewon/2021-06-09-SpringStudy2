@@ -1,11 +1,15 @@
 package com.sist.web;
 
+import org.apache.ibatis.annotations.Select;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.sist.manager.*;// 외부에서 데이터 읽기 => 네이버 뉴스 읽기 , 뉴스 등록 (실시간 뉴스) => open api 
+// 네플릭스 (open api)
+// 책 => 알라딘 (api)
 // 화면이동 => 데이터 변경 (필요한 데이터만 전송) => 같은 파일로 데이터만 전송 => JSON
 /*
  *      1. 버전 변경 => 1.6 (스프링 5버전 => 1.8이상에서만 적용)
@@ -71,6 +75,9 @@ public class FoodRestController {
    // DAO가 필요하다 
    @Autowired
    private FoodDAO dao;
+   
+   @Autowired
+   private MovieManager mgr; // => 스프링에서 객체 생성 => 스프링을 통해서 객체 주소를 얻어 온다 
    // @RequestMapping => URI는 반드시 Primary => 500 
    @RequestMapping(value="food/rest_category.do",produces="text/plain;charset=UTF-8")
    // 믿고 보는 맛집리스트(no=1) => 1~12, 지역별 맛집리스트(no=2) 13~18 , 인기별 맛집리스트 (no=3) 19~30
@@ -195,6 +202,86 @@ public class FoodRestController {
 		   json=obj.toJSONString();
 		   System.out.println(json);
 	   }catch(Exception ex){}
+	   return json;
+   }
+   /*
+    *     params:{
+    				ss:this.ss,
+    				page:this.page
+    			 }
+    */
+   // web/  => 루트  , uri => web/~~
+   @RequestMapping(value="food/rest_find.do",produces="text/plain;charset=UTF-8")
+   public String food_rest_find(int page, String ss)
+   {
+	   // find.do?page=1    ==> int page
+	   // find.do           ==> page=null  => int page(오류) , String page 
+	   String json=""; //RestAPI => @RestController => 다른 언어와 연동 할때 (자바스크립트,코틀린)
+	   // 공용으로 사용하는 데이터 ==> JSON , XML (파싱 : JSON)
+	   try
+	   {
+		   int curpage=page;
+		   // 해당 페이지의 데이터 읽기 
+		   // VueJS(검색,페이지 나누기) / ReactJS(외부의 데이터 실시간)=> 증권 ,날씨 , 여행정보,예약=>배포
+		   // webPack(CSS/JavaScript) => src="파일명"
+		   // 외부 요청 (업체) = 다방면으로 편집기 (editplus , 울트라edit , 아톰 , 웹스톰 , vscode)
+		   // 데이터베이스 연동 (DAO) 
+		   Map map=new HashMap();
+		   int rowSize=20;
+		   int start=(rowSize*curpage)-(rowSize-1); // 1 , 13 , 25...
+		   //        1=> 12*1-11 => 1 , 2=> 12*2-11 => 13
+		   int end=rowSize*curpage; // 12 , 24 , 36...
+		   /*
+		    *  @Select("SELECT no,name,poster,num "
+				 +"FROM (SELECT no,name,poster,rownum as num "
+				 +"FROM (SELECT /*+ INDEX_ASC(project_food_house pfh_no_pk)  no,name,poster "
+				 +"FROM project_food_house WHERE address LIKE '%'||마포||'%')) "
+				 +"WHERE num BETWEEN 1 AND 12")
+		    */
+		   map.put("start", start);
+		   map.put("end", end);
+		   map.put("ss", ss);
+		   List<FoodVO> list=dao.foodFindData(map);
+		   int totalpage=dao.foodFindTotalPage(ss);
+		   
+		   // List => JSON
+		   //[{},{},{}] List(vo,vo...) 
+		   /*
+		    *   {no:1,name:'',curpage:1,totalpage:2}
+		    *   {no:2,name:'',sex:''}
+		    *   {no:3,name:'',sex:'',addr:''}
+		    */
+		   JSONArray arr=new JSONArray();
+		   int i=0;
+		   for(FoodVO vo:list)
+		   {
+			   JSONObject obj=new JSONObject();
+			   obj.put("no", vo.getNo());
+			   obj.put("name", vo.getName());
+			   obj.put("poster", vo.getPoster().substring(0,vo.getPoster().indexOf("^")));
+			   
+			   if(i==0)
+			   {
+				   obj.put("curpage", curpage);
+				   obj.put("totalpage", totalpage);
+			   }
+			   
+			   arr.add(obj);// 배열에 추가 [{},{}...] 12
+			   i++;
+		   }
+		   json=arr.toJSONString();
+	   }catch(Exception ex){}
+	   return json;
+   }
+   // XML (공공데이터) => JSON  (NodeJS => xml2json)
+   @RequestMapping(value="movie/rest_list.do",produces="text/plain;charset=UTF-8")
+   public String movie_rest_list(int no)
+   {
+	   // 출력 => JSON
+	   String json=mgr.movieListData(no);
+	   json=json.replace("<", "");
+	   json=json.replace(">", "");
+	   System.out.println(json);
 	   return json;
    }
 }

@@ -66,6 +66,16 @@ public interface FoodMapper {
   public FoodVO foodDetailData(int no);
   // 입력값 넘기는 방법 (화면 분할 => 템플릿)
   // 라우터 (라이브러리)
+  @Select("SELECT no,name,poster,num "
+		 +"FROM (SELECT no,name,poster,rownum as num "
+		 +"FROM (SELECT /*+ INDEX_ASC(project_food_location pfl_no_pk) */ no,name,poster "
+		 +"FROM project_food_location WHERE address LIKE '%'||#{ss}||'%')) "
+		 +"WHERE num BETWEEN #{start} AND #{end}")
+  public List<FoodVO> foodFindData(Map map);
+  
+  @Select("SELECT CEIL(COUNT(*)/20.0) FROM project_food_location "
+		 +"WHERE address LIKE '%'||#{address}||'%'")
+  public int foodFindTotalPage(String address);
 }
 
 

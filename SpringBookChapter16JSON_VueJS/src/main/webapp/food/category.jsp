@@ -72,7 +72,9 @@ h1{
     			    function(response){this(자신의 객체)=>axios}
     			    response=>{this => Vue}
     			*/
-    			this.cate_data=response.data;
+    			console.log(response);// 설정 (한글),실제 데이터 포함 , header, 상태
+    			console.log(response.data)
+    			this.cate_data=response.data;// 실제로 보내준 데이터 
     		})
     	},
     	// 사용자 정의 함수 

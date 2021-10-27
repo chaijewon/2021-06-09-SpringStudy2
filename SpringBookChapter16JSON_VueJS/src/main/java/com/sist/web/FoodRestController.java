@@ -3,6 +3,7 @@ package com.sist.web;
 import org.apache.ibatis.annotations.Select;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,7 +78,10 @@ public class FoodRestController {
    private FoodDAO dao;
    
    @Autowired
-   private MovieManager mgr; // => 스프링에서 객체 생성 => 스프링을 통해서 객체 주소를 얻어 온다 
+   private MovieManager mgr; // => 스프링에서 객체 생성 => 스프링을 통해서 객체 주소를 얻어 온다
+
+   @Autowired
+   private NewsManager nMgr;
    // @RequestMapping => URI는 반드시 Primary => 500 
    @RequestMapping(value="food/rest_category.do",produces="text/plain;charset=UTF-8")
    // 믿고 보는 맛집리스트(no=1) => 1~12, 지역별 맛집리스트(no=2) 13~18 , 인기별 맛집리스트 (no=3) 19~30
@@ -277,11 +281,59 @@ public class FoodRestController {
    @RequestMapping(value="movie/rest_list.do",produces="text/plain;charset=UTF-8")
    public String movie_rest_list(int no)
    {
-	   // 출력 => JSON
+	   // 출력 => JSON => synop
 	   String json=mgr.movieListData(no);
-	   json=json.replace("<", "");
-	   json=json.replace(">", "");
+	   
+	   try
+	   {
+		   JSONArray temp=new JSONArray();
+		   JSONParser jp=new JSONParser();
+		   JSONArray arr=(JSONArray)jp.parse(json);
+		   for(int i=0;i<arr.size();i++)
+		   {
+			   JSONObject obj=(JSONObject)arr.get(i);
+			   String story=(String)obj.get("synop");
+			   story=story.replaceAll("[^A-Za-z가-힣0-9]","");// 제거 (특수문자 제거) ,="" "" => ""
+			   // 한글 : 가-힣 , 영문:A-Za-z , 숫자:0-9 ==> [^]=>제외하고  ,^[]=시작   ^[A-Z] 대문자시작 
+			   // "" , => "" , 제거 
+			   // 정규식 => 답변 추출 (AI) 
+			   /*
+			    *   챗봇 => 답변 => 사용자가 보낸 데이터 명사 추출 => 긍정/부정 ==> 해당하는 데이터 찾기 
+			    */
+			   temp.add(obj);
+		   }
+		   json=temp.toJSONString();
+	   }catch(Exception ex){}
 	   System.out.println(json);
+	   return json;
+   }
+   // 뉴스 전송 
+   @RequestMapping(value="news/news_find.do",produces="text/plain;charset=UTF-8")
+   public String news_news_find(String ss)
+   {
+	   String json="";
+	   //1. Manager에 값을 읽어 온다 
+	   List<NewsVO> list=nMgr.newsFindData(ss); // 뉴스를 가지고 온다 
+	   // VueJS => List를 인식하지 못하기 때문에 JSON으로 변경해서 전송 
+	   
+	   try
+	   {
+		   JSONArray arr=new JSONArray(); // 뉴스 50개 => 한번에 묶어서 전송 => 배열 
+		   // Jsoup => 태그명 (:)
+		   for(NewsVO vo:list)
+		   {
+			   // vo와 매칭 => JSONObject 
+			   JSONObject obj=new JSONObject();
+			   obj.put("title", vo.getTitle());
+			   obj.put("desc",vo.getDescription());
+			   obj.put("author", vo.getAuthor());
+			   obj.put("link", vo.getLink());
+			   obj.put("date", vo.getPubDate());
+			   
+			   arr.add(obj);
+		   }
+		   json=arr.toJSONString();
+	   }catch(Exception ex){}
 	   return json;
    }
 }

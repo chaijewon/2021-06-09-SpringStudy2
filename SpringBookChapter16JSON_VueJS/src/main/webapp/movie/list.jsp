@@ -72,7 +72,7 @@ watchGradeNm: "15세이상관람가"
     <div class="row">
       <div class="col-md-6">
         <!-- 상세보기  -->
-        <table class="table">
+        <table class="table" v-show="isShow">
           <tr>
            <td class="text-center" width=30% rowspan="10">
              <img :src="'https://www.kobis.or.kr'+movie_detail.thumbUrl" width=100%>
@@ -150,7 +150,8 @@ watchGradeNm: "15세이상관람가"
 		   title:'일별 박스오피스',
            no:1,
            movie_data:[],
-           movie_detail:{}
+           movie_detail:{},
+           isShow:false
 	   },
 	   mounted:function(){
 		 // default 출력  
@@ -177,6 +178,7 @@ watchGradeNm: "15세이상관람가"
 				 })
 		   },
 		   mouseData:function(rank){
+			   this.isShow=true;
 			   console.log("rank="+rank);
 			   this.movie_detail=this.movie_data[rank-1];
 		   }

@@ -49,6 +49,15 @@ public class FoodDAO {
     {
     	return mapper.foodFindTotalPage(address); // 매개변수가 1개만 사용 가능 
     }
+    
+    public CategoryVO categoryInfoData(int cno)
+    {
+    	return mapper.categoryInfoData(cno);
+    }
+    public List<FoodVO> categoryFoodListData(int cno)
+    {
+    	return mapper.categoryFoodListData(cno);
+    }
 }
 
 

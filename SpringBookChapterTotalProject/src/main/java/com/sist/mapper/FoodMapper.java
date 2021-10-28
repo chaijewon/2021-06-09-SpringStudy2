@@ -100,6 +100,22 @@ public interface FoodMapper {
 		   +"WHERE address LIKE '%'||#{address}||'%'")
 	public int foodFindTotalPage(String address);
 	// 상세보기 / 카테고리별 맛집 
+	// 1. 카테고리 정보
+	@Select("SELECT title,subject FROM project_food_category "
+		   +"WHERE cno=#{cno}")
+	public CategoryVO categoryInfoData(int cno);
+	// 2. 카테고리별 맛집
+	@Select("SELECT no,name,address,tel,type,poster "
+		  +"FROM project_food_house "
+		  +"WHERE cno=#{cno}")
+	public List<FoodVO> categoryFoodListData(int cno);
+	/*
+	 *   #{} => 일반 데이터형 , #{} , #{} => 매개변수를 1개만 지정이 가능 => VO,Map
+	 *      #{name} => 홍길동  => '홍길동 '
+	 *   ${} => 일반 데이터형을 사용하는 것이 아니라 => table/column 
+	 *      ${name} => 홍길동  => 홍길동
+	 *   변수명 => 동적 쿼리 => 반드시 (getter(VO),get(Map)) 
+	 */
 	// 추천 
 	// 댓글 
 }

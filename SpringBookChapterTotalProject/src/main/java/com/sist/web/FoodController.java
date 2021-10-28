@@ -44,6 +44,14 @@ public class FoodController {
 		model.addAttribute("main_jsp", "../food/search.jsp");
 		return "main/main";
 	}
+	
+	@GetMapping("detail.do")
+	public String food_detail(int cno,Model model)
+	{
+		model.addAttribute("cno", cno);
+		model.addAttribute("main_jsp", "../food/detail.jsp");
+		return "main/main";
+	}
 }
 
 

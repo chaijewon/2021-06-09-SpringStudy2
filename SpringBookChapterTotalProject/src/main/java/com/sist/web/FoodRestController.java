@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 import com.sist.dao.*;
 import com.sist.vo.*;
+
+import lombok.Getter;
 @RestController // 데이터만 전송
 // template (중복이 많은 경우) , router : 화면 이동 
 // 사용자 정의 이벤트 : 채팅 , 실시간 상담 => NodeJS
@@ -95,6 +97,35 @@ public class FoodRestController {
 	   }catch(Exception ex){}
 	   return json;
    }
+   @GetMapping(value="food/rest_detail.do",produces="text/plain;charset=UTF-8")
+   public String food_res_detail(int cno)
+   {
+	   String json="";
+	   try
+	   {
+		   JSONArray arr=new JSONArray();
+	   }catch(Exception ex){}
+	   return json;
+   }
+   // @RequestMapping() = @GetMapping+@PostMapping
+   /*
+    *    폼 한개를 가지고 두개 처리  
+    *    GET / POST
+    *    
+    *    
+    */
+   @RequestMapping(value="food/rest_info.do",produces="text/plain;charset=UTF-8")
+   public String food_res_info(int cno)
+   {
+	   String json="";
+	   try
+	   {
+		   JSONObject obj=new JSONObject();
+	   }catch(Exception ex){}
+	   return json;
+   }
+   
+   
 }
 
 

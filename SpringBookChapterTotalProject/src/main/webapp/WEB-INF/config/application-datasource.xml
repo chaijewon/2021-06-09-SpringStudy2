@@ -37,6 +37,9 @@
     />
     <!-- 
           Datasoure / XML => SqlSessionFactoryBean / SqlSessionTemplate
+          
+          VO => Mapper => DAO => Controller => JSP
+          =================================    ====여러개 (목록,상세보기 ,수정하기, 삭제하기)
      -->
     <!-- Mapper -->
     <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
@@ -58,6 +61,10 @@
     <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
        p:sqlSessionFactory-ref="ssf"
        p:mapperInterface="com.sist.mapper.EmpMapper"
+    />
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.mapper.FreeBoardMapper"
     />
     <!-- <mybatis-spring:scan base-package="com.sist.mapper"/> -->
 </beans>

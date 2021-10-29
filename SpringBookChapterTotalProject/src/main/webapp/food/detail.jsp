@@ -46,9 +46,9 @@ h1{
         <table class="table" v-for="vo in cate_list">
           <tr>
             <td class="text-center" width=30% rowspan="4">
-              <img :src="vo.poster" width=100% v-on:click="food_detail(vo.no)" class="image">
+              <img :src="vo.poster" width=100% v-on:click="food_detail(vo.no,vo.address)" class="image">
             </td>
-            <td width=70%><span v-on:click="food_detail(vo.no)" class="title">{{vo.name}}</span>&nbsp;<span style="color:orange">{{vo.score}}</span></td>
+            <td width=70%><span v-on:click="food_detail(vo.no,vo.address)" class="title">{{vo.name}}</span>&nbsp;<span style="color:orange">{{vo.score}}</span></td>
           </tr>
           <tr>
             <td width=70%>주소:{{vo.address}}</td>
@@ -106,11 +106,38 @@ h1{
 	           </td>
 	         </tr>
 	        </table>
+	        <!-- 인근 명소 -->
+	        <table class="table">
+	          <caption>인근명소</caption>
+	          <tr>
+	           <td class="text-center" v-for="vo in loc_data">
+	             <img :src="vo.poster" style="width:103px;height:90px" :title="vo.title">
+	           </td>
+	          </tr>
+	        </table>
+	        <!-- 인근 호텔 -->
+	        <table class="table">
+	          <caption>인근호텔</caption>
+	          <tr>
+	           <td class="text-center" v-for="vo in hotel_data">
+	             <img :src="vo.poster" style="width:103px;height:90px" :title="vo.name">
+	           </td>
+	          </tr>
+	        </table>
+	        <!-- 인근 자연 -->
+	        <table class="table">
+	          <caption>인근자연</caption>
+	          <tr>
+	           <td class="text-center" v-for="vo in nature_data">
+	             <img :src="vo.poster" style="width:103px;height:90px" :title="vo.title">
+	           </td>
+	          </tr>
+	        </table>
 	      </div>
       </div>
     <!-- ################################################################################################ -->
     <!-- / main body -->
-    
+     
      <div class="clear"></div><!-- 화면 통합 -->
     </main>
   </div>
@@ -145,10 +172,10 @@ h1{
   			_this.cate_info=response.data;
   		})
   	},
-	methods:{
+  	methods:{
   		
   	    // .do?no=1
-  		food_detail:function(no){
+  		food_detail:function(no,addr){
   			this.isShow=true;
   			let _this=this;//Vue
   			axios.get("http://localhost:8080/web/food/rest_food_detail.do",{
@@ -162,7 +189,7 @@ h1{
   			
   			axios.get("http://localhost:8080/web/food/rest_loc_list.do",{
   				params:{
-  					addr:_this.detail_data.address
+  					addr:addr
   				}
   			}).then(function(response){
   				console.log(response.data);
@@ -171,7 +198,7 @@ h1{
   			
   			axios.get("http://localhost:8080/web/food/rest_hotel_list.do",{
   				params:{
-  					addr:_this.detail_data.address
+  					addr:addr
   				}
   			}).then(function(response){
   				console.log(response.data);
@@ -180,7 +207,7 @@ h1{
   			
   			axios.get("http://localhost:8080/web/food/rest_nature_list.do",{
   				params:{
-  					addr:_this.detail_data.address
+  					addr:addr
   				}
   			}).then(function(response){
   				console.log(response.data);

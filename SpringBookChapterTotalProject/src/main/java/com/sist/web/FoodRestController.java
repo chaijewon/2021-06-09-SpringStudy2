@@ -181,11 +181,31 @@ public class FoodRestController {
 	   }catch(Exception ex){}
 	   return json; // DispatcherServlet => 해당 JSP로 전송 
    }
-   
+   //no,title,address,poster,msg
    @RequestMapping(value="food/rest_nature_list.do",produces="text/plain;charset=UTF-8")
    public String food_nature_list(String addr)
    {
 	   String json="";
+	   try
+	   {
+		   // addr=학동로 338 강남파라곤 S동 1F 103호
+		   String temp=addr;
+		   temp=temp.substring(temp.indexOf(" "));
+		   String temp1=temp.trim();// 앞에 있는 공백 제거 
+		   temp1=temp1.substring(0,temp1.indexOf(" "));
+		   System.out.println("주소:"+addr);
+		   System.out.println("변경 주소:"+temp1);
+		   List<SeoulNatureVO> list=dao.foodLikeNature(temp1.trim());
+		   JSONArray arr=new JSONArray();
+		   for(SeoulNatureVO vo:list)
+		   {
+			   JSONObject obj=new JSONObject();
+			   obj.put("title", vo.getTitle());
+			   obj.put("poster", vo.getPoster());
+			   arr.add(obj);
+		   }
+		   json=arr.toJSONString();
+	   }catch(Exception ex){}
 	   return json;
    }
    
@@ -193,13 +213,58 @@ public class FoodRestController {
    public String food_hotel_list(String addr)
    {
 	   String json="";
+	   try
+	   {
+		   String temp=addr;
+		   temp=temp.substring(temp.indexOf(" "));
+		   String temp1=temp.trim();
+		   temp1=temp1.substring(0,temp1.indexOf(" "));
+		   System.out.println("주소:"+addr);
+		   System.out.println("변경 주소:"+temp1);
+		   List<SeoulHotelVO> list=dao.foodLikeHotel(temp1.trim());
+		   JSONArray arr=new JSONArray();
+		   for(SeoulHotelVO vo:list)
+		   {
+			   JSONObject obj=new JSONObject();
+			   obj.put("name", vo.getName());
+			   obj.put("poster", vo.getPoster());
+			   arr.add(obj);
+		   }
+		   json=arr.toJSONString();
+	   }catch(Exception ex){}
 	   return json;
    }
    
-   @RequestMapping(value="food/rest_location_list.do",produces="text/plain;charset=UTF-8")
+   @RequestMapping(value="food/rest_loc_list.do",produces="text/plain;charset=UTF-8")
    public String food_location_list(String addr)
    {
+	   // 강남구 학동로 338 강남파라곤 S동 1F 103호
 	   String json="";
+	   try
+	   {
+		   /*
+		    *   substring(int start) => start부터
+		    *   substring(int start,int end)
+		    *             start부터 ~ (end-1)까지
+		    */
+		   String temp=addr;
+		   temp=temp.substring(temp.indexOf(" "));// 제외를 안한다 
+		   System.out.println("temp="+temp);
+		   String temp1=temp.trim();
+		   temp1=temp1.substring(0,temp1.indexOf(" "));// 제외가 된다
+		   System.out.println("주소:"+addr);
+		   System.out.println("변경 주소:"+temp1);
+		   List<SeoulLocationVO> list=dao.foodLikeLocation(temp1.trim());
+		   JSONArray arr=new JSONArray();
+		   for(SeoulLocationVO vo:list)
+		   {
+			   JSONObject obj=new JSONObject();
+			   obj.put("title", vo.getTitle());
+			   obj.put("poster", vo.getPoster());
+			   arr.add(obj);
+		   }
+		   json=arr.toJSONString();
+	   }catch(Exception ex){}
 	   return json;
    }
    

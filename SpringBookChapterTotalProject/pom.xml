@@ -21,6 +21,42 @@
 		</repository>
 	</repositories>
 	<dependencies>
+	    <dependency>
+		    <groupId>org.seleniumhq.selenium</groupId>
+		    <artifactId>selenium-chrome-driver</artifactId>
+		    <version>3.1.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.seleniumhq.selenium</groupId>
+		    <artifactId>selenium-java</artifactId>
+		    <version>3.1.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.asynchttpclient/async-http-client -->
+		<dependency>
+		    <groupId>org.asynchttpclient</groupId>
+		    <artifactId>async-http-client</artifactId>
+		    <version>2.12.3</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.auto.service/auto-service -->
+		<dependency>
+		    <groupId>com.google.auto.service</groupId>
+		    <artifactId>auto-service</artifactId>
+		    <version>1.0</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/com.google.auto/auto-common -->
+		<dependency>
+		    <groupId>com.google.auto</groupId>
+		    <artifactId>auto-common</artifactId>
+		    <version>1.0</version>
+		    <scope>runtime</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.seleniumhq.selenium</groupId>
+		    <artifactId>selenium-api</artifactId>
+		    <version>3.1.0</version>
+		</dependency>
 	    <!-- ojdbc(Maven에서 사용이 안된다)-->
 	    <!-- 시스템 경로 줄때 사용  -->
 	    <dependency>

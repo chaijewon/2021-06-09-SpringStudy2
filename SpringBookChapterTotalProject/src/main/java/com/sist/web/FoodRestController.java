@@ -1,6 +1,7 @@
 package com.sist.web;
 
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.ibatis.annotations.Select;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,6 +98,15 @@ public class FoodRestController {
 	   }catch(Exception ex){}
 	   return json;
    }
+   /*
+    *  @Select("SELECT title,subject FROM project_food_category "
+		   +"WHERE cno=#{cno}")
+	public CategoryVO categoryInfoData(int cno);
+	// 2. 카테고리별 맛집
+	@Select("SELECT no,name,address,tel,type,poster "
+		  +"FROM project_food_house "
+		  +"WHERE cno=#{cno}")
+    */
    @GetMapping(value="food/rest_detail.do",produces="text/plain;charset=UTF-8")
    public String food_res_detail(int cno)
    {
@@ -104,6 +114,19 @@ public class FoodRestController {
 	   try
 	   {
 		   JSONArray arr=new JSONArray();
+		   List<FoodVO> list=dao.categoryFoodListData(cno);
+		   for(FoodVO vo:list)
+		   {
+			   JSONObject obj=new JSONObject();
+			   obj.put("no", vo.getNo());
+			   obj.put("name", vo.getName());
+			   obj.put("address", vo.getAddress().substring(0,vo.getAddress().indexOf("지")));
+			   obj.put("tel", vo.getTel());
+			   obj.put("type", vo.getType());
+			   obj.put("poster", vo.getPoster().substring(0,vo.getPoster().indexOf("^")));
+			   arr.add(obj);
+		   }
+		   json=arr.toJSONString();
 	   }catch(Exception ex){}
 	   return json;
    }
@@ -121,10 +144,64 @@ public class FoodRestController {
 	   try
 	   {
 		   JSONObject obj=new JSONObject();
+		   CategoryVO vo=dao.categoryInfoData(cno);
+		   obj.put("title", vo.getTitle());
+		   obj.put("subject", vo.getSubject());
+		   json=obj.toJSONString();
 	   }catch(Exception ex){}
 	   return json;
    }
+    
+   @RequestMapping(value="food/rest_food_detail.do",produces="text/plain;charset=UTF-8")
+   public String food_detail(int no)
+   {
+	   String json="";
+	   try
+	   {
+		   // 오라클 데이터 읽기 
+		   FoodVO vo=dao.foodDetailData(no);
+		   // JSON변경 
+		   JSONObject obj=new JSONObject();
+		   obj.put("no", vo.getNo());
+		   obj.put("name", vo.getName());
+		   obj.put("poster", vo.getPoster());
+		   obj.put("address", vo.getAddress());
+		   obj.put("tel", vo.getTel());
+		   obj.put("type", vo.getType());
+		   obj.put("time", vo.getTime());
+		   obj.put("parking", vo.getParking());
+		   obj.put("menu", vo.getMenu());
+		   obj.put("good", vo.getGood());
+		   obj.put("soso", vo.getSoso());
+		   obj.put("bad", vo.getBad());
+		   obj.put("score", vo.getScore());
+		   
+		   json=obj.toJSONString();
+		   // 해당 JSP로 전송 =>Front
+	   }catch(Exception ex){}
+	   return json; // DispatcherServlet => 해당 JSP로 전송 
+   }
    
+   @RequestMapping(value="food/rest_nature_list.do",produces="text/plain;charset=UTF-8")
+   public String food_nature_list(String addr)
+   {
+	   String json="";
+	   return json;
+   }
+   
+   @RequestMapping(value="food/rest_hotel_list.do",produces="text/plain;charset=UTF-8")
+   public String food_hotel_list(String addr)
+   {
+	   String json="";
+	   return json;
+   }
+   
+   @RequestMapping(value="food/rest_location_list.do",produces="text/plain;charset=UTF-8")
+   public String food_location_list(String addr)
+   {
+	   String json="";
+	   return json;
+   }
    
 }
 

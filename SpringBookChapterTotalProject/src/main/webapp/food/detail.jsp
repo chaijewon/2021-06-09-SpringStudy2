@@ -21,6 +21,10 @@
 h1{
    text-align: center;
 }
+.image:hover,.title:hover{
+   cursor: pointer;
+   border:2px solid red;
+}
 </style>
 </head>
 <body>
@@ -35,10 +39,74 @@ h1{
       
       <div class="content two_quarter first"> 
         <!-- 화면 분할  상세보기 출력 -->
+        <div class="jumbotron">
+          <h2 class="text-center">{{cate_info.title}}</h2>
+          <h3 class="text-center">{{cate_info.subject}}</h3>
+        </div>
+        <table class="table" v-for="vo in cate_list">
+          <tr>
+            <td class="text-center" width=30% rowspan="4">
+              <img :src="vo.poster" width=100% v-on:click="food_detail(vo.no)" class="image">
+            </td>
+            <td width=70%><span v-on:click="food_detail(vo.no)" class="title">{{vo.name}}</span>&nbsp;<span style="color:orange">{{vo.score}}</span></td>
+          </tr>
+          <tr>
+            <td width=70%>주소:{{vo.address}}</td>
+          </tr>
+          <tr>
+            <td width=70%>전화:{{vo.tel}}</td>
+          </tr>
+          <tr>
+            <td width=70%>음식종류:{{vo.type}}</td>
+          </tr>
+        </table>
       </div>
-   
+        
       <div class="sidebar two_quarter"> 
         <!-- 지도 , 관련 데이터 (레시피 , 명소 , 호텔 )-->
+        <div v-show="isShow">
+	        <table class="table">
+	          <tr>
+	           <td class="text-center" v-for="img in (detail_data.poster||'').split('^')">
+	            <img :src="img" width=100%>
+	           </td>
+	          </tr>
+	        </table>
+	        <table class="table">
+	         <tr>
+	           <td colspan="2"><h3>{{detail_data.name}}&nbsp;
+	           <span style="color:orange">{{detail_data.score}}</span></h3></td>
+	         </tr>
+	         <tr>
+	           <th class="text-right" width=15%>주소</th>
+	           <td width=85%>{{detail_data.address}}</td>
+	         </tr>
+	         <tr>
+	           <th class="text-right" width=15%>전화</th>
+	           <td width=85%>{{detail_data.tel}}</td>
+	         </tr>
+	         <tr>
+	           <th class="text-right" width=15%>음식종류</th>
+	           <td width=85%>{{detail_data.type}}</td>
+	         </tr>
+	         <tr v-if="detail_data.time!='no'">
+	           <th class="text-right" width=15%>영업시간</th>
+	           <td width=85%>{{detail_data.time}}</td>
+	         </tr>
+	         <tr v-if="detail_data.parking!='no'">
+	           <th class="text-right" width=15%>주차</th>
+	           <td width=85%>{{detail_data.parking}}</td>
+	         </tr>
+	         <tr v-if="detail_data.menu!='no'">
+	           <th class="text-right" width=15%>메뉴</th>
+	           <td width=85%>
+	            <ul>
+	             <li v-for="m in (detail_data.menu||'').split('원')">{{m}}</li>
+	            </ul>
+	           </td>
+	         </tr>
+	        </table>
+	      </div>
       </div>
     <!-- ################################################################################################ -->
     <!-- / main body -->
@@ -47,35 +115,80 @@ h1{
     </main>
   </div>
   <script>
-    new Vue({
-    	el:'.container',
-    	data:{
-    		detail_data:{}, // {} = vo , [] = list
-    		cno:${cno},
-    		cate_info:{},
-    		cate_list:[]  // 카테고리별 맛집 리스트
-    	},
-    	mounted:function(){
-    		axiox.get("http://localhost:8080/web/food/rest_detail.do",{
-    			params:{
-    				cno:this.cno
-    			}
-    		}).then(response=>{
-    			this.cate_list=response.data;
-    		})
-    		
-    		axiox.get("http://localhost:8080/web/food/rest_info.do",{
-    			params:{
-    				cno:this.cno
-    			}
-    		}).then(response=>{
-    			this.cate_info=response.data;
-    		})
-    	},
-    	methods:{
-    		
-    	}
-    })
+  new Vue({
+  	el:'.container',
+  	data:{
+  		detail_data:{}, // {} = vo , [] = list
+  		cno:${cno},
+  		cate_info:{},
+  		cate_list:[],  // 카테고리별 맛집 리스트
+  		isShow:false,
+  		loc_data:[],
+  		hotel_data:[],
+  		nature_data:[]
+  	},
+  	mounted:function(){
+  		let _this=this;
+  		axios.get("http://localhost:8080/web/food/rest_detail.do",{
+  			params:{
+  				cno:_this.cno
+  			}
+  		}).then(function(response){
+  			_this.cate_list=response.data;
+  		})
+  		
+  		axios.get("http://localhost:8080/web/food/rest_info.do",{
+  			params:{
+  				cno:_this.cno
+  			}
+  		}).then(function(response){
+  			_this.cate_info=response.data;
+  		})
+  	},
+	methods:{
+  		
+  	    // .do?no=1
+  		food_detail:function(no){
+  			this.isShow=true;
+  			let _this=this;//Vue
+  			axios.get("http://localhost:8080/web/food/rest_food_detail.do",{
+  				params:{
+  					no:no
+  				}
+  			}).then(function(response){
+  				console.log(response.data);
+  				_this.detail_data=response.data
+  			})
+  			
+  			axios.get("http://localhost:8080/web/food/rest_loc_list.do",{
+  				params:{
+  					addr:_this.detail_data.address
+  				}
+  			}).then(function(response){
+  				console.log(response.data);
+  				_this.loc_data=response.data
+  			})
+  			
+  			axios.get("http://localhost:8080/web/food/rest_hotel_list.do",{
+  				params:{
+  					addr:_this.detail_data.address
+  				}
+  			}).then(function(response){
+  				console.log(response.data);
+  				_this.hotel_data=response.data
+  			})
+  			
+  			axios.get("http://localhost:8080/web/food/rest_nature_list.do",{
+  				params:{
+  					addr:_this.detail_data.address
+  				}
+  			}).then(function(response){
+  				console.log(response.data);
+  				_this.nature_data=response.data
+  			})
+  		}
+  	}
+  })
   </script>    
 </body>
 </html>

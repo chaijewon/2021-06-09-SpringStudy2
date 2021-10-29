@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 import com.sist.mapper.*;
 import com.sist.vo.CategoryVO;
 import com.sist.vo.FoodVO;
+import com.sist.vo.SeoulHotelVO;
+import com.sist.vo.SeoulLocationVO;
+import com.sist.vo.SeoulNatureVO;
 @Repository
 public class FoodDAO {
 	@Autowired
@@ -57,6 +60,26 @@ public class FoodDAO {
     public List<FoodVO> categoryFoodListData(int cno)
     {
     	return mapper.categoryFoodListData(cno);
+    }
+    // JSP로 전송 => @Controller , @RestController (DAO의 데이터를 읽어서 전송)
+    public FoodVO foodDetailData(int no)
+    {
+    	return mapper.foodDetailData(no);
+    }
+    
+    public List<SeoulLocationVO> foodLikeLocation(String address)
+    {
+    	return mapper.foodLikeLocation(address);
+    }
+    
+    public List<SeoulHotelVO> foodLikeHotel(String address)
+    {
+    	return mapper.foodLikeHotel(address);
+    }
+    
+    public List<SeoulNatureVO> foodLikeNature(String address)
+    {
+    	return mapper.foodLikeNature(address);
     }
 }
 

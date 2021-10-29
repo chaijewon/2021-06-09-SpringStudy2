@@ -5,6 +5,9 @@ import org.apache.ibatis.annotations.Select;
 
 import com.sist.vo.CategoryVO;
 import com.sist.vo.FoodVO;
+import com.sist.vo.SeoulHotelVO;
+import com.sist.vo.SeoulLocationVO;
+import com.sist.vo.SeoulNatureVO;
 public interface FoodMapper {
   /*
    *   MyBatis : 데이터베이스 연결  => MyBatis / JPA (DataSet) : LinkQ  / Hibernate
@@ -116,7 +119,36 @@ public interface FoodMapper {
 	 *      ${name} => 홍길동  => 홍길동
 	 *   변수명 => 동적 쿼리 => 반드시 (getter(VO),get(Map)) 
 	 */
+	/*
+	 *  private int no,cno,good,soso,bad;
+        private double score;
+        private String name,poster,address,tel,type,price,parking,time,menu;
+	 */
+	@Select("SELECT * FROM project_food_house "
+		   +"WHERE no=#{no}")
+	public FoodVO foodDetailData(int no);
+	
+	// 명소  읽기 
+	@Select("SELECT no,title,address,poster,msg,rownum "
+		   +"FROM seoul_location "
+		   +"WHERE rownum<=3 AND "
+		   +"address LIKE '%'||#{address}||'%'")
+	public List<SeoulLocationVO> foodLikeLocation(String address);
+	// 호텔 읽기
+	@Select("SELECT no,name,address,poster,score,rownum "
+			   +"FROM seoul_hotel "
+			   +"WHERE rownum<=3 AND "
+			   +"address LIKE '%'||#{address}||'%'")
+	
+	public List<SeoulHotelVO> foodLikeHotel(String address);
+	// 자연/관광 
+	@Select("SELECT no,title,address,poster,msg,rownum "
+			   +"FROM seoul_nature "
+			   +"WHERE rownum<=3 AND "
+			   +"address LIKE '%'||#{address}||'%'")
+   public List<SeoulNatureVO> foodLikeNature(String address);
 	// 추천 
+	
 	// 댓글 
 }
 

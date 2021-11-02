@@ -57,7 +57,7 @@ $(function(){ //window.onload (main)
 </script>
 </head>
 <body>
-<div class="bgded overlay" style="background-image:url('../images/demo/backgrounds/01.png');">
+<div class="bgded overlay" style="background-image:url('../images/demo/backgrounds/back.png');">
   <div id="breadcrumb" class="hoc clear"> 
 </div>
 <div class="wrapper row3">

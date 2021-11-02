@@ -38,6 +38,7 @@ public class MemberDAO {
     			vo.setMsg("OK");
     			vo.setId(id);
     			vo.setName(dbVO.getName());
+    			vo.setAdmin(dbVO.getAdmin());
     		}
     		else //비밀번호가 틀릴때
     		{

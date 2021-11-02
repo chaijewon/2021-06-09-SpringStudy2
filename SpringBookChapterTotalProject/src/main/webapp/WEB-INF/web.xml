@@ -20,6 +20,16 @@
 	       insert_ok.do
 	       update.do 
 	 -->
+	 <!-- 
+	     <init-param>
+        <param-name>contextClass</param-name>
+        <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+      </init-param>
+      <init-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>com.sist.config.WebSocketConfig</param-value>
+      </init-param>
+	  -->
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

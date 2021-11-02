@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+    <!-- 데이터베이스 관련되는 라이브러리 등록 (고정) -->
+    <!-- DataSource 설정 : 데이터베이스 관련 데이터 설정 (DriverName , URL , UserName , Password) 
+                  프로젝트 : 오라클 
+                  개인 : MySql(마리아디비) => 실무에서 가장 많이 사용하는 DB (마리아디비)
+    -->
+    <bean id="ds"
+       class="org.apache.commons.dbcp.BasicDataSource"
+       p:driverClassName="oracle.jdbc.driver.OracleDriver"
+       p:url="jdbc:oracle:thin:@211.238.142.181:1521:XE"
+       p:username="hr"
+       p:password="happy"
+    />
+    <!-- MyBatis -->
+    <bean id="ssf"
+        class="org.mybatis.spring.SqlSessionFactoryBean"
+        p:dataSource-ref="ds"
+    />
+    <!-- 
+          Datasoure / XML => SqlSessionFactoryBean / SqlSessionTemplate
+          
+          VO => Mapper => DAO => Controller => JSP
+          =================================    ====여러개 (목록,상세보기 ,수정하기, 삭제하기)
+     -->
+    
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.mapper.SeoulMapper"
+    />
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.mapper.ReplyBoardMapper"
+    />
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.mapper.MemberMapper"
+    />
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.mapper.FoodMapper"
+    />
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.mapper.EmpMapper"
+    />
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.mapper.FreeBoardMapper"
+    />
+    
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.mapper.RecipeMapper"
+    />
+    
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.mapper.CartMapper"
+    />
+    <!-- <mybatis-spring:scan base-package="com.sist.mapper"/> -->
+</beans>
+
+
+
+
+
+
+

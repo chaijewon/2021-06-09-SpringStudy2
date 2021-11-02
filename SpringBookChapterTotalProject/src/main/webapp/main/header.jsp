@@ -155,9 +155,12 @@
             </c:if>
           </ul>
         </li>
-        <li><a href="#">상품스토어</a></li>
-        <c:if test="${sessionScope.id!=null }">
-         <li><a href="#">마이페이지</a></li>
+        <li><a href="../cart/list.do">상품스토어</a></li>
+        <c:if test="${sessionScope.id!=null && sessionScope.admin=='n'}">
+         <li><a href="../page/mypage.do">마이페이지</a></li>
+        </c:if>
+        <c:if test="${sessionScope.id!=null && sessionScope.admin=='y'}">
+         <li><a href="../page/adminpage.do">어드민페이지</a></li>
         </c:if>
       </ul>
       <!-- ################################################################################################ -->

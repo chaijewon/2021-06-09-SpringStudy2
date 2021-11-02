@@ -14,7 +14,7 @@ public interface MemberMapper {
 		  +"WHERE id=#{id}")
    public int memberIdCount(String id);
    // 2. 비밀번호 체크 
-   @Select("SELECT pwd,name FROM project_member "
+   @Select("SELECT pwd,name,admin FROM project_member "
 		  +"WHERE id=#{id}")
    public MemberVO memberGetPassword(String id);
    // 회원가입 

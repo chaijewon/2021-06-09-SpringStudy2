@@ -7,14 +7,14 @@
 <title>Insert title here</title>
 </head>
 <body>
-<div class="bgded overlay" style="background-image:url('images/demo/backgrounds/01.png');">
+<div class="bgded overlay" style="background-image:url('../images/demo/backgrounds/back.png');">
   <div id="pageintro" class="hoc clear"> 
     <!-- ################################################################################################ -->
-    <article>
-      <h3 class="heading">Faucibus porttitor metus</h3>
-      <p>In nibh nullam egestas velit laoreet nullam elementum ipsum pharetra suscipit leo augue pretium felis nisl vitae ipsum curabitur quis libero.</p>
-      <footer><a class="btn" href="#">Tristique vehicula</a></footer>
-    </article>
+    <!-- <article class="bgded overlay" style="background-image:url('../images/demo/backgrounds/images.jpeg');">
+      <h3 class="heading">여행가고 싶은데 못갈땐 맛집이라도 가자!!!</h3>
+      <p>먹지 않아서 후회한 끼니는 있어도 먹어서 후회한 끼니는 없다!먹으면서, 기웃대면서, 장보면서, 부엌에서 즐거운 요리 여행하기먹기와 여행하기를 동시에 즐기는 미식 여행 이야기여행에서 추억의 절반은 맛있는 음식이 차지한다고 해도 과언이 아니다. 먹고 싶으면 먹고, 가고 ...</p>
+      <footer><a class="btn" href="#">여행 & 맛집 & 레시피</a></footer>
+    </article> -->
     <!-- ################################################################################################ -->
   </div>
 </div>
@@ -29,37 +29,33 @@
       <ul class="nospace group btmspace-80 elements elements-four">
         <li class="one_quarter">
           <article><a href="#"><i class="fas fa-hand-rock"></i></a>
-            <h6 class="heading">Feugiat fermentum</h6>
-            <p>Ac orci proin porttitor lacus eget mi pellentesque non.</p>
+            <h6 class="heading">서울 실시간 날씨 정보</h6>
           </article>
         </li>
         <li class="one_quarter">
           <article><a href="#"><i class="fas fa-dove"></i></a>
-            <h6 class="heading">Malesuada accumsan</h6>
-            <p>Sapien sed metus congue sodales vivamus scelerisque.</p>
+            <h6 class="heading">서울 여행 코스 추천</h6>
           </article>
         </li>
         <li class="one_quarter">
           <article><a href="#"><i class="fas fa-history"></i></a>
-            <h6 class="heading">Mauris placerat</h6>
-            <p>Et interdum vulputate purus nisl fringilla sapien quis.</p>
+            <h6 class="heading">서울 지역 맛집 실시간 추천</h6>
           </article>
         </li>
         <li class="one_quarter">
           <article><a href="#"><i class="fas fa-heartbeat"></i></a>
-            <h6 class="heading">Elementum rhoncus</h6>
-            <p>Sollicitudin dui mauris dui nunc lorem tortor pharetra.</p>
+            <h6 class="heading">실시간 추천 상담</h6>
           </article>
         </li>
       </ul>
     </section>
     <!-- ################################################################################################ -->
     <section class="group shout">
-      <figure class="one_half first"><img src="../images/demo/546x356.png" alt="">
-        <figcaption class="heading"><a href="#">Accumsan placerat</a></figcaption>
+      <figure class="one_half first"><embed src="http://youtube.com/embed/vz6Hpuss1Lc" style="width:546px;height:356px"></embed>
+        <figcaption class="heading"><a href="#">오늘의 추천 레시피</a></figcaption>
       </figure>
-      <figure class="one_half"><img src="../images/demo/546x356.png" alt="">
-        <figcaption class="heading"><a href="#">Scelerisque etiam</a></figcaption>
+      <figure class="one_half"><embed src="http://youtube.com/embed/MbqfFFE8vXY" style="width:546px;height:356px"></embed>
+        <figcaption class="heading"><a href="#">오늘의 추천 여행지</a></figcaption>
       </figure>
     </section>
     <!-- ################################################################################################ -->

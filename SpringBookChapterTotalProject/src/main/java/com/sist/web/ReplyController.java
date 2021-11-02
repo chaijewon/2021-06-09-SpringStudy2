@@ -22,7 +22,7 @@ public class ReplyController {
     private CommonReplyDAO dao;
     private String[] jsp={"","../seoul/location_detail.do","../seoul/hotel_detail.do",
     		"../seoul/nature_detail.do","../freeboard/detail.do","../food/detail.do",
-    		"../recipe/detail.do"};
+    		"../recipe/detail.do","../cart/detail.do"};
     // 댓글 목록 
    /* @RequestMapping("reply/list.do")
     public String reply_list(int cno,int tno,Model model)

@@ -44,6 +44,7 @@ public class MemberController {
 	   {
 		   session.setAttribute("id", vo.getId());
 		   session.setAttribute("name", vo.getName()); // 프로그램 종료시까지 필요한 데이터 저장 
+	       session.setAttribute("admin", vo.getAdmin());
 	   }
 	   msg=vo.getMsg();
 	   return msg; //NOID,NOPWD,OK

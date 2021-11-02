@@ -66,6 +66,16 @@
        p:sqlSessionFactory-ref="ssf"
        p:mapperInterface="com.sist.mapper.FreeBoardMapper"
     />
+    
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.mapper.RecipeMapper"
+    />
+    
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.mapper.CartMapper"
+    />
     <!-- <mybatis-spring:scan base-package="com.sist.mapper"/> -->
 </beans>
 

@@ -27,7 +27,7 @@ h1 {
  function connection()
  {
 	 // websocket 등록 
-	 websocket=new WebSocket("ws://211.238.142.181:8080/web/chat-ws");
+	 websocket=new WebSocket("ws://localhost:8080/web/chat-ws");
 	 websocket.onopen=onOpen;
 	 websocket.onmessage=onMessage;
 	 websocket.onclose=onClose;
@@ -97,8 +97,18 @@ h1 {
 	 $('#sendBtn').click(function(){
 		 send();
 	 })
+	 $('#sendMsg').keydown(function(key){
+		 if(key.keyCode==13)
+		 {
+		    send();	 
+		 }
+	 })
  })
 </script>
+<!-- 
+$("#message").keydown(function(keyNum){ //현재의 키보드의 입력값을 keyNum으로 받음 if(keyNum.keyCode == 13){ // keydown으로 발생한 keyNum의 숫자체크 // 숫자가 enter의 아스키코드 13과 같으면 // 기존에 정의된 클릭함수를 호출 $("#mbutton").click() } })
+
+ -->
 </head>
 <body>
   <div class="bgded overlay" style="background-image:url('../images/demo/backgrounds/back.png');">

@@ -151,7 +151,7 @@
             <li><a href="../freeboard/list.do">자유게시판</a></li>
             <li><a href="../replyboard/list.do">묻고답하기</a></li>
             <c:if test="${sessionScope.id!=null }">
-              <li><a href="#">실시간 상담(webSocket)</a></li>
+              <li><a href="../chat/chat.do">실시간 상담(webSocket)</a></li>
             </c:if>
           </ul>
         </li>

@@ -20,16 +20,19 @@
 	       insert_ok.do
 	       update.do 
 	 -->
-	 <!-- 
-	     <init-param>
+	
+	   <context-param>
         <param-name>contextClass</param-name>
         <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
-      </init-param>
-      <init-param>
+       </context-param>
+      <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>com.sist.config.WebSocketConfig</param-value>
-      </init-param>
-	  -->
+      </context-param>
+	<listener>
+	  <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -41,6 +44,7 @@
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>*.do</url-pattern>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
     <!-- 한글 변환 -->
     <filter>

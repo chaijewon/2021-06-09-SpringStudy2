@@ -76,6 +76,32 @@ public class CartDAO {
     {
     	return mapper.cartListData(id);
     }
+    // => JSP로 전송 : JSP에서 화면 변경 , 데이터 전송 => @Controller,@RestController
+    // HttpServletRequest , HttpServletResponse => 존재하지 않는다 
+    // ==> DispatcherServlet 관리하는 클래스 (@Controller,@RestController)
+    public void cartSaleUpdate(int cart_id)
+    {
+    	mapper.cartSaleUpdate(cart_id);
+    }
+    public void cartSaleDelete(int cart_id)
+    {
+    	mapper.cartSaleDelete(cart_id);
+    }
+    
+    public List<CartVO> cartAdminListData()
+    {
+    	return mapper.cartAdminListData();
+    }
+    
+    public void goodsAdminYes(int cart_id)
+    {
+    	mapper.goodsAdminYes(cart_id);
+    }
+    
+    public CartVO cartYesData(int cart_id)
+    {
+    	return mapper.cartYesData(cart_id);
+    }
 }
 
 

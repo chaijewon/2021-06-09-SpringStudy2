@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpSession;
 
 import com.sist.dao.*;
 import com.sist.vo.*;
+import com.sist.data.*;
 /*
  *    사용자 정의로 생성 ==> new => 빈공백으로 생성 
  *    스프링에서 객체 생성 ==> @Autowired , @Resource
@@ -182,6 +184,52 @@ public class GoodsController {
 	   model.addAttribute("main_jsp", "../page/mypage.jsp");
 	   return "main/main";
    }
+   
+   @GetMapping("page/adminpage.do")
+   public String page_adminpage(Model model)
+   {
+	   // 구매한 모든 내용을 보내준다 
+	   List<CartVO> list=dao.cartAdminListData();
+	   model.addAttribute("list", list);
+	   model.addAttribute("main_jsp", "../page/adminpage.jsp");
+	   return "main/main";
+   }
+   /*
+    *   1. 요청   ==> JSP안에서 <a> , <form> , ajax , axios  => .do (@Controller,@RestController)
+    *      @Controller : JSP화면 변경 (forward=> return "폴더명/JSP명",
+    *      sendRedirect=> return "redirect:~")
+    *        => 데이터만 전송 
+    *        => @ResponseBody
+    *      @RestController : 데이터만 전송 (데이터가 많은 경우 : JSON) => JavaScript (Ajax,ReactJS,VueJS)
+    */
+   @GetMapping("page/goodsAdminYes.do")
+   public String page_goodsAdminYes(int no,HttpSession session)
+   {
+	   // 구매내역을 이메일 (id,password) ==> JMail (라이브러리)
+	   //DAO연동 
+	   String name=(String)session.getAttribute("name");
+	   CartVO vo=dao.cartYesData(no);
+	   MailSender.naverMailSend(vo,name);
+	   dao.goodsAdminYes(no);
+	   return "redirect:../page/adminpage.do";
+   }
+   // 스프링에서 제어를 하기 위한 조립(클래스)
+   @GetMapping("page/goodsYes.do")
+   public String page_goodsYes(int no)
+   {
+	   // DAO => Update (issale:0=>1)
+	   dao.cartSaleUpdate(no);
+	   return "redirect:../page/mypage.do";
+   }
+   @GetMapping("page/goodsNo.do")
+   public String page_goodsNo(int no)
+   {
+	   // DAO => Delete 
+	   dao.cartSaleDelete(no);
+	   return "redirect:../page/mypage.do";
+   }
+   
+  
 }
 
 

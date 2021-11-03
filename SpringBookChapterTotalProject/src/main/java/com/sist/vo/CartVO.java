@@ -19,11 +19,23 @@ package com.sist.vo;
  */
 import java.util.*;
 public class CartVO {
-    private int cart_id,product_id,amount;
+    private int cart_id,product_id,amount,ischeck,issale;
     private String id;
     private Date regdate;
     
-    private String product_name,product_poster,product_price;
+    public int getIssale() {
+		return issale;
+	}
+	public void setIssale(int issale) {
+		this.issale = issale;
+	}
+	public int getIscheck() {
+		return ischeck;
+	}
+	public void setIscheck(int ischeck) {
+		this.ischeck = ischeck;
+	}
+	private String product_name,product_poster,product_price;
     
 	public String getProduct_name() {
 		return product_name;

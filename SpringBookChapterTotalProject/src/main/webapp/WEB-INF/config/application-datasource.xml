@@ -42,7 +42,7 @@
           =================================    ====여러개 (목록,상세보기 ,수정하기, 삭제하기)
      -->
     <!-- Mapper -->
-    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+    <!-- <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
        p:sqlSessionFactory-ref="ssf"
        p:mapperInterface="com.sist.mapper.SeoulMapper"
     />
@@ -76,7 +76,12 @@
        p:sqlSessionFactory-ref="ssf"
        p:mapperInterface="com.sist.mapper.CartMapper"
     />
-    <!-- <mybatis-spring:scan base-package="com.sist.mapper"/> -->
+    
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.mapper.FreeBoardMapper"
+    /> -->
+    <mybatis-spring:scan base-package="com.sist.mapper"/>
 </beans>
 
 

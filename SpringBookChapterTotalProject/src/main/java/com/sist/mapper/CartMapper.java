@@ -9,9 +9,12 @@ import java.util.*;
 	PRODUCT_AMOUNT          NUMBER 
  */
 import com.sist.vo.*;
+
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.annotations.Update;
 public interface CartMapper {
    @SelectKey(keyProperty="product_id",resultType=int.class,before=true,
 		   statement="SELECT NVL(MAX(product_id)+1,1) as product_id FROM goods")
@@ -43,10 +46,10 @@ public interface CartMapper {
 			REGDATE             DATE
     */
    @Insert("INSERT INTO cart VALUES("
-		  +"(SELECT NVL(MAX(cart_id)+1,1) FROM cart),#{id},#{product_id},#{amount},SYSDATE)")
+		  +"(SELECT NVL(MAX(cart_id)+1,1) FROM cart),#{id},#{product_id},#{amount},SYSDATE,0,0)")
    public void cartInsert(CartVO vo);
    // 마이페이지 => 취소/결제 => 결제(이메일로 전송)
-   @Select("SELECT /*+ INDEX_DESC(cart cart_id_pk)*/ cart_id,id,amount,"
+   @Select("SELECT /*+ INDEX_DESC(cart cart_id_pk)*/ cart_id,id,amount,ischeck,issale,"
 		  +"(SELECT product_name FROM goods WHERE goods.product_id=cart.product_id) as product_name,"
 		  +"(SELECT product_poster FROM goods WHERE goods.product_id=cart.product_id) as product_poster,"
 		  +"(SELECT product_price FROM goods WHERE goods.product_id=cart.product_id) as product_price "
@@ -54,7 +57,38 @@ public interface CartMapper {
 		  +"WHERE id=#{id} "
 		  +"AND regdate>=SYSDATE-3 AND regdate<=SYSDATE")
    public List<CartVO> cartListData(String id);
+   
+   // 구매요청 
+   @Update("UPDATE cart SET "
+		  +"issale=1 "
+		  +"WHERE cart_id=#{cart_id}")
+   public void cartSaleUpdate(int cart_id);
+   // 구매취소 
+   @Delete("DELETE FROM cart "
+		  +"WHERE cart_id=#{cart_id}")
+   public void cartSaleDelete(int cart_id);
    // 어드민 페이지에서 결제 
+   @Select("SELECT /*+ INDEX_DESC(cart cart_id_pk)*/ cart_id,id,amount,ischeck,issale,"
+			  +"(SELECT product_name FROM goods WHERE goods.product_id=cart.product_id) as product_name,"
+			  +"(SELECT product_poster FROM goods WHERE goods.product_id=cart.product_id) as product_poster,"
+			  +"(SELECT product_price FROM goods WHERE goods.product_id=cart.product_id) as product_price "
+			  +"FROM cart "
+			  +"WHERE issale=1") // 구매를 요청한 데이터만 읽는다 
+   public List<CartVO> cartAdminListData();
+   
+   @Update("UPDATE cart SET "
+		  +"ischeck=1 "
+		  +"WHERE cart_id=#{cart_id}")
+   public void goodsAdminYes(int cart_id);
+   
+   @Select("SELECT /*+ INDEX_DESC(cart cart_id_pk)*/ cart_id,id,amount,ischeck,issale,"
+			  +"(SELECT product_name FROM goods WHERE goods.product_id=cart.product_id) as product_name,"
+			  +"(SELECT product_poster FROM goods WHERE goods.product_id=cart.product_id) as product_poster,"
+			  +"(SELECT product_price FROM goods WHERE goods.product_id=cart.product_id) as product_price "
+			  +"FROM cart "
+			  +"WHERE cart_id=#{cart_id}")
+   public CartVO cartYesData(int cart_id);
+			  
 }
 
 

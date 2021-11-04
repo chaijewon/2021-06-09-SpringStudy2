@@ -12,9 +12,22 @@ public class ReplyBoardVO {
     *   depth => 게시물별로 답변의 갯수
     *   ================================== 삭제용 
     */
-    private int no,hit,group_id,group_step,group_tab,root,depth;
-    private String name,subject ,content,pwd,dbday;
+    private int no,hit,group_id,group_step,group_tab,root,depth,bno;
+    private String name,subject ,content,pwd,dbday,id;
     private Date regdate;
+    
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public int getBno() {
+		return bno;
+	}
+	public void setBno(int bno) {
+		this.bno = bno;
+	}
 	public int getNo() {
 		return no;
 	}

@@ -1,6 +1,7 @@
 package com.sist.dao;
 import java.util.*;
 
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -30,4 +31,28 @@ public class RecipeDAO {
   {
 	  return mapper.recipeLinkData();
   }
+  
+  public List<RecipeVO> recipeListData(Map map)
+  {
+	  return mapper.recipeListData(map);
+  }
+  
+  public int recipeTotalPage()
+  {
+	  return mapper.recipeTotalPage();
+  }
+  
+  public int recipeCount()
+  {
+	  return mapper.recipeCount();
+  }
+  
 }
+
+
+
+
+
+
+
+

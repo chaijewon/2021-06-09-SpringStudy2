@@ -25,11 +25,16 @@ import org.springframework.ui.Model;
  */
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sist.dao.FreeBoardDAO;
 
+import java.awt.HeadlessException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import javax.servlet.http.HttpSession;
+
 import com.sist.vo.*;
 // DispatcherServlet (모든 기능 : 사용자 요청 , 요청 처리 , 결과값 응답)
 // 요청을 처리할 수 있게 위임 => 개발자 
@@ -99,6 +104,9 @@ public class FreeBoardController {
 	   // 1. 게시물에 대한 상세보기 데이터 전송
 	   FreeBoardVO vo=dao.freeboardDetailData(no);
 	   // 2. 댓글 전송 
+	   List<ReplyVO> list=dao.freeboardReplyListData(no); 
+	   // 게시물 => no , 댓글 : bno
+	   model.addAttribute("list", list);
 	   model.addAttribute("vo", vo);
 	   model.addAttribute("page", page);
 	   model.addAttribute("main_jsp", "../freeboard/detail.jsp");
@@ -143,6 +151,78 @@ public class FreeBoardController {
 	   model.addAttribute("page", page);
 	   model.addAttribute("main_jsp", "../freeboard/delete.jsp");
 	   return "main/main";
+   }
+   // 댓글 관련 
+   // 1. 댓글 
+   @PostMapping("freeboard/reply_insert.do")
+   public String freeboard_reply_insert(int page,ReplyVO vo,HttpSession session,
+		   RedirectAttributes attr)
+   {
+	   // 댓글을 오라클에 추가 
+	   String id=(String)session.getAttribute("id"); // Object(자바에서 사용하는 모든 클래스의 상위 클래스)가 리턴
+	   String name=(String)session.getAttribute("name"); 
+	   vo.setId(id);
+	   vo.setName(name);
+	   dao.freeboardReplyInsert(vo);
+	   // detail.do => 게시물번호 , 페이지 
+	   attr.addAttribute("no", vo.getBno());
+	   attr.addAttribute("page", page);
+	   return "redirect:../freeboard/detail.do";
+   }
+   /*
+    *   => JSP  ==> .do 요청 
+    *   => @Controller 
+    *   => Mapper 
+    *   => DAO 
+    *   => @Controller
+    *   => JSP
+    */
+   // 3. 수정
+   @PostMapping("freeboard/reply_update.do")
+   public String freeboard_reply_update(ReplyVO vo,int page,RedirectAttributes attr)
+   {
+	   // 1. DAO연결 
+	   dao.freeboardReplyUpdate(vo);
+	   attr.addAttribute("no", vo.getBno());
+	   attr.addAttribute("page", page);
+	   return "redirect:../freeboard/detail.do";
+   }
+   // 4. 삭제
+   // 5. 댓글-댓글 
+   @PostMapping("freeboard/reply_reply_insert.do")
+   public String freeboard_reply2_insert(int pno,int bno,int page,String msg,
+		   HttpSession session,RedirectAttributes attr)
+   {
+	   // 댓글 -댓글 처리 
+	   ReplyVO vo=new ReplyVO(); 
+	   String id=(String)session.getAttribute("id");
+	   String name=(String)session.getAttribute("name");
+	   vo.setMsg(msg);
+	   vo.setId(id);
+	   vo.setName(name);
+	   vo.setBno(bno);
+	   // group_id , group_step , group_tab , root , depth : DAO
+	   ///////// 상세보기로 다시 이동 
+	   dao.freeboardReplyReplyInsert(pno, vo);
+	   attr.addAttribute("no", bno);
+	   attr.addAttribute("page", page);
+	   return "redirect:../freeboard/detail.do";
+   }
+   // 댓글 삭제 
+   // freeboard/reply_delete.do?no=${rvo.no }&bno=${vo.no}&page=${page}
+   /*
+    *   JSP에 값을 전송 
+    *   forward  => return "main/main"; => request공유 (request자체를 전송 => Model)
+    *   redirect => return "redirect:~"; => request초기화 (RedirectAttributes)
+    */
+   @GetMapping("freeboard/reply_delete.do")
+   public String freeboard_reply_delete(int no,int bno,int page,RedirectAttributes attr)
+   {
+	   // DAO연동 
+	   dao.freeboardReplyDelete(no);
+	   attr.addAttribute("no", bno);
+	   attr.addAttribute("page", page);
+	   return "redirect:../freeboard/detail.do";
    }
 }
 

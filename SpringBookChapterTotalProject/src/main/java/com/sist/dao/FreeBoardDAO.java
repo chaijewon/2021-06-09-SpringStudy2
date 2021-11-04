@@ -87,6 +87,55 @@ public class FreeBoardDAO {
 	  // catch=> conn.rollback() @After-Throwing 
 	  return bCheck;
   }
+  
+  public void freeboardReplyInsert(ReplyVO vo)
+  {
+	  mapper.freeboardReplyInsert(vo);
+  }
+  public List<ReplyVO> freeboardReplyListData(int bno)
+  {
+	  return mapper.freeboardReplyListData(bno);
+  }
+  
+  public void freeboardReplyUpdate(ReplyVO vo)
+  {
+	  mapper.freeboardReplyUpdate(vo);
+  }
+  /*
+   *   AAAAA   1
+   *   ()=>BBBBB 2
+   *   ()()=>CCCCCC 3 => step
+   *   ====
+   *   tab
+   */
+  @Transactional(propagation=Propagation.REQUIRED,rollbackFor=Exception.class)
+  public void freeboardReplyReplyInsert(int pno,ReplyVO vo)
+  {
+	  ReplyVO pvo=mapper.freeboardReplyParentInfoData(pno);
+	  vo.setGroup_id(pvo.getGroup_id());
+	  vo.setGroup_step(pvo.getGroup_step()+1);// 출력 순서 
+	  vo.setGroup_tab(pvo.getGroup_tab()+1);// => 간격 
+	  vo.setRoot(pno);
+	  mapper.freeboardReplyStepIncrement(pvo);
+	  mapper.freeboardReply2Insert(vo);
+	  mapper.freeboardReplyDepthIncrement(pno);
+  }
+  
+  @Transactional(propagation=Propagation.REQUIRED,rollbackFor=Exception.class)
+  public void freeboardReplyDelete(int no)
+  {
+	  ReplyVO vo=mapper.freeboardDepthInfoData(no);
+	  if(vo.getDepth()==0)
+	  {
+		  mapper.freeboardDelete(no);
+	  }
+	  else
+	  {
+		  mapper.freeboardReplyMsgUpdate(no);
+	  }
+	  
+	  mapper.freeboardReplyDepthDecrement(vo.getRoot());
+  }
 }
 
 

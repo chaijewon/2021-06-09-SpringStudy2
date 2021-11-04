@@ -55,6 +55,23 @@ public interface RecipeMapper {
    
    @Select("SELECT no,link FROM recipe")
    public List<RecipeVO> recipeLinkData();
+   
+   // 레시피 목록 => 상세보기  
+   // no},#{title},#{poster},#{chef},#{link}
+   @Select("SELECT no,title,poster,chef,num "
+		  +"FROM (SELECT no,title,poster,chef,rownum as num "
+		  +"FROM (SELECT /*+ INDEX_ASC(recipe recipe_no_pk)*/ no,title,poster,chef "
+		  +"FROM recipe)) "
+		  +"WHERE num BETWEEN #{start} AND #{end}")
+   public List<RecipeVO> recipeListData(Map map);
+   
+   @Select("SELECT CEIL(COUNT(*)/20.0) FROM recipe")
+   public int recipeTotalPage();
+   
+   // 레시피 총 갯수 읽기
+   @Select("SELECT COUNT(*) FROM recipe")
+   public int recipeCount();
+   // 쉐프 출력 
 }
 
 

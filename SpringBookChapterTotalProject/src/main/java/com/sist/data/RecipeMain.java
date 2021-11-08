@@ -64,6 +64,28 @@ public class RecipeMain {
 	     }catch(Exception ex){ex.printStackTrace();}
 	    
 	}
+	/*
+	 *  <div class="chef_list4_in">
+
+    
+			 <div class="list_lump">
+            <div class="list_ranking2">
+                <p class="list_ranking2_num ">1</p>
+                <p class="list_ranking2_num2"><span style="color:#fff;" class="glyphicon "></span></p>
+            </div>
+            <div class="list_mem3">
+                <a href="/profile/index.html?uid=jun8707" class="mem_pic"><img src="https://recipe1.ezmember.co.kr/cache/rpf/2016/01/19/3ebaebc5e49f53dd2f66b71932e5a33d1.jpg" ></a>
+            </div>
+            <div class="list_cont4"><b>
+                <a href="/profile/index.html?uid=jun8707" id="folFriend_jun8707" class="info_name_f">
+                    시크제이맘                </a>
+                    <button type="button" class="btn btn-default btn-sm" id="btnActFriend_jun8707" fact="insert" onClick="doActFriend('jun8707')">
+                        <span class="glyphicon glyphicon-plus"></span>소식받기                    </button>
+                </b>
+                <span class="mem_cont1">1,712</span><span class="mem_cont3">1,188,441</span><span class="mem_cont7">40,430,313</span><span class="mem_cont2">24,467</span>
+            </div>
+        </div>
+	 */
 	public ArrayList<ChefVO> chefAllData()
 	{
 		ArrayList<ChefVO> list=new ArrayList<ChefVO>();
@@ -75,11 +97,11 @@ public class RecipeMain {
 				// https://www.10000recipe.com/chef/chef_list.html?order=chef_no_follower&term=all&page=2
 				Document doc=Jsoup.connect("http://www.10000recipe.com/chef/chef_list.html?order=chef_no_follower&term=all&page="+i).get();
 				Elements poster=doc.select("div.list_mem3 a.mem_pic img");
-				Elements chef=doc.select("div.list_cont4 a");
-				Elements mem_cont1=doc.select("span.mem_cont1");
-				Elements mem_cont3=doc.select("span.mem_cont3");
-				Elements mem_cont7=doc.select("span.mem_cont7");
-				Elements mem_cont2=doc.select("span.mem_cont2");
+				Elements chef=doc.select("div.list_cont4 a.info_name_f");
+				Elements mem_cont1=doc.select("div.list_cont4 span.mem_cont1");
+				Elements mem_cont3=doc.select("div.list_cont4 span.mem_cont3");
+				Elements mem_cont7=doc.select("div.list_cont4 span.mem_cont7");
+				Elements mem_cont2=doc.select("div.list_cont4 span.mem_cont2");
 				
 				for(int j=0;j<poster.size();j++)
 				{
@@ -88,10 +110,10 @@ public class RecipeMain {
 						ChefVO vo=new ChefVO();
 						vo.setPoster(poster.get(j).attr("src"));
 						vo.setChef(chef.get(j).text());
-						vo.setMem_cont1(Integer.parseInt(mem_cont1.get(j).text().trim()));
-						vo.setMem_cont3(Integer.parseInt(mem_cont3.get(j).text().trim()));
-						vo.setMem_cont7(Integer.parseInt(mem_cont7.get(j).text().trim()));
-						vo.setMem_cont2(Integer.parseInt(mem_cont2.get(j).text().trim()));
+						vo.setMem_cont1(Integer.parseInt(mem_cont1.get(j).text().replace(",", "")));
+						vo.setMem_cont3(Integer.parseInt(mem_cont3.get(j).text().replace(",", "")));
+						vo.setMem_cont7(Integer.parseInt(mem_cont7.get(j).text().replace(",", "")));
+						vo.setMem_cont2(Integer.parseInt(mem_cont2.get(j).text().replace(",", "")));
 						System.out.println("Poster:"+vo.getPoster());
 						System.out.println("Chef:"+vo.getChef());
 						System.out.println("Mem-cont1:"+vo.getMem_cont1());
@@ -102,7 +124,7 @@ public class RecipeMain {
 						System.out.println("---------------------------------------------------------");
 						dao.chefInsert(vo);
 					    k++;
-					}catch(Exception ex){}
+					}catch(Exception ex){ex.printStackTrace();}
 					//list.add(vo);
 				}
 			}
@@ -244,10 +266,10 @@ public class RecipeMain {
 		String[] xml={"application-context.xml","application-datasource.xml"};
 		ApplicationContext app=new ClassPathXmlApplicationContext(xml);
 		RecipeMain rm=(RecipeMain)app.getBean("recipeMain");
-		//rm.chefAllData();
+		rm.chefAllData();
 		//rm.recipeAllData();
 		//rm.recipeDetailData();
-		rm.goodsListData();
+		//rm.goodsListData();
 	}
 	
 }

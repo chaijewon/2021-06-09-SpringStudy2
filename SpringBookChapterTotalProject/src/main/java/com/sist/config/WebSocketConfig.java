@@ -8,8 +8,8 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 
 import com.sist.chat.*;
 
-@Configuration
-@EnableWebSocket
+//@Configuration
+//@EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer{
 
 	@Override

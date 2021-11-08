@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+    <!-- AOP 등록 -->
+    <!-- 사용자 정의 클래스 등록 -->
+    <context:component-scan base-package="com.sist.*"/>
+    <!-- 
+                  메모리 할당하는 어노테이션 
+         @Component,
+         @Repository, 
+         @Service, 
+         @Controller, 
+         @RestController, 
+         @ControllerAdvice, 
+         @Configuration
+         
+                 주입(DI)
+         @Autowired, 
+         @PostConstruct,  init-method 
+         @PreDestroy,   destory-method 
+         @Resource
+     -->
+    <!-- 데이터베이스 정보 -->
+    <bean id="ds" class="org.apache.commons.dbcp.BasicDataSource"
+       p:driverClassName="oracle.jdbc.driver.OracleDriver"
+       p:url="jdbc:oracle:thin:@211.238.142.181:1521:XE"
+       p:username="hr"
+       p:password="happy"
+    />
+    <!-- 트랜잭션 적용 -->
+    <!-- 마이바티스  -->
+    <bean id="ssf" class="org.mybatis.spring.SqlSessionFactoryBean"
+       p:dataSource-ref="ds"
+    />
+    <!-- 매퍼구현 -->
+    <bean id="mapper"
+         class="org.mybatis.spring.mapper.MapperFactoryBean"
+         p:sqlSessionFactory-ref="ssf"
+         p:mapperInterface="com.sist.dao.RecipeMapper"
+    />
+    <!-- ViewResolver -->
+    <bean id="viewResolver"
+         class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+         p:prefix="/"
+         p:suffix=".jsp"
+     />
+     <!-- Spring은 자바전용이 아니다 (코틀린 , C#) -->
+    <!-- 기타 : 웹소켓, 인터셉트 , 웹보안  -->
+</beans>
+
+
+
+
+
+
+
+
+
+
+

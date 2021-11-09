@@ -154,7 +154,7 @@
       <c:forEach var="rvo" items="${list }">
         <div class="col-md-3">
 		    <div class="thumbnail">
-		      <a href="../recipe/detail.do?no=${rvo.no }">
+		      <a href="../recipe/detail.do?no=${rvo.no }&page=1">
 		        <img src="${rvo.poster }" title="${rvo.chef }" style="width:100%">
 		        <div class="caption">
 		          <p>${rvo.title }</p>

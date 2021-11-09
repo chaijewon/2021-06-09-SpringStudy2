@@ -32,9 +32,9 @@ public class FoodDAO {
 	   return mapper.categoryInfoData(cno);
    }
    
-   public FoodVO foodDetailData(int no)
+   public FoodVO foodDetailData(Map map)
    {
-	   return mapper.foodDetailData(no);
+	   return mapper.foodDetailData(map);
    }
    
    public List<RecipeVO> foodRecipeData(String title)
@@ -50,5 +50,14 @@ public class FoodDAO {
    public int foodLocationTotalPage(String address)
    {
 	   return mapper.foodLocationTotalPage(address);
+   }
+   // 추천 
+   public List<String> foodGetNameData()
+   {
+	   return mapper.foodGetNameData();
+   }
+   public FoodLocationVO foodInfoData(String name)
+   {
+	   return mapper.foodInfoData(name);
    }
 }

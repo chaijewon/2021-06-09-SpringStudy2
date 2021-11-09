@@ -50,9 +50,9 @@ public interface FoodMapper {
 		 +"WHERE cno=#{cno}")
   public CategoryVO categoryInfoData(int cno);
   // 맛집 상세보기 
-  @Select("SELECT * FROM project_food_house "
+  @Select("SELECT * FROM ${tbl} "
 		 +"WHERE no=#{no}")
-  public FoodVO foodDetailData(int no);
+  public FoodVO foodDetailData(Map map);
   
   // 레시피 연동 (12)  
   @Select("SELECT no,title,poster,chef,rownum "
@@ -75,6 +75,14 @@ public interface FoodMapper {
 		 +"WHERE address LIKE '%'||#{address}||'%'")
   public int foodLocationTotalPage(String address);
   // 맛집 추천 => Naver 블로그 이용 (데이터 분석) (*******) ==> XML,JSON
+  // 맛집 명 
+  @Select("SELECT DISTINCT name FROM project_food_location")
+  public List<String> foodGetNameData();
+  // 맛집 명 => 정보 받기
+  @Select("SELECT * FROM project_food_location "
+		 +"WHERE name=#{name}")
+  public FoodLocationVO foodInfoData(String name);
+  //트위터 => 등록 => 인스타그램 (React) 
 }
 
 

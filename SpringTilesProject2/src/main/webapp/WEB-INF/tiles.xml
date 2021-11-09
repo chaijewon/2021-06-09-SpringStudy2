@@ -16,4 +16,5 @@
     <put-attribute name="content" value="/WEB-INF/{1}/{2}.jsp"/> <!--model.addAttribute("main_jsp","../food/category.jsp");  -->
     <!--  main.jsp안에 <jsp:include "value파일명"> -->
   </definition>
+  
 </tiles-definitions>

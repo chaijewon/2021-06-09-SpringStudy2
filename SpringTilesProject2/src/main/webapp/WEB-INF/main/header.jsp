@@ -31,6 +31,7 @@
           <li><a href="../recipe/chef.do">쉐프 목록</a></li>
         </ul>
       </li>
+      <li><a href="../recommand/list.do">추천 경로</a></li>
       <li><a href="../chat/chat.do">실시간 채팅</a></li>
     </ul>
   </div>

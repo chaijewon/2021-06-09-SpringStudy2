@@ -29,7 +29,7 @@
       <c:forEach var="vo" items="${list }">
         <div class="col-md-3">
 		    <div class="thumbnail">
-		      <a href="#">
+		      <a href="../food/detail.do?no=${vo.no }&type=1">
 		        <img src="${fn:substring(vo.poster,0,fn:indexOf(vo.poster,'^')) }" style="width:100%">
 		        <div class="caption">
 		          <p>${vo.name }&nbsp;<span style="color:orange">${vo.score }</span></p>

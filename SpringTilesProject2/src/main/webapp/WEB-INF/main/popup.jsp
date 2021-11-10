@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
 font-family: SF Pro KR, SF Pro Display, SF Pro Icons, AOS Icons, Apple Gothic, HY Gulim, MalgunGothic, HY Dotum, Lexi Gulim, Helvetica Neue, Helvetica, Arial, sans-serif;
@@ -79,59 +78,55 @@ font-family: SF Pro KR, SF Pro Display, SF Pro Icons, AOS Icons, Apple Gothic, H
 	height : 40px;
 }
 </style>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 </head>
 <body>
-   <tiles:insertAttribute name="header"/>
-   <div style="height: 50px"></div>
-   <tiles:insertAttribute name="content"/>
-   <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
-   <script type="text/javascript">
-     
-     function setCookie( name, value, expiredays ) {
-	    var todayDate = new Date();
-	    todayDate.setDate(todayDate.getDate() + expiredays ); 
-	    document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + todayDate.toGMTString() + ";"
-	 }
-     var closePop = function(){
-         if($("input[name='chkbox']").is(":checked") == true){
-             setCookie("close","Y",1);   
-         }
-         $("#layer_popup").hide();
-     }
-     
-     $(document).ready(function(){
-    	 //setCookie("close","Y",10)
-         var cookiedata = document.cookie;
-         if(cookiedata.indexOf("close=Y")<0){
-             $("#layer_popup").show();
-         }else{
-             $("#layer_popup").hide();
-         }
-         $("#close").click(function(){
-        	
-        	 closePop();
-         });
-     });
+<script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
+<script type="text/javascript">
+$(function(){
+	cookiedata = document.cookie;   
+	if ( cookiedata.indexOf("maindiv=done") < 0 ){      
+		
+			$('#layer_popup').css("visibility","visibility");
+		//$("#layer_popup").css("visibility","visible");
+	}
+	else {
+	    //document.getElementById('layer_popup').style.display = "none";
+		$("#layer_popup").css("visibility","hidden");
+	}
+})
+function setCookie( name, value, expiredays ) {
+    var todayDate = new Date();
+    todayDate.setDate(todayDate.getDate() + expiredays ); 
+    document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + todayDate.toGMTString() + ";"
+}
+function closePop() {
+	//alert("1")
+    if ( document.pop_form.chkbox.checked ){
+    	//alert("12")
+        setCookie( "maindiv", "done" , 1);
+    	i=1;
+    }
+    document.getElementById('layer_popup').style.display = "none";
+}
 </script>
+<!-- <div class="layerPopup" id="layer_popup" style="display:'block';"> -->
 <div class="layerPopup" id="layer_popup" style="visibility: visible;">
     <div class="layerBox">
         <h4 class="title">Organi 공지사항</h4>
         <div class="cont">
             <p>
-			  <img src="../main/popup.jpg" width=400 height=550 usemap="#popup" alt="event page">
+			  <img src="popup.jpg" width=400 height=550 usemap="#popup" alt="event page">
             </p>
         </div>
         <form name="pop_form">
         <div id="check" ><input type="checkbox" name="chkbox" value="checkbox" id="chkbox" >
         <label for="chkbox">&nbsp;&nbsp;오늘 하루동안 보지 않기</label></div>
-		<div id="close" ><a href="#" id="close">닫기</a></div>    
+		<div id="close" ><a href="javascript:closePop();">닫기</a></div>    
 		</form>
 	</div>
 </div>
 
-   
+
 </body>
 </html>

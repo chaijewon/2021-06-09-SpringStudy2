@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+       <context-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/config/application-*.xml</param-value>
+      </context-param>
+    
+	<listener>
+	  <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- <init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/config/application-*.xml</param-value>
+			xml파일이 여러개 일 경우 
+		</init-param> -->
+		<init-param>
+	        <param-name>contextClass</param-name>
+	        <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+	    </init-param>
+	    <init-param>
+	        <param-name>contextConfigLocation</param-name>
+	        <param-value>com.sist.config.ChatConfig</param-value>
+	    </init-param>
+	</servlet>
+		
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<!-- <url-pattern>/</url-pattern> -->
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	<!-- 한글 변환 -->
+	<!-- request를 사용하지 않는 경우에 자동으로 한글변환
+	     Spring : 예전버전 => request를 매개변수로 받아서 처리 
+	          최근버전 : DispatcherServlet 직접전송 
+	     id,password
+	     public String login(HttpServletRequest request,HttpServletResponse response)
+	     {
+	          String id=request.getParameter("id");
+	          String pwd=request.getParameter("pwd");
+	     }
+	     public String login(String id,String pwd) => DispatcherServlet
+	     {
+	        
+	     }
+	     => @RequestMapping (GET/POST 동시에 처리가 가능)
+	         = @GetMapping() (GET)
+	         = @PostMapping() (POST)
+	     => 1. 간결하게 만든다 
+	     => 2. 다른 개발자가 쉽게 적용할 수 있게 만든다 
+	     => 3. 모든 개발자가 동일한 코딩 (표준화)
+	     => 4. 목적:결합성이 낮은 프로그램 (다른 클래스에 영향이 없는 클래스)
+	 -->
+	<filter>
+	    <filter-name>encodingFilter</filter-name>
+	    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+	    <init-param>
+	        <param-name>encoding</param-name>
+	        <param-value>UTF-8</param-value>
+	    </init-param>
+	    <init-param>
+	        <param-name>forceEncoding</param-name>
+	        <param-value>true</param-value>
+	    </init-param>
+		</filter>
+		
+		<!-- /의 형식으로 시작하는 url에 대하여 UTF-8로 인코딩 -->
+		<filter-mapping>
+		    <filter-name>encodingFilter</filter-name>
+		    <url-pattern>/*</url-pattern>
+		</filter-mapping>
+    
+</web-app>

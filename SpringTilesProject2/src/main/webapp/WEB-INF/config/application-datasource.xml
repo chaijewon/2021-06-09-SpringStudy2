@@ -35,6 +35,10 @@
        p:sqlSessionFactory-ref="ssf"
        p:mapperInterface="com.sist.dao.RecipeMapper"
     />
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.dao.RecommandMapper"
+    />
     <!-- mapper를 패키지에 따로 설정  -->
     <!-- <mybatis-spring:scan base-package="com.sist.mapper"/> -->
 </beans>

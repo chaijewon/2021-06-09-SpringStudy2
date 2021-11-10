@@ -15,16 +15,16 @@
        class="org.springframework.web.servlet.view.tiles3.TilesConfigurer"
        p:definitions="/WEB-INF/tiles.xml"
     />
-    <!-- 2. TilesView 적용 :화면 변경  -->
+    <!-- 2. TilesView 적용 :화면 변경  (Include)-->
     <bean id="tilesViewResolver"
        class="org.springframework.web.servlet.view.UrlBasedViewResolver"
        p:viewClass="org.springframework.web.servlet.view.tiles3.TilesView"
        p:order="0"
     />
-    <!-- ViewResolver 등록 : Ajax -->
+    <!-- ViewResolver 등록 : Ajax,Front-End -->
     <bean id="viewResolver"
        class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-       p:prefix="/WEB-INF/"
+       p:prefix="/"
        p:suffix=".jsp"
        p:order="1"
      />

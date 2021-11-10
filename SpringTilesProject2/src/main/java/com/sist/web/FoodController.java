@@ -265,7 +265,7 @@ public class FoodController {
 		   }
 	   }
 	   model.addAttribute("lList", lList);
-	   return "food/ajax/result";
+	   return "WEB-INF/food/ajax/result";
    }
     
   

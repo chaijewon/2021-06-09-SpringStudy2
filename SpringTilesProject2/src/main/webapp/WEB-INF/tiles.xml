@@ -11,6 +11,12 @@
             model.addAttribute("main_jsp","../food/category.jsp");
             return "main/main"; (X) ==> return "food/category"
         }
+        
+        */*/*(파일명)
+        === 폴더명 
+        food/recipe/list
+        
+        recommand/list
    -->
   <definition name="*/*" extends="main"> <!-- return "main/main" -->
     <put-attribute name="content" value="/WEB-INF/{1}/{2}.jsp"/> <!--model.addAttribute("main_jsp","../food/category.jsp");  -->

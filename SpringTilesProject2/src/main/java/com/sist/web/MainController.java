@@ -10,4 +10,9 @@ public class MainController {
    {
 	   return "main";
    }
+   @RequestMapping("site/chat/chat.do")
+   public String chat_chat()
+   {
+	   return "site/chat/chat";
+   }
 }

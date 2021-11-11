@@ -8,7 +8,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 // XML(채팅 제어)
 
 import com.sist.web.ChatHandler;
-// ws://locahost:8080/web/chat-ws
+// ws://locahost:8080/web/chat-ws.do
 @Configuration
 // 활성화 
 @EnableWebSocket

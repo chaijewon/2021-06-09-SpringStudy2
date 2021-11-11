@@ -15,7 +15,8 @@ h1 {
   text-align: center;
 }
 #chatArea{
-  height: 150px;
+  width:400px;
+  height:200px;
   overflow-y:auto;
   border:1px solid black;
 }
@@ -23,126 +24,127 @@ h1 {
 <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.3.0/sockjs.min.js"></script>
 <script type="text/javascript">
- var websocket;
- function connection()
- {
-	 // websocket 등록 
+let websocket;
+function connection() // 연결 
+{
+	 // 스프링 서버와 연결 => http(X) => ws
 	 websocket=new WebSocket("ws://localhost:8080/web/chat-ws.do");
 	 websocket.onopen=onOpen;
-	 websocket.onmessage=onMessage;
 	 websocket.onclose=onClose;
-	 
- }
- function onOpen(event)
- {
-	 // 서버 연결
-	 alert("채팅 서버와 연결되었습니다!!");
- }
- function onMessage(event)
- {
-	 // 서버에 값을 전송
-	 var data=event.data;
-	 if(data.substring(0,4)=="msg:")
-	 {
-	     // 100 LOGIN , 200 방만들기 
-	     appendMessage(data.substring(4));
-	 }
- }
- function onClose(event)
- {
-	 // 종료
-	 alert("채팅서버와 연결 종료되었습니다!!");
- }
- function disconnection()
- {
-	 // 서버연결 해제
+	 websocket.onmessage=onMessage;
+}
+function onOpen(event) // 연결이 된 경우
+{
+	alert("서버와 연결되었습니다!!");
+}
+function onMessage(event) // 채팅 문장열이 전송 
+{
+	let data=event.data; // 스프링서버에서 보내준 데이터
+	/*
+	    채팅 문자열 ==> 'msg:' 
+	    채팅방 만들기 ==> 'make_room:'
+	    일대일 채팅 ==> 'mantoman:'
+	*/
+	if(data.substring(0,4)=='msg:') 
+	{
+		appendMessage(data.substring(4));
+	}
+}
+function onClose(event) // 종료 완료
+{
+	alert("서버와 연결이 종료되었습니다!!");
+}
+function disconnection() // 서버와 종료
+{
 	 websocket.close();
- }
- function send()
- {
-	 // 전송 
-	 var name=$('#name').val();
-	 if(name.trim()=="")
-	 {
-		 $('#name').focus();
-		 return;
-	 }
-	 var msg=$('#sendMsg').val();
-	 if(msg.trim()=="")
-	 {
-		 $('#sendMsg').focus();
-		 return;
-	 }
-	 websocket.send("msg:["+name+"]"+msg);
-	 $('#sendMsg').val("");
-	 $('#sendMsg').focus();
-	 
- }
- function appendMessage(msg)
- {
-	 // 채팅문자열을 결합 
-	 $('#recvMsg').append(msg+"<br>");
-	 var ch=$('#chatArea').height();
-	 var m=$('#recvMsg').height()-ch;
-	 $('#chatArea').scrollTop(m);
- }
- 
- $(function(){
-	 $('#startBtn').click(function(){
-		 connection();
-	 });
-	 $('#endBtn').click(function(){
-		 disconnection();
-	 });
-	 $('#sendBtn').click(function(){
-		 send();
-	 })
-	 $('#sendMsg').keydown(function(key){
+}
+function send()
+{
+	let name=$('#name').val();
+	let msg=$('#sendMsg').val();
+	websocket.send('msg:['+name+']:'+msg);
+	$('#sendMsg').val("");
+}
+function appendMessage(msg)
+{
+	$('#recvMsg').append(msg+"<br>");
+	// scroll조절
+	let ch=$('#chatArea').height();
+	let m=$('#recvMsg').height()-ch;
+	$('#chatArea').scrollTop(m);
+}
+$(function(){
+	// 이벤트 처리
+	$('#startBtn').click(function(){
+		let name=$('#name').val();
+		if(name.trim()=="")
+		{
+			$('#name').focus();
+			return;
+		}
+		connection();
+	});
+	$('#endBtn').click(function(){
+		disconnection();
+	})
+	$('#sendBtn').click(function(){
+		let msg=$('#sendMsg').val();
+		if(msg.trim()=="")
+		{
+			$('#sendMsg').focus();
+			return;
+		}
+		send();
+	})
+	// Enter
+	$('#sendMsg').keydown(function(key){
 		 if(key.keyCode==13)
 		 {
 		    send();	 
 		 }
 	 })
- })
+})
 </script>
-<!-- 
-$("#message").keydown(function(keyNum){ //현재의 키보드의 입력값을 keyNum으로 받음 if(keyNum.keyCode == 13){ // keydown으로 발생한 keyNum의 숫자체크 // 숫자가 enter의 아스키코드 13과 같으면 // 기존에 정의된 클릭함수를 호출 $("#mbutton").click() } })
-
- -->
 </head>
 <body>
-  <div class="bgded overlay" style="background-image:url('../images/demo/backgrounds/back.png');">
-    <div id="breadcrumb" class="hoc clear"></div>
-  </div>
-  <div style="height: 50px"></div>
-  <div class="wrapper row3">
-   <main class="hoc container clear"> 
-    <h1>WebSocket 채팅 프로그램</h1>
-     <div class="row">
-       <table class="table">
-       <tr>
-        <td class="inline">
-         이름:<input type=text id="name" class="input-sm">
-         <input type="button" id="startBtn" value="입장" class="btn btn-sm btn-primary">
-         <input type="button" id="endBtn" value="퇴장" class="btn btn-sm btn-danger">
+  <div class="container">
+    <h1>Spring WebSocket 채팅</h1>
+    <div class="row">
+     <table class="table">
+      <tr>
+        <td>
+          <input type=text id=name size=20 class="input-sm">
+          <input type=button class="btn btn-sm btn-danger" value="입장" id="startBtn">
+          <input type=button class="btn btn-sm btn-success" value="퇴장" id="endBtn">
         </td>
       </tr>
       <tr>
         <td>
-         <div id="chatArea">
-           <div id="recvMsg"></div>
-         </div>
+          <div id="chatArea"> <%-- Scrollbar --%>
+            <div id="recvMsg"></div>
+          </div>
         </td>
       </tr>
       <tr>
-        <td class="inline">
-         <input type=text id="sendMsg" size=50 class="input-sm">
-         <input type=button id="sendBtn" value="전송" class="btn btn-sm btn-success">
+        <td>
+         <input type=text id="sendMsg" size=40 class="input-sm">
+         <input type=button id="sendBtn" class="btn btn-sm btn-success" value="전송">
         </td>
       </tr>
      </table>
-   </div>
-  </main>
+     
+    </div>
   </div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+

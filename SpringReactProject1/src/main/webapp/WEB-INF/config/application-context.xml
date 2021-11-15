@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+    <!-- 사용자 정의 클래스 등록 : 패키지 단위 등록  -->
+    <context:component-scan base-package="com.sist.*"/>
+    <!-- DB설정  -->
+    <!-- 1. 데이터베이스 정보 : BasicDataSource -->
+    <bean id="ds"
+        class="org.apache.commons.dbcp.BasicDataSource"
+        p:driverClassName="oracle.jdbc.driver.OracleDriver"
+        p:url="jdbc:oracle:thin:@211.238.142.181:1521:XE"
+        p:username="hr"
+        p:password="happy"
+     />
+    <!-- 2. MyBatis연결 : SqlSessionFactoryBean (getConnection,disConnection) -->
+    <bean id="ssf"
+       class="org.mybatis.spring.SqlSessionFactoryBean"
+       p:dataSource-ref="ds"
+     />
+    <!-- 3. 인터페이스(Mapper)를 구현하는 클래스에 인터페이스 등록 (자동 구현)) -->
+    <bean id="mapper"
+        class="org.mybatis.spring.mapper.MapperFactoryBean"
+        p:sqlSessionFactory-ref="ssf"
+        p:mapperInterface="com.sist.dao.RecipeMapper"
+    />
+    <!-- ViewResolver -->
+    <bean id="viewResolver"
+       class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+       p:prefix="/"
+       p:suffix=".jsp"
+    />
+</beans>
+
+
+
+
+
+
+

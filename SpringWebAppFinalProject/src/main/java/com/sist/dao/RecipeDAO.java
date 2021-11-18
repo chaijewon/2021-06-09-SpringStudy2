@@ -63,6 +63,32 @@ public class RecipeDAO {
 	{
 		return mapper.recipeDetailData(no);
 	}
+	// MyBatis 
+	/*
+	 *   1. SQL 
+	 *   2. 결과값은 어떤 데이터형으로 받을 지 (리턴형)
+	 *   3. 매개변수 설정 (사용자가 보내주는 데이터)
+	 *   ====> 자동 구현 
+	 */
+	public List<CategoryVO> categoryListData(Map map)
+	{
+		return mapper.categoryListData(map); //브라우저로 전송이 불가능 
+	}
+	/*
+	 *   DAO : 오라클 연동 (오라클 데이터 읽기) => 서버 자체(브라우저 ,모바일에 전송(X))
+	 *   Controller : 서버에서 전송이 가능하게 만들어 준 클래스 
+	 *   Manager : 외부 API를 이용해서 데이터 읽기 => 서버 자체 (브라우저 ,모바일에 전송(X))
+	 */
+	public CategoryVO categoryInfoData(int cno)
+	{
+		return mapper.categoryInfoData(cno);
+	}
+	
+	public List<FoodVO> foodCategoryListData(int cno)
+	{
+		return mapper.foodCategoryListData(cno);
+	}
+	
 }
 
 

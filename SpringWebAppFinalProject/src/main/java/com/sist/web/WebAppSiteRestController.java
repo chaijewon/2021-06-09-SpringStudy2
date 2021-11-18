@@ -13,6 +13,9 @@ import com.sist.dao.*;
  *    데이터 읽기 
  *     1. 오라클 데이터 읽기  : DAO => 오라클에서 데이터를 읽고 브라우저,모바일로 전송이 불가능  
  *     2. 데이터 전송 : @Controller,@RestController (배달) 
+ *     
+ *     ==> @Controller , @RestController 
+ *         ==> DsipatcherServlet에서 request,response를 사용할 권한 
  */
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -99,18 +102,28 @@ public class WebAppSiteRestController {
 		try
 		{
 			JSONObject obj=new JSONObject();
-			obj.put("title", vo.getTitle());
-			obj.put("poster", vo.getPoster());
-			obj.put("content", vo.getContent());
-			obj.put("info1",vo.getInfo1());
-			obj.put("info2",vo.getInfo2());
-			obj.put("info3",vo.getInfo3());
-			obj.put("chef", vo.getChef());
-			obj.put("chef_poster", vo.getChef_poster());
-			obj.put("chef_profile", vo.getChef_profile());
-			//obj.put("foodmake", vo.getFoodmake());
-			//obj.put("foodimg", vo.getFoodimg());
-			json=obj.toJSONString();
+			if(vo!=null)
+			{
+				
+				obj.put("title", vo.getTitle());
+				obj.put("poster", vo.getPoster());
+				obj.put("content", vo.getContent());
+				obj.put("info1",vo.getInfo1());
+				obj.put("info2",vo.getInfo2());
+				obj.put("info3",vo.getInfo3());
+				obj.put("chef", vo.getChef());
+				obj.put("chef_poster", vo.getChef_poster());
+				obj.put("chef_profile", vo.getChef_profile());
+				//obj.put("foodmake", vo.getFoodmake());
+				//obj.put("foodimg", vo.getFoodimg());
+				json=obj.toJSONString();
+			}
+			else
+			{
+				obj.put("title", "준비된 내용이 없습니다");
+				json=obj.toJSONString();
+			}
+				
 		}catch(Exception ex){}
 		return  json;
 	}
@@ -147,6 +160,91 @@ public class WebAppSiteRestController {
 				arr.add(ss);
 			}
 			json=arr.toJSONString();
+		}catch(Exception ex){}
+		return json;
+	}
+	/*
+	 *    Java(JSP) , C#(ASP.Net) => 웹  => 스크립트 (PHP)
+	 *    파이썬 => AI특화(데이터 수집,통계,분석)
+	 *    코틀린 , 스칼라 => 모바일 
+	 *    C/C++ => HW , 게임 (exe)
+	 *    ===== 브라우저 (char(1byte)) 자바(2byte)
+	 *                 
+	 */
+	@RequestMapping(value="food/rest_category.do",produces="text/plain;charset=UTF-8")
+	public String food_category(int no)
+	{
+		//1. 오라클에서 데이터 읽기 
+		//2. JSON으로 변경후 전송 => kotlin,react,vue,ajax (Java) => 호환성 있는 데이터형식 (JSON,XML)
+		//3. => 전송 (스프링 ==> JSP) => List,~VO 
+		String json="";
+		try
+		{
+			Map map=new HashMap();
+			map.put("no", no);
+			List<CategoryVO> list=dao.categoryListData(map);// => JSONArray => []
+			JSONArray arr=new JSONArray();
+			for(CategoryVO vo:list)
+			{
+				// CategoryVO => JSONObject => {} => 자바스크립트에서는 {} 객체 ==> 표현법 (JSON)
+				JSONObject obj=new JSONObject();
+				obj.put("cno", vo.getCno());
+				obj.put("title", vo.getTitle());
+				obj.put("poster", vo.getPoster());
+				arr.add(obj);
+			}
+			json=arr.toJSONString();
+		}catch(Exception ex){}
+		return json;
+	}
+	
+	@RequestMapping(value="food/rest_food_category_list.do",produces="text/plain;charset=UTF-8")
+	public String food_category_list(int cno)
+	{
+		String json="";
+		try
+		{
+			// 1. 오라클 데이터 
+			List<FoodVO> list=dao.foodCategoryListData(cno);
+			CategoryVO cvo=dao.categoryInfoData(cno);
+			int i=0;
+			JSONArray arr=new JSONArray();
+			for(FoodVO vo:list)
+			{
+				JSONObject obj=new JSONObject();
+				// no,name,address,poster,tel,type,score
+				obj.put("no", vo.getNo()); // {no:1,name:"",address:""}
+				obj.put("name", vo.getName());
+				String addr=vo.getAddress();
+				addr=addr.substring(0,addr.lastIndexOf("지"));
+				obj.put("address", addr);
+				String poster=vo.getPoster();
+				poster=poster.substring(0,poster.indexOf("^"));
+				obj.put("poster", poster);
+				obj.put("tel", vo.getTel());
+				obj.put("type", vo.getType());
+				obj.put("score", vo.getScore());
+				
+				arr.add(obj);
+				i++;
+			}
+			json=arr.toJSONString();
+		}catch(Exception ex){}
+		return json;
+	}
+	@RequestMapping(value="food/rest_food_category_info.do",produces="text/plain;charset=UTF-8")
+	public String food_category_info(int cno)
+	{
+		String json="";
+		try
+		{
+			// 1. 오라클 데이터 
+			
+			CategoryVO cvo=dao.categoryInfoData(cno);
+			JSONObject obj=new JSONObject();
+			obj.put("title", cvo.getTitle());
+			obj.put("subject", cvo.getSubject());
+			json=obj.toJSONString();
 		}catch(Exception ex){}
 		return json;
 	}

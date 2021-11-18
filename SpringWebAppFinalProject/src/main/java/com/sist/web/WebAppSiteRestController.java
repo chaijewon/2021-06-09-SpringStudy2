@@ -248,6 +248,51 @@ public class WebAppSiteRestController {
 		}catch(Exception ex){}
 		return json;
 	}
+	/*
+	 *   Spring (라이브러리) 
+	 *      클라언트 요청 ========>DispatcherServlet ====> 요청 처리 
+	 *                                                   |
+	 *                                                 HandlerMapping => @RequestMapping
+	 *                                                   | 결과값 
+	 *                                                 ViewResolver
+	 *                                                 동작의 기본 (웹 => 틀) => 프레임워크 
+	 *        *.do
+	 *        =구분
+	 *   Mybatis : 라이브러리  => 오라클 기본 정보 , SQL , VO/List/일반 데이터 
+	 *   =========
+	 *     axios => then()
+	 *   React  =
+	 *   Vue    =
+	 *   Ajax   =  형식 , 순서 => View
+	 *   ================ 웹 (클라이언트 / 서버)
+	 *                         요청         응답 
+	 *   Kotlin 
+	 */
+	@RequestMapping(value="food/rest_detail.do",produces="text/plain;charset=UTF-8")
+	public String food_detail(int no)
+	{
+		String json="";
+		try
+		{
+			FoodVO vo=dao.foodDetailData(no);
+			// vo=> JSONObject 
+			JSONObject obj=new JSONObject();
+			obj.put("name", vo.getName());
+			obj.put("poster", vo.getPoster());
+			String addr=vo.getAddress();
+			addr=addr.substring(0,addr.lastIndexOf("지"));
+			obj.put("address", addr);
+			obj.put("tel", vo.getTel());
+			obj.put("type", vo.getType());
+			obj.put("price", vo.getPrice());
+			obj.put("time", vo.getTime());
+			obj.put("parking", vo.getParking());
+			obj.put("menu", vo.getMenu());
+			
+			json=obj.toJSONString();
+		}catch(Exception ex){}
+		return json;
+	}
 }
 
 

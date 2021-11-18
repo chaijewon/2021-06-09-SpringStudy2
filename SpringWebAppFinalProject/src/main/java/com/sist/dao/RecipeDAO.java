@@ -88,6 +88,10 @@ public class RecipeDAO {
 	{
 		return mapper.foodCategoryListData(cno);
 	}
+	public FoodVO foodDetailData(int no)
+	{
+		return mapper.foodDetailData(no);
+	}
 	
 }
 

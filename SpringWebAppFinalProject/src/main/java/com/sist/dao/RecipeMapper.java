@@ -67,6 +67,9 @@ public interface RecipeMapper {
    public List<FoodVO> foodCategoryListData(int cno);
    
    // 7. 맛집 상세보기 (지도) => 코틀린 지도 처리 
+   @Select("SELECT * FROM project_food_house "
+		  +"WHERE no=#{no}")
+   public FoodVO foodDetailData(int no);
    // 8. 여행 목록 => 상세보기 
    // ==> React , Redux(Hooks) , Kotlin
 }

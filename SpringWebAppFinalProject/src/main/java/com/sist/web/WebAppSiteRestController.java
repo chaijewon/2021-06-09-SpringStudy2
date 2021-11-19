@@ -293,6 +293,229 @@ public class WebAppSiteRestController {
 		}catch(Exception ex){}
 		return json;
 	}
+	
+	// 서울 관련 
+	/*
+	 *   스프링에서는 역할 분담 
+	 *   @Controller : 화면 변환 , 변환시 출력할 데이터 전송 
+	 *                 forward : request를 전송 ==> model.addAttribute()
+	 *                 return "main/main"
+	 *                 redirect : request를 전송하는 것이 아니고 (화면 변경)
+	 *                 return "redirect:~.do";
+	 *   @RestController : 화면변환은 없고 출력할 데이터만 전송
+	 *                 => 일반 데이터 전송 
+	 *                 => 데이터가 많은 경우 , 다른 언어에서 사용할 경우 : JSON
+	 *                    JavaScript(Ajax,VueJs,ReactJS) / Kotlin ==> List,~VO가 존재하지 않는다 
+	 *   =====================  클라이언트로 데이터 전송 , 화면 변환 
+	 *   @Repository (~DAO)
+	 *   ===================== 오라클에 있는 데이터만 관리 (클라이언트로 직접 전송이 불가능 하다)
+	 *   
+	 *   MVC
+	 *   = Model => 요청처리 
+	 *   = View  => 처리된 결과 
+	 *   = Controller => 요청을 받아서 결과값을 보내준다 (DispatcherServlet)
+	 *                                           ==================
+	 *                                                | 위임
+	 *                                               @Controller
+	 *     ==========
+	 *     *** MVC의 단점 Controller 의존성이 높다 (분산:여러개의 Controller사용 => 도메인) : Spring5
+	 *     
+	 *     폭포수 => 프로토타입 => 애자일 (분산 : 각팀마다 요구사항)
+	 *               | 수시로 요구사항 => 체크 
+	 *      | 위에서 관리 (요구사항)  
+	 *      
+	 *    JSON 변경 => List => JSONArray  ===> []
+	 *                VO   => JSONObject ===> {} (JSON:자바스크립트 객체 표현법)
+	 *                
+	 *    어노테이션은 구분하는 프로그램 
+	 *             ==== 인덱스 
+	 */
+	// 찾기 (사용자 요청 찾기) => @RequestMapping , @GetMapping , @PostMapping 
+	@RequestMapping(value="seoul/location_list.do",produces="text/plain;charset=UTF-8")
+	public String seoul_location(int page)
+	{
+		System.out.println("page="+page);
+		String json="";
+		try
+		{
+			// page처리 
+			Map map=new HashMap();
+			int rowSize=20;
+			int start=(rowSize*page)-(rowSize-1);
+			int end=rowSize*page;
+			map.put("start", start);
+			map.put("end", end);
+			List<SeoulLocationVO> list=dao.seoulLocationListData(map);
+			System.out.println(list);
+			map.put("table", "seoul_location");
+			int totalpage=dao.seoulTotalPage(map);
+			System.out.println("totalpage="+totalpage);
+			// JSON변경 
+			JSONArray arr=new JSONArray();
+			int k=0;
+			for(SeoulLocationVO vo:list)
+			{
+				// vo=>JSONObject
+				JSONObject obj=new JSONObject();
+				obj.put("no", vo.getNo());
+				obj.put("title", vo.getTitle());
+				obj.put("poster", vo.getPoster());
+				if(k==0)
+				{
+					obj.put("page", page);
+					obj.put("totalpage", totalpage);
+				}
+				arr.add(obj);
+				k++;
+			}
+			json=arr.toJSONString();
+		}catch(Exception ex){}
+		return json;
+	}
+	@RequestMapping(value="seoul/nature_list.do",produces="text/plain;charset=UTF-8")
+	public String seoul_nature(int page)
+	{
+		String json="";
+		try
+		{
+			// page처리 
+			Map map=new HashMap();
+			int rowSize=20;
+			int start=(rowSize*page)-(rowSize-1);
+			int end=rowSize*page;
+			map.put("start", start);
+			map.put("end", end);
+			List<SeoulNatureVO> list=dao.seoulNatureListData(map);
+			map.put("table", "seoul_nature");
+			int totalpage=dao.seoulTotalPage(map);
+			
+			// JSON변경 
+			JSONArray arr=new JSONArray();
+			int k=0;
+			for(SeoulNatureVO vo:list)
+			{
+				// vo=>JSONObject
+				JSONObject obj=new JSONObject();
+				obj.put("no", vo.getNo());
+				obj.put("title", vo.getTitle());
+				obj.put("poster", vo.getPoster());
+				if(k==0)
+				{
+					obj.put("page", page);
+					obj.put("totalpage", totalpage);
+				}
+				
+				arr.add(obj);
+				k++;
+			}
+			json=arr.toJSONString();
+		}catch(Exception ex){}
+		return json;
+	}
+	
+	@RequestMapping(value="seoul/hotel_list.do",produces="text/plain;charset=UTF-8")
+	public String seoul_hotel(int page)
+	{
+		String json="";
+		try
+		{
+			// page처리 
+			Map map=new HashMap();
+			int rowSize=20;
+			int start=(rowSize*page)-(rowSize-1);
+			int end=rowSize*page;
+			map.put("start", start);
+			map.put("end", end);
+			List<SeoulHotelVO> list=dao.seoulHotelListData(map);
+			map.put("table", "seoul_hotel");
+			int totalpage=dao.seoulTotalPage(map);
+			
+			// JSON변경 
+			JSONArray arr=new JSONArray();
+			int k=0;
+			for(SeoulHotelVO vo:list)
+			{
+				// vo=>JSONObject
+				JSONObject obj=new JSONObject();
+				obj.put("no", vo.getNo());
+				obj.put("name", vo.getName());
+				obj.put("poster", vo.getPoster());
+				obj.put("score",vo.getScore());
+				if(k==0)
+				{
+					obj.put("page", page);
+					obj.put("totalpage", totalpage);
+				}
+				arr.add(obj);
+				k++;
+			}
+			json=arr.toJSONString();
+		}catch(Exception ex){}
+		return json;
+	}
+	
+	@RequestMapping(value="food/find.do",produces="text/plain;charset=UTF-8")
+	public String food_find(String page,String ss)
+	{
+		System.out.println("page="+page);
+		String json="";
+		try
+		{
+			if(page==null)
+				page="1";
+			int curpage=Integer.parseInt(page);
+			// 오라클 연결 
+			Map map=new HashMap();
+			int rowSize=20;
+			int start=(rowSize*curpage)-(rowSize-1);
+			int end=rowSize*curpage;
+			map.put("start", start);
+			map.put("end", end);
+			map.put("ss", ss);
+			List<FoodVO> list=dao.foodFindData(map);
+			System.out.println("list="+list);
+			int totalpage=dao.findTotalPage(ss);
+			System.out.println("totalpage="+totalpage);
+			// JSON으로 변경
+			JSONArray arr=new JSONArray();
+			int k=0;
+			/*
+			 *   정형화 : 저장된 갯수 동일 (오라클) 
+			 *   반정형화 : 저장된 갯수 동일하지 않는데 구분이 된 데이터 (JSON,XML)
+			 *   비정형화 : 구분이 안되는 데이터 ==> 빅데이터 ==> 분석 , 통계 ==> 정형화 ==> AI
+			 *   ========== 형태소 분석 
+			 *   
+			 *   마포에 있는 맛집을 추천해 주세요 
+			 *   ===     ===  ===
+			 *   마포         맛집    추천  ===> 챗봇  ===> 꼬꼬마 (형태소 => 명사찾아주는 라이브러리 (R))
+			 *   
+			 *   일반 챗봇 
+			 *   문장 ==> 문장안에 포함된 데이터가 많은 답변을 찾아서 응답 
+			 */
+			for(FoodVO vo:list)
+			{
+				// vo => {} => JSONObject
+				JSONObject obj=new JSONObject(); // Rest API (Restful) => JSON (다른 응용프로그램과 연결)
+				// 웹 / 앱 (모바일)  no,name,poster
+				obj.put("no", vo.getNo());
+				obj.put("name",vo.getName());
+				String poster=vo.getPoster();
+				poster=poster.substring(0,poster.indexOf("^"));
+				obj.put("poster", vo.getPoster());
+				
+				if(k==0)
+				{
+					obj.put("page", curpage);
+					obj.put("totalpage", totalpage);
+				}
+				
+				arr.add(obj); // list.add()  
+				k++;
+			}
+			json=arr.toJSONString();
+		}catch(Exception ex){}
+		return json;
+	}
 }
 
 

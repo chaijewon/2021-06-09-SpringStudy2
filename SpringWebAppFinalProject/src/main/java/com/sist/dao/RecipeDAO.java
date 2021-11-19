@@ -92,7 +92,56 @@ public class RecipeDAO {
 	{
 		return mapper.foodDetailData(no);
 	}
+	// 서울 여행 
+	/*
+	 *  
+      public List<SeoulLocationVO> seoulLocationListData(Map map);
+   
+      public List<SeoulNatureVO> seoulNatureListData(Map map);
+   
+      public List<SeoulHotelVO> seoulHotelListData(Map map);
+      
+            마이바티스
+            1. SQL문장 => 실행후 결과(리턴형) 
+                        = List ==> row가 여러개 (목록)
+                        = VO   ==> row가 한개 (상세보기)
+                        = int  ==> 총페이지 
+                        = String => 비밀번호 , 이름 ....
+                        = LIKE , BETWEEN => List
+            2. 매개변수 => ?에 들어가는 값   
+                        #{변수명} => 1개 ==> 일반데이터형 
+                                   여러개 => ~VO를 설정 , VO에 없는 값 => Map
+                         ==== INSERT , UPDATE (VO) 
+                         ==== 검색 , 동적쿼리 (Map)
+	 */
+	public List<SeoulLocationVO> seoulLocationListData(Map map)
+	{
+		return mapper.seoulLocationListData(map);
+	}
+	public List<SeoulNatureVO> seoulNatureListData(Map map)
+	{
+		return mapper.seoulNatureListData(map);
+	}
+	public List<SeoulHotelVO> seoulHotelListData(Map map)
+	{
+		return mapper.seoulHotelListData(map);
+	}
+	// 테이블 3개를 동시에 처리 
+	public int seoulTotalPage(Map map)
+	{
+		return mapper.seoulTotalPage(map);
+	}
 	
+	// 찾기
+	public List<FoodVO> foodFindData(Map map)
+	{
+		return mapper.foodFindData(map);
+	}
+	
+	public int findTotalPage(String ss)
+	{
+		return mapper.findTotalPage(ss);
+	}
 }
 
 

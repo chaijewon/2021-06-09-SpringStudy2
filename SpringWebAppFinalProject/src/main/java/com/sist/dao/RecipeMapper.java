@@ -71,7 +71,66 @@ public interface RecipeMapper {
 		  +"WHERE no=#{no}")
    public FoodVO foodDetailData(int no);
    // 8. 여행 목록 => 상세보기 
+   /*
+    *  NO      NOT NULL NUMBER         
+		TITLE   NOT NULL VARCHAR2(200)  
+		POSTER  NOT NULL VARCHAR2(500)  
+		MSG     NOT NULL VARCHAR2(4000) 
+		ADDRESS NOT NULL VARCHAR2(300)
+		
+		NO      NOT NULL NUMBER         
+		TITLE   NOT NULL VARCHAR2(200)  
+		POSTER  NOT NULL VARCHAR2(300)  
+		MSG     NOT NULL VARCHAR2(4000) 
+		ADDRESS NOT NULL VARCHAR2(300)
+		
+		NO      NOT NULL NUMBER         
+		NAME    NOT NULL VARCHAR2(100)  
+		SCORE            NUMBER(2,1)    
+		ADDRESS NOT NULL VARCHAR2(300)  
+		POSTER  NOT NULL VARCHAR2(4000) 
+		IMAGES           VARCHAR2(4000) 
+    */
+   @Select("SELECT no,title,poster,num "
+		  +"FROM (SELECT no,title,poster,rownum as num "
+		  +"FROM (SELECT /*+ INDEX_ASC(seoul_location sl_no_pk)*/ no,title,poster "
+		  +"FROM seoul_location)) "
+		  +"WHERE num BETWEEN #{start} AND #{end}")
+   public List<SeoulLocationVO> seoulLocationListData(Map map);
+   
+   @Select("SELECT no,title,poster,num "
+			  +"FROM (SELECT no,title,poster,rownum as num "
+			  +"FROM (SELECT /*+ INDEX_ASC(seoul_nature sn_no_pk)*/ no,title,poster "
+			  +"FROM seoul_nature)) "
+			  +"WHERE num BETWEEN #{start} AND #{end}")
+   public List<SeoulNatureVO> seoulNatureListData(Map map);
+   
+   @Select("SELECT no,name,poster,score,num "
+			  +"FROM (SELECT no,name,poster,score,rownum as num "
+			  +"FROM (SELECT /*+ INDEX_ASC(seoul_hotel sh_no_pk)*/ no,name,poster,score "
+			  +"FROM seoul_hotel)) "
+			  +"WHERE num BETWEEN #{start} AND #{end}")
+   public List<SeoulHotelVO> seoulHotelListData(Map map);
+   
+   // 테이블명 , 컬럼명 ==> ${} , 일반 데이터 => #{}
+   //  ${} 있는 그대로 대입 , 일반 데이터 #{} => ''
+   //  select ceil(count(*)/20,0) from 'seoul_location'
+   @Select("SELECT CEIL(COUNT(*)/20.0) FROM ${table}")
+   public int seoulTotalPage(Map map);
    // ==> React , Redux(Hooks) , Kotlin
+   @Select("SELECT no,name,poster,num "
+		  +"FROM (SELECT no,name,poster,rownum as num "
+		  +"FROM (SELECT /*+ INDEX_ASC(project_food_location pfl_no_pk)*/no,name,poster "
+		  +"FROM project_food_location WHERE address LIKE '%'||#{ss}||'%')) "
+		  +"WHERE num BETWEEN #{start} AND #{end}")
+   public List<FoodVO> foodFindData(Map map);
+   
+   @Select("SELECT CEIL(COUNT(*)/20.0)  "
+		  +"FROM project_food_location "
+		  +"WHERE address LIKE '%'||#{ss}||'%'")
+   public int findTotalPage(String ss);
+			
+   
 }
 
 

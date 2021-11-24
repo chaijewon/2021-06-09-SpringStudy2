@@ -142,6 +142,30 @@ public class RecipeDAO {
 	{
 		return mapper.findTotalPage(ss);
 	}
+	
+	public List<ChefVO> chefListData(Map map)
+	{
+		return mapper.chefListData(map);
+	}
+	
+	public int chefTotalPage()
+	{
+		return mapper.chefTotalPage();
+	}
+	
+	public List<RecipeVO> recipeChefMakeData(String chef)
+	{
+		return mapper.recipeChefMakeData(chef);
+	}
+	
+	public FoodVO foodFindDetailData(int no)
+	{
+		return mapper.foodFindDetailData(no);
+	}
+	
+	// React ==> NavLink to="http://localhost:8080/web/food/find_detail.do" 요청 
+	// @RestController => @RequestMapping => DAO연결 => JSON변경 => React출력 
+	// Kotlin(모바일) ==> Link => @RequestMapping => DAO연결 => JSON변경 => Kotlin(모바일)
 }
 
 

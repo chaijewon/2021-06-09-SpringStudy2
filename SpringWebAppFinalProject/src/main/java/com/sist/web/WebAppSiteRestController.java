@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 import com.sist.dao.*;
+import com.sist.manager.*;
 // 다른 프로그램에 데이터 전송하는 역할 (JSON)
 /*
  *    데이터 읽기 
@@ -24,6 +25,8 @@ public class WebAppSiteRestController {
 	@Autowired // 메모리 할당된 객체 요청 
     private RecipeDAO dao;
 	
+	@Autowired
+	private NewsManager mgr;
 	// 레시피 목록 요청 
 	@RequestMapping(value="recipe/rest_list.do",produces="text/plain;charset=UTF-8")
 	public String recipe_list(int page)
@@ -516,6 +519,126 @@ public class WebAppSiteRestController {
 		}catch(Exception ex){}
 		return json;
 	}
+	
+	@RequestMapping(value="recipe/chef_list.do",produces="text/plain;charset=UTF-8")
+	public String recipe_chef_list(int page)
+	{
+		String json="";
+		try
+		{
+			// 목록 읽기 
+			Map map=new HashMap();
+			int rowSize=50;
+			int start=(rowSize*page)-(rowSize-1);
+			int end=rowSize*page;
+			map.put("start", start);
+			map.put("end", end);
+			List<ChefVO> list=dao.chefListData(map);
+			// 총페이지 
+			int totalpage=dao.chefTotalPage();
+			// JSON변경 
+			int k=0;
+			JSONArray arr=new JSONArray();
+			for(ChefVO vo:list)
+			{
+				JSONObject obj=new JSONObject();
+				obj.put("chef", vo.getChef());
+				obj.put("poster", vo.getPoster());
+				obj.put("mc1", vo.getMem_cont1());
+				obj.put("mc2", vo.getMem_cont2());
+				obj.put("mc3", vo.getMem_cont3());
+				obj.put("mc7", vo.getMem_cont7());
+				if(k==0)
+				{
+					obj.put("page", page);
+					obj.put("totalpage", totalpage);
+				}
+				k++;
+				arr.add(obj);
+			}
+			
+			json=arr.toJSONString();
+		}catch(Exception ex){}
+		return json;
+	}
+	
+	@RequestMapping(value="recipe/chef_detail.do",produces="text/plain;charset=UTF-8")
+	public String recipe_chef_detail(String chef)
+	{
+		String json="";
+		try
+		{
+			// 오라클 데이터 읽기
+			List<RecipeVO> list=dao.recipeChefMakeData(chef);
+			// JSON
+			JSONArray arr=new JSONArray();
+			for(RecipeVO vo:list)
+			{
+				JSONObject obj=new JSONObject();
+				obj.put("no", vo.getNo());
+				obj.put("title", vo.getTitle());
+				obj.put("poster",vo.getPoster());
+				obj.put("chef", vo.getChef());
+				arr.add(obj);
+			}
+			json=arr.toJSONString();
+		}catch(Exception ex){}
+		return json;
+	}
+	
+	@RequestMapping(value="food/find_detail.do",produces="text/plain;charset=UTF-8")
+	public String food_find_detail(int no)
+	{
+		String json="";
+		try
+		{
+			// 오라클 
+			FoodVO vo=dao.foodFindDetailData(no);
+			JSONObject obj=new JSONObject();
+			obj.put("name", vo.getName());
+			obj.put("poster", vo.getPoster());
+			String addr=vo.getAddress();
+			addr=addr.substring(0,addr.lastIndexOf("지"));
+			obj.put("address", addr);
+			obj.put("tel", vo.getTel());
+			obj.put("type", vo.getType());
+			obj.put("price", vo.getPrice());
+			obj.put("time", vo.getTime());
+			obj.put("parking", vo.getParking());
+			obj.put("menu", vo.getMenu());
+			
+			json=obj.toJSONString();
+			// JSON변경 
+		}catch(Exception ex){}
+		return json;
+	}
+	
+	// 뉴스 출력 
+	@RequestMapping(value="food/news.do",produces="text/plain;charset=UTF-8")
+	public String food_news(String fd)
+	{
+		String json="";
+		try
+		{
+			// 뉴스 읽기 
+			List<NewsVO> list=mgr.newsListData(fd);
+			// JSON변경 
+			JSONArray arr=new JSONArray();
+			for(NewsVO vo:list)
+			{
+				JSONObject obj=new JSONObject();
+				obj.put("title", vo.getTitle());
+				obj.put("desc", vo.getDescription());
+				obj.put("author", vo.getAuthor());
+				
+				arr.add(obj);
+			}
+			
+			json=arr.toJSONString();
+		}catch(Exception ex){}
+		return json;
+	}
+	
 }
 
 

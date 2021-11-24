@@ -129,8 +129,25 @@ public interface RecipeMapper {
 		  +"FROM project_food_location "
 		  +"WHERE address LIKE '%'||#{ss}||'%'")
    public int findTotalPage(String ss);
-			
    
+   // 쉐프 목록 출력 mem_cont1
+   @Select("SELECT chef,poster,mem_cont1,mem_cont2,mem_cont3,mem_cont7,num "
+		  +"FROM (SELECT chef,poster,mem_cont1,mem_cont2,mem_cont3,mem_cont7,rownum as num "
+		  +"FROM (SELECT chef,poster,mem_cont1,mem_cont2,mem_cont3,mem_cont7 "
+		  +"FROM chef ORDER BY mem_cont1 DESC)) "
+		  +"WHERE num BETWEEN #{start} AND #{end}")
+   public List<ChefVO> chefListData(Map map);
+   
+   @Select("SELECT CEIL(COUNT(*)/50.0) FROM chef")
+   public int chefTotalPage();
+			
+   @Select("SELECT no,poster,title,chef,rownum FROM recipe "
+		  +"WHERE rownum<=20 AND chef LIKE '%'||#{chef}||'%'")
+   public List<RecipeVO> recipeChefMakeData(String chef);
+   
+   @Select("SELECT * FROM project_food_location "
+			  +"WHERE no=#{no}")
+   public FoodVO foodFindDetailData(int no);
 }
 
 

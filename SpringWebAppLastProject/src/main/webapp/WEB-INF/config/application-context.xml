@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+    <!-- 1. AOP 등록  
+                       반복적인 내용(공통모듈을 모아서 요청시마다 => 자동 호출이 가능) => 반복을 제거 (OOP는 불가능) => AOP는 OOP를 보완 
+            = PointCut => 어떤 메소드에 대입할 지 (메소드명이 지정)
+            = JoinPoint => 어느 시점에 호출할지 결정 
+              =========
+                Before
+                After
+                After-Throwing
+                After-Retruning
+                Around
+           
+            public String display()
+            {
+                  @Before  => getConnection()
+                  =======
+                  try
+                  {
+                       @Around => 트랜젝션  ==> conn.setAutoCommit(false)
+                       =========
+                                                핵심 코딩 
+                       =========
+                       @Around => conn.commit()
+                  }catch(Exception e)
+                  {
+                       @After-Throwing (예외 처리)
+                  }
+                  finally
+                  {
+                       disConnection() ==> @After
+                  }
+                  
+                  return ""; // 정상 수행 ==> After-Retruning
+            }
+    -->
+    <!-- 2. 사용자 정의 클래스 
+                 패키지 단위 등록 <context:component-scan> : 사용자정의 클래스를 등록 
+                 클래스 한개 등록  <bean> : 라이브러리 클래스를 이용할 경우 
+    -->
+    <context:component-scan base-package="com.sist.*"/>
+    <!-- 
+                메모리 할당 유무를 결정 : Annotation
+        @Component, ==> 일반 클래스 (ChatBot , News ....)
+        @Repository, ==> DAO등록 
+        @Service,    ==> DAO가 여러개일때 한개로 모아서 처리 : BI
+        @Controller, ==> 화면 이동 , 데이터 전송 (forward,redirect)
+        @RestController, ==> 데이터만 전송(일반 문자열 , JSON,XML)
+        @ControllerAdvice, ==> 공통 예외처리 
+        @Configuration ==> XML대신 자바로 환경 설정 
+     -->
+    <!-- 3. 데이터베이스 정보 설정 -->
+    <bean id="ds"
+        class="org.apache.commons.dbcp.BasicDataSource"
+        p:driverClassName="oracle.jdbc.driver.OracleDriver"
+        p:url="jdbc:oracle:thin:@211.238.142.181:1521:XE"
+        p:username="hr"
+        p:password="happy"
+     />
+     <!--  클래스 메모리 할당 => 필요한 데이터를 전송 : DI
+           DI 
+           == 1. setter DI  ===> p:
+              2. constructor DI => c:  (생성자 매개변수)
+              3. method DI => 메모리 할당시 호출 (init-method)  => @PreConstructor
+                                                            메모리 해제시 호출 (destory-method) => @PostDestory
+           => 1. Container 종류 (클래스 관리 => 의존성 낮은 프로그램) => 독립적인 클래스를 만들어서  다른 클래스에 영향이 없는 
+                 =========
+                    BeanFactory
+                       |
+                   ApplicationContext(XML) , AnnotationConfigApplicationContext(Annotation)
+                       |
+                 WebApplicationContext  (MVC) ==> HandlerMapping,ViewResolver
+              2. DI (주입) => 데이터값 , 클래스 주소 (자동주입: @Autowired , 사용자 주입: @Resource)
+              3. AOP (공통모듈 => 자동 호출)
+              4. MVC : View단, Model단을 나눠서 처리 (확장성 , 재사용) 
+      -->
+    <!-- 4. MyBatis연결: 오라클 연결 (getConnection,disConnection) -->
+    <bean id="ssf"
+       class="org.mybatis.spring.SqlSessionFactoryBean"
+       p:dataSource-ref="ds"
+    /> 
+    <!-- Mapper등록 : 인터페이스 구현 -->
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.dao.FoodMapper"
+    />
+    <!-- 5. Transaction 설정  -->
+    <!-- 6. ViewResolver 설정  -->
+    <bean id="viewResolver"
+       class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+       p:prefix="/"
+       p:suffix=".jsp"
+    />
+    <!-- 
+         개발 
+         => SpringFramework(설정 파일:실무에서는 이미 제작 => web.xml,pom.xml,application-*) ****** (SpringFrame+MyBatis) 
+         => Spring-Boot (설정 파일)
+         
+         ==> 과목 (지원자격 : Java,JSP.....) => 분야 (Back-End , Front-End , DBA) => 1년후에 
+     -->
+    <!-- 7. 기타 (보안 , 웹소켓 , MVC한글 변환) -->
+</beans>
+
+
+
+
+
+
+
+

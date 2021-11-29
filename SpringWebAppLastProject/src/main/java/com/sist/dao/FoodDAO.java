@@ -22,9 +22,24 @@ public class FoodDAO {
    // 스프링에서 구현된 Mapper의 주소를 가지고 온다 
    @Autowired
    private FoodMapper mapper;
-   
+   // 카테고리 
    public List<CategoryVO> categoryListData(Map map)
    {
 	   return mapper.categoryListData(map);
+   }
+   // 카테고리별 맛집 출력 
+   public List<FoodVO> categoryFoodListData(int cno)
+   {
+	   return mapper.categoryFoodListData(cno);
+   }
+   // 카테고리 정보 읽기 
+   public CategoryVO categoryInfoData(int cno)
+   {
+	   return mapper.categoryInfoData(cno);
+   }
+   // 상세 보기 
+   public FoodVO foodDetailData(int no)
+   {
+	   return mapper.foodDetailData(no);
    }
 }

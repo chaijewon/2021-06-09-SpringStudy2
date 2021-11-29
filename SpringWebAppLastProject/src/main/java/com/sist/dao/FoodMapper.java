@@ -42,6 +42,21 @@ public interface FoodMapper {
 	   +"</script>"
    })
    public List<CategoryVO> categoryListData(Map map); // #{} 일반 변수 , 동적쿼리 => Map => 구현이 완료 
+   
+   @Select("SELECT no,name,poster,address,tel,type,score "
+		 +"FROM project_food_house "
+		 +"WHERE cno=#{cno}")
+   
+   public List<FoodVO> categoryFoodListData(int cno);
+   
+   @Select("SELECT title,subject FROM project_food_category "
+		  +"WHERE cno=#{cno}")
+   public CategoryVO categoryInfoData(int cno);
+   
+   @Select("SELECT * FROM project_food_house "
+		  +"WHERE no=#{no}")
+   
+   public FoodVO foodDetailData(int no);
 }
 
 

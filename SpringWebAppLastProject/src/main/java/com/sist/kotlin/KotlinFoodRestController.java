@@ -143,6 +143,7 @@ public class KotlinFoodRestController {
 	   map.put("end", end);
 	   map.put("loc", loc);
 	   
+	   
 	   // 오라클에서 데이터 읽기 
 	   List<FoodVO> list=dao.foodFindData(map);
 	   for(FoodVO vo:list)

@@ -57,6 +57,19 @@ public interface FoodMapper {
 		  +"WHERE no=#{no}")
    
    public FoodVO foodDetailData(int no);
+   
+   // 검색 
+   @Select("SELECT no,name,poster,num "
+		  +"FROM (SELECT no,name,poster,rownum as num "
+		  +"FROM (SELECT /*+ INDEX_ASC(project_food_location pfl_no_pk) */no,name,poster "
+		  +"FROM project_food_location WHERE address LIKE '%'||#{loc}||'%')) "
+		  +"WHERE num BETWEEN #{start} AND #{end}")
+   public List<FoodVO> foodFindData(Map map);
+   // 총페이지 
+   @Select("SELECT CEIL(COUNT(*)/12.0) "
+		 +"FROM project_food_location "
+		 +"WHERE address LIKE '%'||#{loc}||'%'")
+   public int foodFindTotalPage(String loc);
 }
 
 

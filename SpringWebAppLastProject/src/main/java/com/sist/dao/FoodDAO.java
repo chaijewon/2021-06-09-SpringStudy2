@@ -42,4 +42,17 @@ public class FoodDAO {
    {
 	   return mapper.foodDetailData(no);
    }
+   
+   // 지역별 맛집 찾기 => DAO에 있는 메소드는 Mapper에 있는 메소드와 다를 수도 있다 
+   
+   public List<FoodVO> foodFindData(Map map) // 매개변수가 여러개 사용이 가능 (사용자 정의)
+   {
+	   return mapper.foodFindData(map); // 매개변수를 한개만 사용 (여러개 => Map,VO)
+	   // 매퍼는 Mybatis형식에 적용 , DAO는 사용자 마음..
+   }
+   // 총페이지 
+   public int foodFindTotalPage(String loc)
+   {
+	   return mapper.foodFindTotalPage(loc);
+   }
 }

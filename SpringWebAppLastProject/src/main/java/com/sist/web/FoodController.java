@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sist.dao.*;
 import java.util.*;
@@ -48,6 +49,44 @@ public class FoodController {
 	   vo.setAddress(address);
 	   model.addAttribute("vo", vo);
 	   model.addAttribute("main_jsp", "../food/food_detail.jsp");
+	   return "main/main";
+   }
+   // 메뉴 클릭 => 지역 출력 (GET) , 버튼 (POST) == RequestMapping
+   @RequestMapping("food/find.do")
+   public String food_find(String page,String loc,Model model)
+   {
+	   if(page==null)
+		   page="1";
+	   
+	   int curpage=Integer.parseInt(page);
+	   if(loc==null)
+		   loc="마포";
+	   
+	   int rowSize=12;
+	   int start=(rowSize*curpage)-(rowSize-1);
+	   int end=rowSize*curpage;
+	   
+	   Map map=new HashMap();
+	   map.put("start", start);
+	   map.put("end", end);
+	   map.put("loc", loc);
+	   
+	   List<FoodVO> list=dao.foodFindData(map);
+	   for(FoodVO vo:list)
+	   {
+		   String poster=vo.getPoster();
+		   poster=poster.substring(0,poster.indexOf("^"));
+		   vo.setPoster(poster);
+	   }
+	   // 총페이지 
+	   int totalpage=dao.foodFindTotalPage(loc);
+	   
+	   model.addAttribute("main_jsp", "../food/food_find.jsp");
+	   model.addAttribute("curpage", curpage);
+	   model.addAttribute("totalpage", totalpage);
+	   model.addAttribute("list", list);
+	   model.addAttribute("loc", loc);
+	   // DB연동 ==> 브라우저(JSP)로 전송 
 	   return "main/main";
    }
 }

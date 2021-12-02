@@ -36,8 +36,8 @@
       </li>
       <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">레시피<span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="#">레시피 목록</a></li>
-          <li><a href="#">쉐프 목록</a></li>
+          <li><a href="../recipe/list.do">레시피 목록</a></li><%--Intent --%>
+          <li><a href="../recipe/chef.do">쉐프 목록</a></li>
         </ul>
       </li>
       <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">서울 여행<span class="caret"></span></a>

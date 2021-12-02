@@ -91,6 +91,14 @@
        p:sqlSessionFactory-ref="ssf"
        p:mapperInterface="com.sist.dao.FoodMapper"
     />
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.dao.RecipeMapper"
+    />
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean"
+       p:sqlSessionFactory-ref="ssf"
+       p:mapperInterface="com.sist.dao.SeoulMapper"
+    />
     <!-- 5. Transaction 설정  -->
     <!-- 6. ViewResolver 설정  -->
     <bean id="viewResolver"

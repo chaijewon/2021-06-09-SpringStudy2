@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.dao.location-mapper">
+  <!-- 음식점 명을 읽어 온다  -->
+  <select id="foodGetNameData" resultType="String">
+    SELECT DISTINCT name FROM project_food_location
+  </select>
+  <!-- 음식점 이름에 대한 정보를 읽어 온다 
+       1. id ==> 중복이 없어야 한다 (id명은 반드시 알파벳)
+       2. resultType => SQL문장 실행 결과값을 받는 변수를 설정 
+                        한개(컬럼)일 경우에는 해당 데이터형 (int,double,String...)
+                        여러개(컬럼)일 경우에는 Map,VO ==> VO
+            => 한개의 데이터형만 설정이 가능 
+       3. parameterType => #{} => #{} (?)
+                           #{} => 1개 (일반데이터형)
+                           #{} => 여러개 (VO,Map)
+                                       ==== vo에 있는 변수 
+                                       ==== vo에 없는 변수 (map)
+       4. 동적 쿼리 => 일반 변수는 사용 할 수 없고 VO,Map에 값을 첨부해서 대입 
+       
+       Spring : 데이터베이스 연동 (70%:MyBatis(3)=구글,IBatis(2)=오픈 소스 그룹)
+                              15% : Hibernate , 10% : JPA , 5% : JDBC
+                              ============================ 자동으로 SQL
+   -->
+  <select id="foodInfoData" resultType="FoodLocationVO" parameterType="string">
+    SELECT no,name,address,tel,type,score 
+    FROM project_food_location
+    WHERE name=#{name}
+  </select>
+</mapper>

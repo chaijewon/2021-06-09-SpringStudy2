@@ -68,12 +68,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 // 데이터베이스 연동 
 import com.sist.dao.*;
 import java.util.*;
+import com.sist.manager.*;
 @Controller
 public class BoardController {
    // 전체기능에서 DAO를 사용한다
    // 메모리 할당을 스프링에서 진행 => 스프링에 저장된 주소를 얻어 온다 (자동 주입)
    @Autowired
    private BoardDAO dao;
+   
+   @Autowired
+   private WordManager wm; // 형태소 분석 (문자분석 => 테스트마이닝)
    
    // 사용자가 요청했을때 어떻게 처리 할지 .. => @RequestMapping(GET/POST) , @GetMapping(GET) , @PostMapping
    @GetMapping("board/list.do") // 게시판 목록을 보여 달라 요청 
@@ -97,6 +101,17 @@ public class BoardController {
    {
 	   dao.boardInsert(vo);
 	   return "redirect:list.do";
+   }
+   
+   // 서빙 => 요청 / 응답 
+   @GetMapping("board/detail.do")
+   public String board_detail(int no,Model model)
+   {
+	   BoardVO vo=dao.boardDetailData(no);
+	   List<WordVO> list=wm.wordData(vo.getContent());
+	   model.addAttribute("list", list);
+	   model.addAttribute("vo", vo);
+	   return "board/detail";
    }
 }
 

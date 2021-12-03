@@ -74,6 +74,14 @@ public class FoodLocationDAO extends SqlSessionDaoSupport{
 	{
 		return getSqlSession().selectOne("foodInfoData", name); // #{name}
 	}
+	
+	/*
+	 *  <select id="foodListData" resultType="FoodLocationVO">
+	 */
+	public List<FoodLocationVO> foodListData()
+	{
+		return getSqlSession().selectList("foodListData");
+	}
 }
 
 

@@ -2,10 +2,16 @@ package com.sist.manager;
 // Blog로부터 추천 
 import java.util.*;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
-
 import java.io.*;
 import java.net.*;
+// => 딥러닝 (데이터 분석) => 통계
+// 데이터 수집(트위터,페이스북, 인스타그램,카톡) ==> 분석후 필요한 데이터 저장 ==> 통계 ==> 해당 데이터 찾기가 가능 
+// ==========================================================(빅데이터) 
+// 데이터웨어하우스 ==> 클라우드 ====> 빅데이터 ===> AI ===> ?(차세대:감성컴퓨팅) 
 
 @Component
 public class NaverBlogManager {
@@ -20,7 +26,7 @@ public class NaverBlogManager {
 
         String text = null;
         try {
-            text = URLEncoder.encode(fd, "UTF-8");
+            text = URLEncoder.encode(fd+" 추천", "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("검색어 인코딩 실패",e);
         }
@@ -34,9 +40,20 @@ public class NaverBlogManager {
         requestHeaders.put("X-Naver-Client-Id", clientId);
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         String responseBody = get(apiURL,requestHeaders);
+        try
+        {
+        	// Jsoup=>URL 주소 connection, 문자열 => parse
+        	Document doc=Jsoup.parse(responseBody);
+        	Elements elem=doc.select("channel > item > description");
+        	for(int i=0;i<elem.size();i++)
+        	{
+        		System.out.println(elem.get(i).text());
+        		list.add(elem.get(i).text());
+        	}
+        	
+        }catch(Exception ex){}
 
-
-        System.out.println(responseBody);
+        //System.out.println(responseBody);
         
         return list;
     }

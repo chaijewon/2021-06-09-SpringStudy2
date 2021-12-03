@@ -18,11 +18,20 @@ package com.sist.dao;
  */
 public class FoodLocationVO {
     private int no;
-    private String name,address,tel,type;
+    private String name,address,tel,type,poster;
     private double score;
 	public int getNo() {
 		return no;
 	}
+	
+	public String getPoster() {
+		return poster;
+	}
+
+	public void setPoster(String poster) {
+		this.poster = poster;
+	}
+
 	public void setNo(int no) {
 		this.no = no;
 	}

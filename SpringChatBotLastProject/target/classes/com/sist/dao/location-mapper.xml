@@ -29,4 +29,13 @@
     FROM project_food_location
     WHERE name=#{name}
   </select>
+  <select id="foodListData" resultType="FoodLocationVO">
+   SELECT poster,name,rownum 
+   FROM project_food_location
+   WHERE rownum&lt;=50
+  </select>
 </mapper>
+
+
+
+

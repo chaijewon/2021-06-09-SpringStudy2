@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- PreparedStatement(SQL전송) , ResultSet(결과값) -->
+<!-- XML , Annotation : 메뉴얼 (동작이 가능하게 제작) -->
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+   namespace => package (반드시 등록)
+   7:3 (7 : XML , 3 : Annotation)
+ -->
+<mapper namespace="com.sist.dao.board-mapper">
+  <!-- 
+       @Select("SELECT no,subject,name,regdate,hit FROM chatbotBoard")
+       public BoardVO boardListData()
+   -->
+  <select id="boardListData" resultType="BoardVO">
+    SELECT no,subject,name,regdate,hit FROM chatbotBoard
+    ORDER BY no DESC
+  </select>
+  <!-- 
+      @Insert("")
+      public void boardInsert(BoardVO vo)
+   -->
+  <insert id="boardInsert" parameterType="BoardVO">
+    INSERT INTO chatbotBoard VALUES(
+      (SELECT NVL(MAX(no)+1,1) FROM chatbotBoard),#{name},#{subject},#{content},#{pwd},
+      SYSDATE, 0
+    )
+  </insert>
+  <!-- 
+     @Update("SQL")
+     public void boardHitIncrement(int no)
+   -->
+  <update id="boardHitIncrement" parameterType="int">
+    UPDATE chatbotBoard SET 
+    hit=hit+1
+    WHERE no=#{no}
+  </update>
+  
+  <!-- 
+     public BoardVO boardDetailData(int no)
+   -->
+  <select id="boardDetailData" resultType="BoardVO" parameterType="int">
+    SELECT * FROM chatbotBoard
+    WHERE no=#{no}
+  </select>
+</mapper>
+
+
+
+
+
+
+
+
+

@@ -93,7 +93,7 @@ h1{
 	  },
 	  methods:{
 		  getData:function(){
-			  axios.get("http://localhost:8080/web/food/rest_find.do",{
+			  axios.get("http://localhost/web/food/rest_find.do",{
 				  params:{
 					  page:this.curpage,
 					  ss:this.ss

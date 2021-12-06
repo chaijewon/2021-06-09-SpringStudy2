@@ -156,7 +156,7 @@ h1{
   	},
   	mounted:function(){
   		let _this=this;
-  		axios.get("http://localhost:8080/web/food/rest_detail.do",{
+  		axios.get("http://localhost/web/food/rest_detail.do",{
   			params:{
   				cno:_this.cno
   			}
@@ -164,7 +164,7 @@ h1{
   			_this.cate_list=response.data;
   		})
   		
-  		axios.get("http://localhost:8080/web/food/rest_info.do",{
+  		axios.get("http://localhost/web/food/rest_info.do",{
   			params:{
   				cno:_this.cno
   			}
@@ -178,7 +178,7 @@ h1{
   		food_detail:function(no,addr){
   			this.isShow=true;
   			let _this=this;//Vue
-  			axios.get("http://localhost:8080/web/food/rest_food_detail.do",{
+  			axios.get("http://localhost/web/food/rest_food_detail.do",{
   				params:{
   					no:no
   				}
@@ -187,7 +187,7 @@ h1{
   				_this.detail_data=response.data
   			})
   			
-  			axios.get("http://localhost:8080/web/food/rest_loc_list.do",{
+  			axios.get("http://localhost/web/food/rest_loc_list.do",{
   				params:{
   					addr:addr
   				}
@@ -196,7 +196,7 @@ h1{
   				_this.loc_data=response.data
   			})
   			
-  			axios.get("http://localhost:8080/web/food/rest_hotel_list.do",{
+  			axios.get("http://localhost/web/food/rest_hotel_list.do",{
   				params:{
   					addr:addr
   				}
@@ -205,7 +205,7 @@ h1{
   				_this.hotel_data=response.data
   			})
   			
-  			axios.get("http://localhost:8080/web/food/rest_nature_list.do",{
+  			axios.get("http://localhost/web/food/rest_nature_list.do",{
   				params:{
   					addr:addr
   				}

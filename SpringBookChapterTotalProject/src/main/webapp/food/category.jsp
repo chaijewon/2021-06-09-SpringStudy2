@@ -77,7 +77,7 @@ h1{
 		                                             => @RequestMapping
 		      axios.post() => POST => @PostMapping()
 		  */
-		  axios.get("http://localhost:8080/web/food/rest_category.do",{
+		  axios.get("http://localhost/web/food/rest_category.do",{
 			  params:{
 				  no:this.no
 			  }
@@ -90,7 +90,7 @@ h1{
 	  methods:{
 		  change:function(no){
 			  this.no=no;
-			  axios.get("http://localhost:8080/web/food/rest_category.do",{
+			  axios.get("http://localhost/web/food/rest_category.do",{
 				  params:{
 					  no:this.no
 				  }

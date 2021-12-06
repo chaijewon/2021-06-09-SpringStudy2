@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="../layout/styles/layout.css" rel="stylesheet" type="text/css" media="all">
+<link href="../chillaid/layout/styles/layout.css" rel="stylesheet" type="text/css" media="all">
 </head>
 <body id="top">
   <%-- 메뉴  --%>
